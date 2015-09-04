@@ -1,0 +1,166 @@
+// -*- C++ -*-
+/*!
+ * @file  rtcdControl.cpp
+ * @brief rtcdControl
+ * @date $Date$
+ *
+ * $Id$
+ */
+
+#include "rtcdControl.h"
+
+// Module specification
+// <rtc-template block="module_spec">
+static const char* rtcdcontrol_spec[] =
+  {
+    "implementation_id", "rtcdControl",
+    "type_name",         "rtcdControl",
+    "description",       "rtcdControl",
+    "version",           "1.0.0",
+    "vendor",            "Miyamoto Nobuhiko",
+    "category",          "TEST",
+    "activity_type",     "PERIODIC",
+    "kind",              "DataFlowComponent",
+    "max_instance",      "1",
+    "language",          "C++",
+    "lang_type",         "compile",
+    ""
+  };
+// </rtc-template>
+
+/*!
+ * @brief constructor
+ * @param manager Maneger Object
+ */
+rtcdControl::rtcdControl(RTC::Manager* manager)
+    // <rtc-template block="initializer">
+  : RTC::DataFlowComponentBase(manager),
+    m_rtcControl_pyPort("rtcControl_py")
+
+    // </rtc-template>
+{
+}
+
+/*!
+ * @brief destructor
+ */
+rtcdControl::~rtcdControl()
+{
+}
+
+
+
+RTC::ReturnCode_t rtcdControl::onInitialize()
+{
+  // Registration: InPort/OutPort/Service
+  // <rtc-template block="registration">
+  // Set InPort buffers
+  
+  // Set OutPort buffer
+  
+  // Set service provider to Ports
+  m_rtcControl_pyPort.registerProvider("rtcControl_py", "rtcControl::RTCDataInterface", m_rtcControl_py);
+  
+  // Set service consumers to Ports
+  
+  // Set CORBA Service Ports
+  addPort(m_rtcControl_pyPort);
+  
+  // </rtc-template>
+
+  // <rtc-template block="bind_config">
+  // </rtc-template>
+  
+  return RTC::RTC_OK;
+}
+
+/*
+RTC::ReturnCode_t rtcdControl::onFinalize()
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t rtcdControl::onStartup(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t rtcdControl::onShutdown(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+
+RTC::ReturnCode_t rtcdControl::onActivated(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+
+
+RTC::ReturnCode_t rtcdControl::onDeactivated(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+
+
+RTC::ReturnCode_t rtcdControl::onExecute(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+
+/*
+RTC::ReturnCode_t rtcdControl::onAborting(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t rtcdControl::onError(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t rtcdControl::onReset(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t rtcdControl::onStateUpdate(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t rtcdControl::onRateChanged(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+
+
+extern "C"
+{
+ 
+  void rtcdControlInit(RTC::Manager* manager)
+  {
+    coil::Properties profile(rtcdcontrol_spec);
+    manager->registerFactory(profile,
+                             RTC::Create<rtcdControl>,
+                             RTC::Delete<rtcdControl>);
+  }
+  
+};
+
+

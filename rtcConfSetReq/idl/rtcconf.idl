@@ -1,0 +1,210 @@
+#ifndef RTCCONF_IDL
+#define RTCCONF_IDL
+#include "BasicDataType.idl"
+
+
+
+
+module RTCConfData {
+
+	struct confData {
+		string id;
+		string data;
+	};
+
+	struct BasicInfo_Doc {
+		wstring reference;
+		wstring license;
+		wstring creator;
+		wstring algorithm;
+		wstring inouts;
+		wstring description;
+	};
+	struct BasicInfo{
+		wstring type;
+		wstring saveProject;
+		wstring updateDate;
+		wstring creationDate;
+		wstring abstracts;
+		wstring version;
+		wstring vendor;
+		wstring maxInstances;
+		wstring executionType;
+		wstring executionRate;
+		wstring description;
+		wstring category;
+		wstring componentKind;
+		wstring activityType;
+		wstring componentType;
+		wstring name;
+		BasicInfo_Doc doc;
+	};
+	struct Action {
+		wstring type;
+		wstring implemented;
+	};
+	struct Actions
+	{
+		Action OnInitialize;
+		Action OnFinalize;
+		Action OnStartup;
+		Action OnShutdown;
+		Action OnActivated;
+		Action OnDeactivated;
+		Action OnAborting;
+		Action OnError;
+		Action OnReset;
+		Action OnExecute;
+		Action OnStateUpdate;
+		Action OnRateChanged;
+		Action OnAction;
+		Action OnModeChanged;
+	};
+
+	struct Configuration_Doc {
+		wstring constraint;
+		wstring range;
+		wstring unit;
+		wstring description;
+		wstring defaultValue;
+		wstring dataname;
+	};
+
+	struct Configuration_Properties {
+		wstring value;
+		wstring name;
+	};
+
+	struct Configuration {
+		wstring type;
+		wstring variableName;
+		wstring unit;
+		wstring defaultValue;
+		wstring dataType;
+		wstring name;
+		Configuration_Properties property;
+		Configuration_Doc doc;
+	};
+
+	typedef sequence<Configuration> ConfigurationSet;
+
+	struct DataPort_Doc{
+		wstring operation;
+		wstring occerrence;
+		wstring unit;
+		wstring semantics;
+		wstring number;
+		wstring type;
+		wstring description;
+	};
+
+	struct DataPort{
+		wstring type;
+		wstring position;
+		wstring variableName;
+		wstring unit;
+		wstring subscriptionType;
+		wstring dataflowType;
+		wstring interfaceType;
+		wstring idlFile;
+		wstring datatype;
+		wstring name;
+		wstring portType;
+
+		DataPort_Doc doc;
+	};
+
+	typedef sequence<DataPort> DataPorts;
+
+	struct ServiceInterface_Doc
+	{
+		wstring docPostCondition;
+		wstring docPreCondition;
+		wstring docException;
+		wstring docReturn;
+		wstring docArgument;
+		wstring description;
+	};
+
+	struct ServiceInterface{
+		wstring type;
+		wstring variableName;
+		wstring path;
+		wstring interfeceType;
+		wstring idlFile;
+		wstring instanceName;
+		wstring direction;
+		wstring name;
+		ServiceInterface_Doc doc;
+	};
+
+	struct ServicePort_Doc{
+		wstring ifdescription;
+		wstring description;
+	};
+
+	typedef sequence<ServiceInterface> ServiceInterfaces;
+
+	struct ServicePort{
+		wstring type;
+		wstring position;
+		wstring name;
+
+		ServiceInterfaces interfaces;
+		ServicePort_Doc doc;
+	};
+
+	typedef sequence<ServicePort> ServicePorts;
+
+	struct RTC_Profile {
+		wstring name;
+		wstring version;
+		wstring id;
+		wstring language;
+		BasicInfo info;
+		Actions act;
+		ConfigurationSet confs;
+		DataPorts dports;
+		ServicePorts sports;
+	};
+
+	typedef sequence<RTC_Profile> RTC_ProfileList;
+
+	typedef sequence<confData> confDataSeq;
+	typedef sequence<string> stringSeq;
+
+	interface ConfDataInterface {
+		boolean open(in string filename);
+		boolean save(in string filename);
+		boolean setConfData_Cpp(in string filename, out confDataSeq data);
+		boolean setConfData_Py(in string filename, out confDataSeq data);
+		boolean setData_Cpp(in confData data);
+		boolean getData_Cpp(in string name, out confData data);
+		boolean setDataSeq_Cpp(in confDataSeq data);
+		boolean getDataSeq_Cpp(out confDataSeq data);
+		boolean setData_Py(in confData data);
+		boolean getData_Py(in string name, out confData data);
+		boolean setDataSeq_Py(in confDataSeq data);
+		boolean getDataSeq_Py(out confDataSeq data);
+		boolean addModule_Cpp(in string filepath);
+		boolean addModule_Py(in string filepath);
+		boolean startRTCD_Cpp();
+		boolean startRTCD_Py();
+		boolean exitRTCD_Cpp();
+		boolean exitRTCD_Py();
+		string getRelPath(in string filepath);
+		boolean setSystem();
+		boolean setExRTCList(in stringSeq name);
+		boolean getExRTCList(out stringSeq name);
+		boolean createProject(in string filepath);
+
+		boolean getProfile(in string name, out RTC_Profile profile);
+		boolean getProfileList(out RTC_ProfileList profileList);
+		boolean createComp(in string name, in short runtype);
+		boolean removeComp(in string name);
+
+	};
+
+};
+
+#endif // RTCCONF_IDL

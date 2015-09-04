@@ -1,0 +1,54 @@
+# rtcConfSet CMake config file
+#
+# This file sets the following variables:
+# rtcConfSet_FOUND - Always TRUE.
+# rtcConfSet_INCLUDE_DIRS - Directories containing the rtcConfSet include files.
+# rtcConfSet_IDL_DIRS - Directories containing the rtcConfSet IDL files.
+# rtcConfSet_LIBRARIES - Libraries needed to use rtcConfSet.
+# rtcConfSet_DEFINITIONS - Compiler flags for rtcConfSet.
+# rtcConfSet_VERSION - The version of rtcConfSet found.
+# rtcConfSet_VERSION_MAJOR - The major version of rtcConfSet found.
+# rtcConfSet_VERSION_MINOR - The minor version of rtcConfSet found.
+# rtcConfSet_VERSION_REVISION - The revision version of rtcConfSet found.
+# rtcConfSet_VERSION_CANDIDATE - The candidate version of rtcConfSet found.
+
+message(STATUS "Found rtcConfSet-@PROJECT_VERSION@")
+set(rtcConfSet_FOUND TRUE)
+
+find_package(<dependency> REQUIRED)
+
+#set(rtcConfSet_INCLUDE_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@"
+#    ${<dependency>_INCLUDE_DIRS}
+#    )
+#
+#set(rtcConfSet_IDL_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@/idl")
+set(rtcConfSet_INCLUDE_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@"
+    ${<dependency>_INCLUDE_DIRS}
+    )
+set(rtcConfSet_IDL_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@/idl")
+
+
+if(WIN32)
+    set(rtcConfSet_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_STATIC_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+else(WIN32)
+    set(rtcConfSet_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_SHARED_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+endif(WIN32)
+
+set(rtcConfSet_DEFINITIONS ${<dependency>_DEFINITIONS})
+
+set(rtcConfSet_VERSION @PROJECT_VERSION@)
+set(rtcConfSet_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(rtcConfSet_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(rtcConfSet_VERSION_REVISION @PROJECT_VERSION_REVISION@)
+set(rtcConfSet_VERSION_CANDIDATE @PROJECT_VERSION_CANDIDATE@)
+
