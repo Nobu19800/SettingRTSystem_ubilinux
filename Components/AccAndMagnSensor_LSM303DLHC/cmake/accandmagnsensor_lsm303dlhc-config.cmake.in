@@ -1,0 +1,54 @@
+# AccAndMagnSensor_LSM303DLHC CMake config file
+#
+# This file sets the following variables:
+# AccAndMagnSensor_LSM303DLHC_FOUND - Always TRUE.
+# AccAndMagnSensor_LSM303DLHC_INCLUDE_DIRS - Directories containing the AccAndMagnSensor_LSM303DLHC include files.
+# AccAndMagnSensor_LSM303DLHC_IDL_DIRS - Directories containing the AccAndMagnSensor_LSM303DLHC IDL files.
+# AccAndMagnSensor_LSM303DLHC_LIBRARIES - Libraries needed to use AccAndMagnSensor_LSM303DLHC.
+# AccAndMagnSensor_LSM303DLHC_DEFINITIONS - Compiler flags for AccAndMagnSensor_LSM303DLHC.
+# AccAndMagnSensor_LSM303DLHC_VERSION - The version of AccAndMagnSensor_LSM303DLHC found.
+# AccAndMagnSensor_LSM303DLHC_VERSION_MAJOR - The major version of AccAndMagnSensor_LSM303DLHC found.
+# AccAndMagnSensor_LSM303DLHC_VERSION_MINOR - The minor version of AccAndMagnSensor_LSM303DLHC found.
+# AccAndMagnSensor_LSM303DLHC_VERSION_REVISION - The revision version of AccAndMagnSensor_LSM303DLHC found.
+# AccAndMagnSensor_LSM303DLHC_VERSION_CANDIDATE - The candidate version of AccAndMagnSensor_LSM303DLHC found.
+
+message(STATUS "Found AccAndMagnSensor_LSM303DLHC-@PROJECT_VERSION@")
+set(AccAndMagnSensor_LSM303DLHC_FOUND TRUE)
+
+find_package(<dependency> REQUIRED)
+
+#set(AccAndMagnSensor_LSM303DLHC_INCLUDE_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@"
+#    ${<dependency>_INCLUDE_DIRS}
+#    )
+#
+#set(AccAndMagnSensor_LSM303DLHC_IDL_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@/idl")
+set(AccAndMagnSensor_LSM303DLHC_INCLUDE_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@"
+    ${<dependency>_INCLUDE_DIRS}
+    )
+set(AccAndMagnSensor_LSM303DLHC_IDL_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@/idl")
+
+
+if(WIN32)
+    set(AccAndMagnSensor_LSM303DLHC_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_STATIC_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+else(WIN32)
+    set(AccAndMagnSensor_LSM303DLHC_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_SHARED_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+endif(WIN32)
+
+set(AccAndMagnSensor_LSM303DLHC_DEFINITIONS ${<dependency>_DEFINITIONS})
+
+set(AccAndMagnSensor_LSM303DLHC_VERSION @PROJECT_VERSION@)
+set(AccAndMagnSensor_LSM303DLHC_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(AccAndMagnSensor_LSM303DLHC_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(AccAndMagnSensor_LSM303DLHC_VERSION_REVISION @PROJECT_VERSION_REVISION@)
+set(AccAndMagnSensor_LSM303DLHC_VERSION_CANDIDATE @PROJECT_VERSION_CANDIDATE@)
+

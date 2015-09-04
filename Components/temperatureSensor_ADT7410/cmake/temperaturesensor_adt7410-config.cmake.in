@@ -1,0 +1,54 @@
+# TemperatureSensor_ADT7410 CMake config file
+#
+# This file sets the following variables:
+# TemperatureSensor_ADT7410_FOUND - Always TRUE.
+# TemperatureSensor_ADT7410_INCLUDE_DIRS - Directories containing the TemperatureSensor_ADT7410 include files.
+# TemperatureSensor_ADT7410_IDL_DIRS - Directories containing the TemperatureSensor_ADT7410 IDL files.
+# TemperatureSensor_ADT7410_LIBRARIES - Libraries needed to use TemperatureSensor_ADT7410.
+# TemperatureSensor_ADT7410_DEFINITIONS - Compiler flags for TemperatureSensor_ADT7410.
+# TemperatureSensor_ADT7410_VERSION - The version of TemperatureSensor_ADT7410 found.
+# TemperatureSensor_ADT7410_VERSION_MAJOR - The major version of TemperatureSensor_ADT7410 found.
+# TemperatureSensor_ADT7410_VERSION_MINOR - The minor version of TemperatureSensor_ADT7410 found.
+# TemperatureSensor_ADT7410_VERSION_REVISION - The revision version of TemperatureSensor_ADT7410 found.
+# TemperatureSensor_ADT7410_VERSION_CANDIDATE - The candidate version of TemperatureSensor_ADT7410 found.
+
+message(STATUS "Found TemperatureSensor_ADT7410-@PROJECT_VERSION@")
+set(TemperatureSensor_ADT7410_FOUND TRUE)
+
+find_package(<dependency> REQUIRED)
+
+#set(TemperatureSensor_ADT7410_INCLUDE_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@"
+#    ${<dependency>_INCLUDE_DIRS}
+#    )
+#
+#set(TemperatureSensor_ADT7410_IDL_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@/idl")
+set(TemperatureSensor_ADT7410_INCLUDE_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@"
+    ${<dependency>_INCLUDE_DIRS}
+    )
+set(TemperatureSensor_ADT7410_IDL_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@/idl")
+
+
+if(WIN32)
+    set(TemperatureSensor_ADT7410_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_STATIC_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+else(WIN32)
+    set(TemperatureSensor_ADT7410_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_SHARED_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+endif(WIN32)
+
+set(TemperatureSensor_ADT7410_DEFINITIONS ${<dependency>_DEFINITIONS})
+
+set(TemperatureSensor_ADT7410_VERSION @PROJECT_VERSION@)
+set(TemperatureSensor_ADT7410_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(TemperatureSensor_ADT7410_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(TemperatureSensor_ADT7410_VERSION_REVISION @PROJECT_VERSION_REVISION@)
+set(TemperatureSensor_ADT7410_VERSION_CANDIDATE @PROJECT_VERSION_CANDIDATE@)
+

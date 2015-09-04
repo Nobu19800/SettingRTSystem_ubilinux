@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<rtc:RtcProfile rtc:version="0.2" rtc:id="RTC:Miyamoto Nobuhiko:Manipulator:AdafruitPWMServoDriverEdison:1.0.0" xmlns:rtcExt="http://www.openrtp.org/namespaces/rtc_ext" xmlns:rtcDoc="http://www.openrtp.org/namespaces/rtc_doc" xmlns:rtc="http://www.openrtp.org/namespaces/rtc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <rtc:BasicInfo xsi:type="rtcExt:basic_info_ext" rtcExt:saveProject="Adafruit_PWMServoDriver_Edison" rtc:updateDate="2015-08-14T10:09:21.868+09:00" rtc:creationDate="2015-03-23T23:50:26+09:00" rtc:abstract="RCサーボへの目標角度をInPortから受信して、PCA9685搭載のデバイスにI2CでPWMのデューティー比を指令します。 
+&lt;a href=&quot;http://robotarmrtc.iaigiri.com/&quot; target=&quot;_blank&quot;&gt;マニュアル&lt;/a&gt; " rtc:version="1.0.0" rtc:vendor="Miyamoto Nobuhiko" rtc:maxInstances="1" rtc:executionType="PeriodicExecutionContext" rtc:executionRate="1000.0" rtc:description="Adafruit PWM ServoDriver Component" rtc:category="Manipulator" rtc:componentKind="DataFlowComponent" rtc:activityType="PERIODIC" rtc:componentType="STATIC" rtc:name="AdafruitPWMServoDriverEdison">
+        <rtcDoc:Doc rtcDoc:reference="" rtcDoc:license="LGPL" rtcDoc:creator="" rtcDoc:algorithm="" rtcDoc:inout="" rtcDoc:description="RCサーボへの目標角度をInPortから受信して、PCA9685搭載のデバイスにI2CでPWMのデューティー比を指令します。 http://robotarmrtc.iaigiri.com/"/>
+        <rtcExt:VersionUpLogs></rtcExt:VersionUpLogs>
+        <rtcExt:VersionUpLogs></rtcExt:VersionUpLogs>
+        <rtcExt:VersionUpLogs></rtcExt:VersionUpLogs>
+    </rtc:BasicInfo>
+    <rtc:Actions>
+        <rtc:OnInitialize xsi:type="rtcDoc:action_status_doc" rtc:implemented="true"/>
+        <rtc:OnFinalize xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnStartup xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnShutdown xsi:type="rtcDoc:action_status_doc" rtc:implemented="true"/>
+        <rtc:OnActivated xsi:type="rtcDoc:action_status_doc" rtc:implemented="true"/>
+        <rtc:OnDeactivated xsi:type="rtcDoc:action_status_doc" rtc:implemented="true"/>
+        <rtc:OnAborting xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnError xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnReset xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnExecute xsi:type="rtcDoc:action_status_doc" rtc:implemented="true"/>
+        <rtc:OnStateUpdate xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnRateChanged xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnAction xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnModeChanged xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+    </rtc:Actions>
+    <rtc:ConfigurationSet>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="64" rtc:type="int" rtc:name="I2C_address">
+            <rtc:Constraint>
+                <rtc:ConstraintUnitType>
+                    <rtc:propertyIsBetween>
+                        <rtc:LowerBoundary>64</rtc:LowerBoundary>
+                        <rtc:UpperBoundary>128</rtc:UpperBoundary>
+                    </rtc:propertyIsBetween>
+                </rtc:ConstraintUnitType>
+            </rtc:Constraint>
+            <rtcDoc:Doc rtcDoc:constraint="64&lt;=x&lt;=128" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="PCA9685のI2Cスレーブアドレス" rtcDoc:defaultValue="64" rtcDoc:dataname="I2C_address"/>
+            <rtcExt:Properties rtcExt:value="spin." rtcExt:name="__widget__"/>
+        </rtc:Configuration>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="1" rtc:type="int" rtc:name="I2C_channel">
+            <rtc:Constraint>
+                <rtc:ConstraintUnitType>
+                    <rtc:Or>
+                        <rtc:Constraint>
+                            <rtc:ConstraintUnitType>
+                                <rtc:propertyIsEqualTo rtc:matchCase="false">
+                                    <rtc:Literal>1</rtc:Literal>
+                                </rtc:propertyIsEqualTo>
+                            </rtc:ConstraintUnitType>
+                        </rtc:Constraint>
+                        <rtc:Constraint>
+                            <rtc:ConstraintUnitType>
+                                <rtc:propertyIsEqualTo rtc:matchCase="false">
+                                    <rtc:Literal>6</rtc:Literal>
+                                </rtc:propertyIsEqualTo>
+                            </rtc:ConstraintUnitType>
+                        </rtc:Constraint>
+                    </rtc:Or>
+                </rtc:ConstraintUnitType>
+            </rtc:Constraint>
+            <rtcDoc:Doc rtcDoc:constraint="(1,6)" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="I2Cポート番号" rtcDoc:defaultValue="1" rtcDoc:dataname="I2C_channel"/>
+            <rtcExt:Properties rtcExt:value="radio" rtcExt:name="__widget__"/>
+        </rtc:Configuration>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="420" rtc:type="double" rtc:name="servo_max">
+            <rtc:Constraint>
+                <rtc:ConstraintUnitType>
+                    <rtc:And>
+                        <rtc:Constraint>
+                            <rtc:ConstraintUnitType>
+                                <rtc:propertyIsGreaterThan rtc:matchCase="false">
+                                    <rtc:Literal>0</rtc:Literal>
+                                </rtc:propertyIsGreaterThan>
+                            </rtc:ConstraintUnitType>
+                        </rtc:Constraint>
+                        <rtc:Constraint>
+                            <rtc:ConstraintUnitType>
+                                <rtc:propertyIsLessThan rtc:matchCase="false">
+                                    <rtc:Literal>4096</rtc:Literal>
+                                </rtc:propertyIsLessThan>
+                            </rtc:ConstraintUnitType>
+                        </rtc:Constraint>
+                    </rtc:And>
+                </rtc:ConstraintUnitType>
+            </rtc:Constraint>
+            <rtcDoc:Doc rtcDoc:constraint="0&lt;x&lt;4096" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="最大角度の時のパルス幅&lt;br/&gt;x/4096=デューティー比" rtcDoc:defaultValue="420" rtcDoc:dataname="servo_max"/>
+            <rtcExt:Properties rtcExt:value="spin." rtcExt:name="__widget__"/>
+        </rtc:Configuration>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="160" rtc:type="double" rtc:name="servo_min">
+            <rtc:Constraint>
+                <rtc:ConstraintUnitType>
+                    <rtc:And>
+                        <rtc:Constraint>
+                            <rtc:ConstraintUnitType>
+                                <rtc:propertyIsGreaterThan rtc:matchCase="false">
+                                    <rtc:Literal>0</rtc:Literal>
+                                </rtc:propertyIsGreaterThan>
+                            </rtc:ConstraintUnitType>
+                        </rtc:Constraint>
+                        <rtc:Constraint>
+                            <rtc:ConstraintUnitType>
+                                <rtc:propertyIsLessThan rtc:matchCase="false">
+                                    <rtc:Literal>4096</rtc:Literal>
+                                </rtc:propertyIsLessThan>
+                            </rtc:ConstraintUnitType>
+                        </rtc:Constraint>
+                    </rtc:And>
+                </rtc:ConstraintUnitType>
+            </rtc:Constraint>
+            <rtcDoc:Doc rtcDoc:constraint="0&lt;x&lt;4096" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="最少角度の時のパルス幅&lt;br/&gt;x/4096=デューティー比" rtcDoc:defaultValue="160" rtcDoc:dataname="servo_min"/>
+            <rtcExt:Properties rtcExt:value="spin." rtcExt:name="__widget__"/>
+        </rtc:Configuration>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="rad" rtc:defaultValue="3.141592" rtc:type="double" rtc:name="angle_max">
+            <rtc:Constraint>
+                <rtc:ConstraintUnitType>
+                    <rtc:propertyIsBetween>
+                        <rtc:LowerBoundary>0</rtc:LowerBoundary>
+                        <rtc:UpperBoundary>6.28</rtc:UpperBoundary>
+                    </rtc:propertyIsBetween>
+                </rtc:ConstraintUnitType>
+            </rtc:Constraint>
+            <rtcDoc:Doc rtcDoc:constraint="0&lt;=x&lt;=6.28" rtcDoc:range="" rtcDoc:unit="rad" rtcDoc:description="RCサーボの角度範囲" rtcDoc:defaultValue="3.141592" rtcDoc:dataname="angle_max"/>
+            <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
+        </rtc:Configuration>
+    </rtc:ConfigurationSet>
+    <rtc:DataPorts xsi:type="rtcExt:dataport_ext" rtcExt:position="LEFT" rtcExt:variableName="" rtc:unit="" rtc:subscriptionType="" rtc:dataflowType="" rtc:interfaceType="" rtc:idlFile="" rtc:type="RTC::TimedDoubleSeq" rtc:name="in" rtc:portType="DataInPort">
+        <rtcDoc:Doc rtcDoc:operation="" rtcDoc:occerrence="" rtcDoc:unit="rad" rtcDoc:semantics="" rtcDoc:number="" rtcDoc:type="RTC::TimedDoubleSeq" rtcDoc:description="サーボモータの目標角度"/>
+    </rtc:DataPorts>
+    <rtc:Language xsi:type="rtcExt:language_ext" rtc:kind="C++">
+        <rtcExt:targets rtcExt:os="ubilinux" rtcExt:langVersion="New Version">
+            <rtcExt:cpus>Intel Edison</rtcExt:cpus>
+            <rtcExt:libraries rtcExt:other="https://github.com/intel-iot-devkit/mraa" rtcExt:version="0.7.3" rtcExt:name="mraa"/>
+        </rtcExt:targets>
+    </rtc:Language>
+</rtc:RtcProfile>

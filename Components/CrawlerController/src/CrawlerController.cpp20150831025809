@@ -1,0 +1,219 @@
+// -*- C++ -*-
+/*!
+ * @file  CrawlerController.cpp
+ * @brief Crawler Controller
+ * @date $Date$
+ *
+ * LGPL
+ *
+ * $Id$
+ */
+
+#include "CrawlerController.h"
+
+// Module specification
+// <rtc-template block="module_spec">
+static const char* crawlercontroller_spec[] =
+  {
+    "implementation_id", "CrawlerController",
+    "type_name",         "CrawlerController",
+    "description",       "Crawler Controller",
+    "version",           "1.0.0",
+    "vendor",            "Miyamoto Nobuhiko",
+    "category",          "Crawler",
+    "activity_type",     "PERIODIC",
+    "kind",              "DataFlowComponent",
+    "max_instance",      "1",
+    "language",          "C++",
+    "lang_type",         "compile",
+    // Configuration variables
+    "conf.default.gyroSensor", "1",
+    "conf.default.FrontRangeSensor", "1",
+    "conf.default.BackRangeSensor", "1",
+    "conf.default.AccelerationSensor", "1",
+    "conf.default.MagneticSensor", "1",
+    "conf.default.bias", "1.0",
+    "conf.default.frontDistance", "0.5",
+    "conf.default.backDistance", "0.1",
+    "conf.default.filter", "0.05",
+    "conf.default.rotOffset", "0.5",
+    "conf.default.rotCorVal", "15",
+    // Widget
+    "conf.__widget__.gyroSensor", "radio",
+    "conf.__widget__.FrontRangeSensor", "radio",
+    "conf.__widget__.BackRangeSensor", "radio",
+    "conf.__widget__.AccelerationSensor", "radio",
+    "conf.__widget__.MagneticSensor", "radio",
+    "conf.__widget__.bias", "text",
+    "conf.__widget__.frontDistance", "text",
+    "conf.__widget__.backDistance", "text",
+    "conf.__widget__.filter", "text",
+    "conf.__widget__.rotOffset", "text",
+    "conf.__widget__.rotCorVal", "text",
+    // Constraints
+    "conf.__constraints__.gyroSensor", "(0,1)",
+    "conf.__constraints__.FrontRangeSensor", "(0,1)",
+    "conf.__constraints__.BackRangeSensor", "(0,1)",
+    "conf.__constraints__.AccelerationSensor", "(0,1)",
+    "conf.__constraints__.MagneticSensor", "(0,1)",
+    ""
+  };
+// </rtc-template>
+
+/*!
+ * @brief constructor
+ * @param manager Maneger Object
+ */
+CrawlerController::CrawlerController(RTC::Manager* manager)
+    // <rtc-template block="initializer">
+  : RTC::DataFlowComponentBase(manager),
+    m_accIn("acc", m_acc),
+    m_magnIn("magn", m_magn),
+    m_gyroIn("gyro", m_gyro),
+    m_range0In("range0", m_range0),
+    m_range1In("range1", m_range1),
+    m_range2In("range2", m_range2),
+    m_range3In("range3", m_range3),
+    m_in0In("in0", m_in0),
+    m_in1In("in1", m_in1),
+    m_posOut("pos", m_pos)
+
+    // </rtc-template>
+{
+}
+
+/*!
+ * @brief destructor
+ */
+CrawlerController::~CrawlerController()
+{
+}
+
+
+
+RTC::ReturnCode_t CrawlerController::onInitialize()
+{
+  // Registration: InPort/OutPort/Service
+  // <rtc-template block="registration">
+  // Set InPort buffers
+  addInPort("acc", m_accIn);
+  addInPort("magn", m_magnIn);
+  addInPort("gyro", m_gyroIn);
+  addInPort("range0", m_range0In);
+  addInPort("range1", m_range1In);
+  addInPort("range2", m_range2In);
+  addInPort("range3", m_range3In);
+  addInPort("in0", m_in0In);
+  addInPort("in1", m_in1In);
+  
+  // Set OutPort buffer
+  addOutPort("pos", m_posOut);
+  
+  // Set service provider to Ports
+  
+  // Set service consumers to Ports
+  
+  // Set CORBA Service Ports
+  
+  // </rtc-template>
+
+  // <rtc-template block="bind_config">
+  // Bind variables and configuration variable
+  bindParameter("gyroSensor", m_gyroSensor, "1");
+  bindParameter("FrontRangeSensor", m_FrontRangeSensor, "1");
+  bindParameter("BackRangeSensor", m_BackRangeSensor, "1");
+  bindParameter("AccelerationSensor", m_AccelerationSensor, "1");
+  bindParameter("MagneticSensor", m_MagneticSensor, "1");
+  bindParameter("bias", m_bias, "1.0");
+  bindParameter("frontDistance", m_frontDistance, "0.5");
+  bindParameter("backDistance", m_backDistance, "0.1");
+  bindParameter("filter", m_filter, "0.05");
+  bindParameter("rotOffset", m_rotOffset, "0.5");
+  bindParameter("rotCorVal", m_rotCorVal, "15");
+  // </rtc-template>
+  
+  return RTC::RTC_OK;
+}
+
+
+RTC::ReturnCode_t CrawlerController::onFinalize()
+{
+  return RTC::RTC_OK;
+}
+
+
+RTC::ReturnCode_t CrawlerController::onStartup(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+
+
+RTC::ReturnCode_t CrawlerController::onShutdown(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+
+
+RTC::ReturnCode_t CrawlerController::onActivated(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+
+
+RTC::ReturnCode_t CrawlerController::onDeactivated(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+
+
+RTC::ReturnCode_t CrawlerController::onExecute(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+
+
+RTC::ReturnCode_t CrawlerController::onAborting(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+
+
+RTC::ReturnCode_t CrawlerController::onError(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+
+
+RTC::ReturnCode_t CrawlerController::onReset(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+
+
+RTC::ReturnCode_t CrawlerController::onStateUpdate(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+
+
+RTC::ReturnCode_t CrawlerController::onRateChanged(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+
+
+
+extern "C"
+{
+ 
+  void CrawlerControllerInit(RTC::Manager* manager)
+  {
+    coil::Properties profile(crawlercontroller_spec);
+    manager->registerFactory(profile,
+                             RTC::Create<CrawlerController>,
+                             RTC::Delete<CrawlerController>);
+  }
+  
+};
+
+

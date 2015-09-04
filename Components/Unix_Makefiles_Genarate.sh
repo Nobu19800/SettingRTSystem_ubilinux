@@ -1,0 +1,21 @@
+#!/bin/sh
+cd `dirname $0`
+sh AccAndMagnSensor_LSM303DLHC/Unix_Makefiles_Genarate.sh
+sh AccelerationSensor_KXR94_2050/Unix_Makefiles_Genarate.sh
+sh AccelerationSensor_KXSC7_2050/Unix_Makefiles_Genarate.sh
+sh Adafruit_PWMServoDriver_Edison/Unix_Makefiles_Genarate.sh
+sh ADC_Edison/Unix_Makefiles_Genarate.sh
+sh ADC_MCP3002/Unix_Makefiles_Genarate.sh
+sh ADC_MCP3208/Unix_Makefiles_Genarate.sh
+sh CrawlerControllerPWM2/Unix_Makefiles_Genarate.sh
+sh DigitalOutput_Edison/Unix_Makefiles_Genarate.sh
+sh GyroSensor_ENC_03R/Unix_Makefiles_Genarate.sh
+sh GyroSensor_L3GD20_I2C/Unix_Makefiles_Genarate.sh
+sh MotorDriver_TA7291P/Unix_Makefiles_Genarate.sh
+sh MotorDriver_TA8428K/Unix_Makefiles_Genarate.sh
+sh NineAxisSensor_LSM9DS0_I2C/Unix_Makefiles_Genarate.sh
+sh PWM_Edison/Unix_Makefiles_Genarate.sh
+sh RangeSensor_GP2Y0A21YK/Unix_Makefiles_Genarate.sh
+sh temperatureSensor_ADT7410/Unix_Makefiles_Genarate.sh
+sh CrawlerController/Unix_Makefiles_Genarate.sh
+sh RobotArmController/Unix_Makefiles_Genarate.sh

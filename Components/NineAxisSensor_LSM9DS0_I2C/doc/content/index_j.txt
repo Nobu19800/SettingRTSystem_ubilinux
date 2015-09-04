@@ -1,0 +1,142 @@
+NineAxisSensor_LSM9DS0_I2C - 日本語
+=======================
+
+
+はじめに
+========
+
+クラスについては、 `APIドキュメンテーション`_ に参照してください。
+
+.. _`APIドキュメンテーション`:
+   doxygen/html/index.html
+
+条件
+====
+
+NineAxisSensor_LSM9DS0_I2CはOpenRTM-aist 1.0.0以上のC++版が必要です。
+
+NineAxisSensor_LSM9DS0_I2Cは CMake_ を使います。CMake 2.8以上が必要です。
+
+.. _CMAke:
+   http://www.cmake.org
+
+インストール
+============
+
+インストーラ
+------------
+
+Windowsのユーザはインストーラパッケージを使用してコンポーネントをインストール
+することができます。これはコンポーネント及びそのすべての必要なライブラリを
+インストールします。Windowsでインストールする場合、インストーラの使用を推奨してます。
+
+- インストーラをダウンロードしてください。
+- インストールを始めるためにインストーラをダブルクリックしてください。
+- 指示にしたがってコンポーネントをインストールしてください。
+- 環境変数の変更を適用するため、コンポーネントを使用する前にコンピューターを
+  再起動する必要があるかもしれません。
+
+NineAxisSensor_LSM9DS0_I2Cは ``NineAxisSensor_LSM9DS0_I2CComp`` の実行をダブルクリックして実行することが
+できます。あるいは、 ``NineAxisSensor_LSM9DS0_I2C`` を初期化関数の ``NineAxisSensor_LSM9DS0_I2CInit`` を利用して、
+マネージャにロードすることができます。
+
+ソースから
+----------
+
+ソースを使う場合は以下の手順でインストールしてください。
+
+- ソースをダウンロードして解凍してください::
+
+    tar -xvzf NineAxisSensor_LSM9DS0_I2C-1.0.0.tar.gz
+
+- 解凍されたフォルダに入ってください::
+
+    cd NineAxisSensor_LSM9DS0_I2C-1.0.0
+
+- ``build`` フォルダを作ってください::
+
+    mkdir build
+
+- `` build`` フォルダに入ってください::
+
+    cd build
+
+- CMakeを実行してください::
+
+    cmake ../
+
+- エラーが出無い場合、makeを実行してください::
+
+    make
+
+- ``make install`` でコンポーネントをインストールしてください。選択された
+  インストール場所に書き込み権限があるかを確認してください::
+
+  ``make install``
+
+- インストールする場所はccmakeを実行して ``CMAKE_INSTALL_PREFIX`` を
+  設定することで変更が可能です。
+
+    ccmake ../
+
+ここまでで、コンポーネントが使えるようになりました。コンフィグレーションは次のセクションを
+参照してください。
+
+NineAxisSensor_LSM9DS0_I2Cは ``NineAxisSensor_LSM9DS0_I2CComp`` を実行（ ``${prefix}/components/bin`` に
+インストールされます）することでスタンドアローンモードで実行することができます。
+あるいは、 ``libNineAxisSensor_LSM9DS0_I2C.so`` を初期化関数の ``NineAxisSensor_LSM9DS0_I2CInit`` を利用して、
+マネージャにロードすることができます。このライブラリは ``${prefix}/components/lib`` 
+または ``${prefix}/components/lib64`` にインストールされます。
+
+
+コンフィグレーション
+====================
+
+使えるコンフィグレーションパラメータは以下のテーブルを参照
+してください。
+
+================ ================== ================ ====
+パラメータ       データ型           デフォルト値     意味
+================ ================== ================ ====
+I2C_channel      int                1                I2Cのポート番号
+offset           double             0                姿勢のオフセット
+accScale         string             8G               加速度センサの測定範囲
+magnScale        string             8000mG           地磁気センサの測定範囲
+gyroScale        string             500dps           ジャイロセンサの測定範囲
+magnOffsetX      int                420              地磁気データX軸方向のオフセット
+magnOffsetY      int                -455             地磁気データY軸方向のオフセット
+magnOffsetZ      int                -155             地磁気データZ軸方向のオフセット
+================ ================== ================ ====
+
+ポート
+======
+
+コンポーネントによって提供されるポートは以下のテーブルで述べられています。
+
+=============== =========== ============================== ====
+ポート名        ポート型    データ型                       意味
+=============== =========== ============================== ====
+acc             OutPort     RTC::TimedAcceleration3D       加速度センサの計測値
+magn            OutPort     RTC::TimedDoubleSeq            地磁気センサの計測値
+gyro            OutPort     RTC::TimedAngularVelocity3D    ジャイロセンサーの計測値
+temp            OutPort     RTC::TimedDouble               温度センサの計測値
+rot             OutPort     RTC::TimedOrientation3D        センサ情報から計算した姿勢
+=============== =========== ============================== ====
+
+例
+==
+
+例のrtc.confファイルは ``${prefix}/components/share/NineAxisSensor_LSM9DS0_I2C/examples/conf/``
+フォルダにインストールされています。
+
+Changelog
+=========
+
+
+License
+=======
+
+このソフトウェアは産業技術総合研究所で開発されています。承認番号はH23PRO-????
+です。このソフトウェアは Lesser General Public License (LGPL) ライセンスとして
+公開されてます。COPYING.LESSER を参照してください。
+

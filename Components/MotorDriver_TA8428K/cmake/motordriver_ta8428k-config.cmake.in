@@ -1,0 +1,54 @@
+# MotorDriver_TA8428K CMake config file
+#
+# This file sets the following variables:
+# MotorDriver_TA8428K_FOUND - Always TRUE.
+# MotorDriver_TA8428K_INCLUDE_DIRS - Directories containing the MotorDriver_TA8428K include files.
+# MotorDriver_TA8428K_IDL_DIRS - Directories containing the MotorDriver_TA8428K IDL files.
+# MotorDriver_TA8428K_LIBRARIES - Libraries needed to use MotorDriver_TA8428K.
+# MotorDriver_TA8428K_DEFINITIONS - Compiler flags for MotorDriver_TA8428K.
+# MotorDriver_TA8428K_VERSION - The version of MotorDriver_TA8428K found.
+# MotorDriver_TA8428K_VERSION_MAJOR - The major version of MotorDriver_TA8428K found.
+# MotorDriver_TA8428K_VERSION_MINOR - The minor version of MotorDriver_TA8428K found.
+# MotorDriver_TA8428K_VERSION_REVISION - The revision version of MotorDriver_TA8428K found.
+# MotorDriver_TA8428K_VERSION_CANDIDATE - The candidate version of MotorDriver_TA8428K found.
+
+message(STATUS "Found MotorDriver_TA8428K-@PROJECT_VERSION@")
+set(MotorDriver_TA8428K_FOUND TRUE)
+
+find_package(<dependency> REQUIRED)
+
+#set(MotorDriver_TA8428K_INCLUDE_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@"
+#    ${<dependency>_INCLUDE_DIRS}
+#    )
+#
+#set(MotorDriver_TA8428K_IDL_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@/idl")
+set(MotorDriver_TA8428K_INCLUDE_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@"
+    ${<dependency>_INCLUDE_DIRS}
+    )
+set(MotorDriver_TA8428K_IDL_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@/idl")
+
+
+if(WIN32)
+    set(MotorDriver_TA8428K_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_STATIC_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+else(WIN32)
+    set(MotorDriver_TA8428K_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_SHARED_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+endif(WIN32)
+
+set(MotorDriver_TA8428K_DEFINITIONS ${<dependency>_DEFINITIONS})
+
+set(MotorDriver_TA8428K_VERSION @PROJECT_VERSION@)
+set(MotorDriver_TA8428K_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(MotorDriver_TA8428K_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(MotorDriver_TA8428K_VERSION_REVISION @PROJECT_VERSION_REVISION@)
+set(MotorDriver_TA8428K_VERSION_CANDIDATE @PROJECT_VERSION_CANDIDATE@)
+

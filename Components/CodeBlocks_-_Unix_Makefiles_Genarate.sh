@@ -1,0 +1,21 @@
+#!/bin/sh
+cd `dirname $0`
+sh AccAndMagnSensor_LSM303DLHC/CodeBlocks_-_Unix_Makefiles_Genarate.sh
+sh AccelerationSensor_KXR94_2050/CodeBlocks_-_Unix_Makefiles_Genarate.sh
+sh AccelerationSensor_KXSC7_2050/CodeBlocks_-_Unix_Makefiles_Genarate.sh
+sh Adafruit_PWMServoDriver_Edison/CodeBlocks_-_Unix_Makefiles_Genarate.sh
+sh ADC_Edison/CodeBlocks_-_Unix_Makefiles_Genarate.sh
+sh ADC_MCP3002/CodeBlocks_-_Unix_Makefiles_Genarate.sh
+sh ADC_MCP3208/CodeBlocks_-_Unix_Makefiles_Genarate.sh
+sh CrawlerControllerPWM2/CodeBlocks_-_Unix_Makefiles_Genarate.sh
+sh DigitalOutput_Edison/CodeBlocks_-_Unix_Makefiles_Genarate.sh
+sh GyroSensor_ENC_03R/CodeBlocks_-_Unix_Makefiles_Genarate.sh
+sh GyroSensor_L3GD20_I2C/CodeBlocks_-_Unix_Makefiles_Genarate.sh
+sh MotorDriver_TA7291P/CodeBlocks_-_Unix_Makefiles_Genarate.sh
+sh MotorDriver_TA8428K/CodeBlocks_-_Unix_Makefiles_Genarate.sh
+sh NineAxisSensor_LSM9DS0_I2C/CodeBlocks_-_Unix_Makefiles_Genarate.sh
+sh PWM_Edison/CodeBlocks_-_Unix_Makefiles_Genarate.sh
+sh RangeSensor_GP2Y0A21YK/CodeBlocks_-_Unix_Makefiles_Genarate.sh
+sh temperatureSensor_ADT7410/CodeBlocks_-_Unix_Makefiles_Genarate.sh
+sh CrawlerController/CodeBlocks_-_Unix_Makefiles_Genarate.sh
+sh RobotArmController/CodeBlocks_-_Unix_Makefiles_Genarate.sh

@@ -1,0 +1,54 @@
+# NineAxisSensor_LSM9DS0_I2C CMake config file
+#
+# This file sets the following variables:
+# NineAxisSensor_LSM9DS0_I2C_FOUND - Always TRUE.
+# NineAxisSensor_LSM9DS0_I2C_INCLUDE_DIRS - Directories containing the NineAxisSensor_LSM9DS0_I2C include files.
+# NineAxisSensor_LSM9DS0_I2C_IDL_DIRS - Directories containing the NineAxisSensor_LSM9DS0_I2C IDL files.
+# NineAxisSensor_LSM9DS0_I2C_LIBRARIES - Libraries needed to use NineAxisSensor_LSM9DS0_I2C.
+# NineAxisSensor_LSM9DS0_I2C_DEFINITIONS - Compiler flags for NineAxisSensor_LSM9DS0_I2C.
+# NineAxisSensor_LSM9DS0_I2C_VERSION - The version of NineAxisSensor_LSM9DS0_I2C found.
+# NineAxisSensor_LSM9DS0_I2C_VERSION_MAJOR - The major version of NineAxisSensor_LSM9DS0_I2C found.
+# NineAxisSensor_LSM9DS0_I2C_VERSION_MINOR - The minor version of NineAxisSensor_LSM9DS0_I2C found.
+# NineAxisSensor_LSM9DS0_I2C_VERSION_REVISION - The revision version of NineAxisSensor_LSM9DS0_I2C found.
+# NineAxisSensor_LSM9DS0_I2C_VERSION_CANDIDATE - The candidate version of NineAxisSensor_LSM9DS0_I2C found.
+
+message(STATUS "Found NineAxisSensor_LSM9DS0_I2C-@PROJECT_VERSION@")
+set(NineAxisSensor_LSM9DS0_I2C_FOUND TRUE)
+
+find_package(<dependency> REQUIRED)
+
+#set(NineAxisSensor_LSM9DS0_I2C_INCLUDE_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@"
+#    ${<dependency>_INCLUDE_DIRS}
+#    )
+#
+#set(NineAxisSensor_LSM9DS0_I2C_IDL_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@/idl")
+set(NineAxisSensor_LSM9DS0_I2C_INCLUDE_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@"
+    ${<dependency>_INCLUDE_DIRS}
+    )
+set(NineAxisSensor_LSM9DS0_I2C_IDL_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@/idl")
+
+
+if(WIN32)
+    set(NineAxisSensor_LSM9DS0_I2C_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_STATIC_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+else(WIN32)
+    set(NineAxisSensor_LSM9DS0_I2C_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_SHARED_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+endif(WIN32)
+
+set(NineAxisSensor_LSM9DS0_I2C_DEFINITIONS ${<dependency>_DEFINITIONS})
+
+set(NineAxisSensor_LSM9DS0_I2C_VERSION @PROJECT_VERSION@)
+set(NineAxisSensor_LSM9DS0_I2C_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(NineAxisSensor_LSM9DS0_I2C_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(NineAxisSensor_LSM9DS0_I2C_VERSION_REVISION @PROJECT_VERSION_REVISION@)
+set(NineAxisSensor_LSM9DS0_I2C_VERSION_CANDIDATE @PROJECT_VERSION_CANDIDATE@)
+

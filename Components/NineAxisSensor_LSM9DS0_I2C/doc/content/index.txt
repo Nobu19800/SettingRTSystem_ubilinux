@@ -1,0 +1,152 @@
+NineAxisSensor_LSM9DS0_I2CName - English
+========================
+
+.. toctree::
+   :hidden:
+
+   index_j
+
+
+Introduction
+============
+
+
+For a full list of classes and functions, see the `API documentation`_.
+
+.. _`API Documentation`:
+   doxygen/html/index.html
+
+Requirements
+============
+
+NineAxisSensor_LSM9DS0_I2C uses the `CMake build system`. You will need at least version
+2.8 to be able to build the component.
+
+.. _`CMAke build system`:
+   http://www.cmake.org
+
+
+Installation
+============
+
+Binary
+------
+
+Users of Windows can install the component using the binary installer. This
+will install the component and all its necessary dependencies. It is the
+recommended method of installation in Windows.
+
+- Download the installer from the website.
+- Double-click the executable file to begin installation.
+- Follow the instructions to install the component.
+- You may need to restart your computer for environment variable changes
+  to take effect before using the component.
+
+The component can be launched by double-clicking the
+``NineAxisSensor_LSM9DS0_I2CComp`` executable. The ``NineAxisSensor_LSM9DS0_I2C`` library
+is available for loading into a manager, using the initialisation function
+``NineAxisSensor_LSM9DS0_I2CInit``.
+
+From source
+-----------
+
+Follow these steps to install NineAxisSensor_LSM9DS0_I2C from source in any operating
+system:
+
+- Download the source, either from the repository or a source archive,
+  and extract it somewhere::
+
+    tar -xvzf NineAxisSensor_LSM9DS0_I2C-1.0.0.tar.gz
+
+- Change to the directory containing the extracted source::
+
+    cd NineAxisSensor_LSM9DS0_I2C-1.0.0
+
+- Create a directory called ``build``::
+
+    mkdir build
+
+- Change to that directory::
+
+    cd build
+
+- Run cmake or cmake-gui::
+
+    cmake ../
+
+- If no errors occurred, run make::
+
+    make
+
+- Finally, install the component. Ensure the necessary permissions to
+  install into the chosen prefix are available::
+
+    make install
+
+- The install destination can be changed by executing ccmake and changing
+  the variable ``CMAKE_INSTALL_PREFIX``::
+
+    ccmake ../
+
+The component is now ready for use. See the next section for instructions on
+configuring the component.
+
+NineAxisSensor_LSM9DS0_I2C can be launched in stand-alone mode by executing the
+``NineAxisSensor_LSM9DS0_I2CComp`` executable (installed into ``${prefix}/components/bin``).
+Alternatively, ``libNineAxisSensor_LSM9DS0_I2C.so`` can be loaded into a manager, using the
+initialisation function ``NineAxisSensor_LSM9DS0_I2CInit``. This shared object can be found in
+``${prefix}/components/lib`` or ``${prefix}/components/lib64``.
+
+
+Configuration
+=============
+
+The available configuration parameters are described below:
+
+================ ================== ================ ======
+Parameter        Data type          Default Value    Effect
+================ ================== ================ ======
+I2C_channel      int                1                I2Cのポート番号
+offset           double             0                姿勢のオフセット
+accScale         string             8G               加速度センサの測定範囲
+magnScale        string             8000mG           地磁気センサの測定範囲
+gyroScale        string             500dps           ジャイロセンサの測定範囲
+magnOffsetX      int                420              地磁気データX軸方向のオフセット
+magnOffsetY      int                -455             地磁気データY軸方向のオフセット
+magnOffsetZ      int                -155             地磁気データZ軸方向のオフセット
+================ ================== ================ ======
+
+Ports
+=====
+
+The ports provided by the component are described below:
+
+=============== =========== ============================== =======
+Name            Type        Data type                      Purpose
+=============== =========== ============================== =======
+acc             OutPort     RTC::TimedAcceleration3D       加速度センサの計測値
+magn            OutPort     RTC::TimedDoubleSeq            地磁気センサの計測値
+gyro            OutPort     RTC::TimedAngularVelocity3D    ジャイロセンサーの計測値
+temp            OutPort     RTC::TimedDouble               温度センサの計測値
+rot             OutPort     RTC::TimedOrientation3D        センサ情報から計算した姿勢
+=============== =========== ============================== =======
+
+Examples
+========
+
+An example configuration file is provided in the
+``${prefix}/components/share/NineAxisSensor_LSM9DS0_I2C/examples/conf/`` directory.
+
+Changelog
+=========
+
+
+
+License
+=======
+
+This software is developed at the National Institute of Advanced
+Industrial Science and Technology. Approval number H23PRO-????. This
+software is licensed under the Lesser General Public License. See
+COPYING.LESSER.
+

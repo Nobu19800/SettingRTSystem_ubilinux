@@ -1,0 +1,150 @@
+CrawlerController - 日本語
+=======================
+
+
+はじめに
+========
+
+クラスについては、 `APIドキュメンテーション`_ に参照してください。
+
+.. _`APIドキュメンテーション`:
+   doxygen/html/index.html
+
+条件
+====
+
+CrawlerControllerはOpenRTM-aist 1.0.0以上のC++版が必要です。
+
+CrawlerControllerは CMake_ を使います。CMake 2.8以上が必要です。
+
+.. _CMAke:
+   http://www.cmake.org
+
+インストール
+============
+
+インストーラ
+------------
+
+Windowsのユーザはインストーラパッケージを使用してコンポーネントをインストール
+することができます。これはコンポーネント及びそのすべての必要なライブラリを
+インストールします。Windowsでインストールする場合、インストーラの使用を推奨してます。
+
+- インストーラをダウンロードしてください。
+- インストールを始めるためにインストーラをダブルクリックしてください。
+- 指示にしたがってコンポーネントをインストールしてください。
+- 環境変数の変更を適用するため、コンポーネントを使用する前にコンピューターを
+  再起動する必要があるかもしれません。
+
+CrawlerControllerは ``CrawlerControllerComp`` の実行をダブルクリックして実行することが
+できます。あるいは、 ``CrawlerController`` を初期化関数の ``CrawlerControllerInit`` を利用して、
+マネージャにロードすることができます。
+
+ソースから
+----------
+
+ソースを使う場合は以下の手順でインストールしてください。
+
+- ソースをダウンロードして解凍してください::
+
+    tar -xvzf CrawlerController-1.0.0.tar.gz
+
+- 解凍されたフォルダに入ってください::
+
+    cd CrawlerController-1.0.0
+
+- ``build`` フォルダを作ってください::
+
+    mkdir build
+
+- `` build`` フォルダに入ってください::
+
+    cd build
+
+- CMakeを実行してください::
+
+    cmake ../
+
+- エラーが出無い場合、makeを実行してください::
+
+    make
+
+- ``make install`` でコンポーネントをインストールしてください。選択された
+  インストール場所に書き込み権限があるかを確認してください::
+
+  ``make install``
+
+- インストールする場所はccmakeを実行して ``CMAKE_INSTALL_PREFIX`` を
+  設定することで変更が可能です。
+
+    ccmake ../
+
+ここまでで、コンポーネントが使えるようになりました。コンフィグレーションは次のセクションを
+参照してください。
+
+CrawlerControllerは ``CrawlerControllerComp`` を実行（ ``${prefix}/components/bin`` に
+インストールされます）することでスタンドアローンモードで実行することができます。
+あるいは、 ``libCrawlerController.so`` を初期化関数の ``CrawlerControllerInit`` を利用して、
+マネージャにロードすることができます。このライブラリは ``${prefix}/components/lib`` 
+または ``${prefix}/components/lib64`` にインストールされます。
+
+
+コンフィグレーション
+====================
+
+使えるコンフィグレーションパラメータは以下のテーブルを参照
+してください。
+
+================ ================== ================ ====
+パラメータ       データ型           デフォルト値     意味
+================ ================== ================ ====
+gyroSensor       int                1                1の時はジャイロセンサを使用する
+FrontRangeSensor int                1                1の時は前方に取り付けた距離センサを使用する
+BackRangeSensor  int                1                1の時は後方に取り付けた距離センサを使用する
+AccelerationSensor int                1                1の時は加速度センサを使用する
+MagneticSensor   int                1                1の時は地磁気センサを使用する
+bias             double             1.0              障害物が近づいた場合にどの程度旋回を行うか？値が大きくなるほど旋回しやすくなります。
+frontDistance    double             0.5              回避運動を開始する障害物までの最長距離
+backDistance     double             0.1              回避運動を開始する障害物までの最短距離。この値より近い距離に障害物があっても回避運動を行いません
+filter           double             0.05             この値が大きいほど余分な回避運動が小さくなります。
+rotOffset        double             0.5              センサの計測値から計算した姿勢角へのオフセット
+rotCorVal        double             15               
+================ ================== ================ ====
+
+ポート
+======
+
+コンポーネントによって提供されるポートは以下のテーブルで述べられています。
+
+=============== =========== ============================== ====
+ポート名        ポート型    データ型                       意味
+=============== =========== ============================== ====
+acc             InPort      RTC::TimedAcceleration3D       加速度センサの計測値
+magn            InPort      RTC::TimedDoubleSeq            地磁気センサの計測値
+gyro            InPort      RTC::TimedAngularVelocity3D    角速度センサの計測値
+range0          InPort      RTC::TimedDouble               距離センサ(右前)の計測値
+range1          InPort      RTC::TimedDouble               距離センサ(左前)の計測値
+range2          InPort      RTC::TimedDouble               距離センサ(右後)の計測値
+range3          InPort      RTC::TimedDouble               距離センサ(左後)の計測値
+in0             InPort      RTC::TimedDouble               左モーターへ入力する電圧のPWMデューティー比<br/>距離センサによる回避運動をする場合はこの入力値を補正する
+in1             InPort      RTC::TimedDouble               右モーターへ入力する電圧のPWMデューティー比<br/>距離センサによる回避運動をする場合はこの入力値を補正する
+pos             OutPort     RTC::TimedPose2D               センサ情報から計算した現在位置、姿勢(位置の計測は実装できていないので左右モーターの電圧が正の場合は前進、負の場合は後退するようにしてある)
+=============== =========== ============================== ====
+
+例
+==
+
+例のrtc.confファイルは ``${prefix}/components/share/CrawlerController/examples/conf/``
+フォルダにインストールされています。
+
+Changelog
+=========
+
+
+License
+=======
+
+このソフトウェアは産業技術総合研究所で開発されています。承認番号はH23PRO-????
+です。このソフトウェアは Lesser General Public License (LGPL) ライセンスとして
+公開されてます。COPYING.LESSER を参照してください。
+

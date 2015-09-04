@@ -1,0 +1,144 @@
+AccelerationSensor_KXSC7_2050Name - English
+========================
+
+.. toctree::
+   :hidden:
+
+   index_j
+
+
+Introduction
+============
+
+
+For a full list of classes and functions, see the `API documentation`_.
+
+.. _`API Documentation`:
+   doxygen/html/index.html
+
+Requirements
+============
+
+AccelerationSensor_KXSC7_2050 uses the `CMake build system`. You will need at least version
+2.8 to be able to build the component.
+
+.. _`CMAke build system`:
+   http://www.cmake.org
+
+
+Installation
+============
+
+Binary
+------
+
+Users of Windows can install the component using the binary installer. This
+will install the component and all its necessary dependencies. It is the
+recommended method of installation in Windows.
+
+- Download the installer from the website.
+- Double-click the executable file to begin installation.
+- Follow the instructions to install the component.
+- You may need to restart your computer for environment variable changes
+  to take effect before using the component.
+
+The component can be launched by double-clicking the
+``AccelerationSensor_KXSC7_2050Comp`` executable. The ``AccelerationSensor_KXSC7_2050`` library
+is available for loading into a manager, using the initialisation function
+``AccelerationSensor_KXSC7_2050Init``.
+
+From source
+-----------
+
+Follow these steps to install AccelerationSensor_KXSC7_2050 from source in any operating
+system:
+
+- Download the source, either from the repository or a source archive,
+  and extract it somewhere::
+
+    tar -xvzf AccelerationSensor_KXSC7_2050-1.0.0.tar.gz
+
+- Change to the directory containing the extracted source::
+
+    cd AccelerationSensor_KXSC7_2050-1.0.0
+
+- Create a directory called ``build``::
+
+    mkdir build
+
+- Change to that directory::
+
+    cd build
+
+- Run cmake or cmake-gui::
+
+    cmake ../
+
+- If no errors occurred, run make::
+
+    make
+
+- Finally, install the component. Ensure the necessary permissions to
+  install into the chosen prefix are available::
+
+    make install
+
+- The install destination can be changed by executing ccmake and changing
+  the variable ``CMAKE_INSTALL_PREFIX``::
+
+    ccmake ../
+
+The component is now ready for use. See the next section for instructions on
+configuring the component.
+
+AccelerationSensor_KXSC7_2050 can be launched in stand-alone mode by executing the
+``AccelerationSensor_KXSC7_2050Comp`` executable (installed into ``${prefix}/components/bin``).
+Alternatively, ``libAccelerationSensor_KXSC7_2050.so`` can be loaded into a manager, using the
+initialisation function ``AccelerationSensor_KXSC7_2050Init``. This shared object can be found in
+``${prefix}/components/lib`` or ``${prefix}/components/lib64``.
+
+
+Configuration
+=============
+
+The available configuration parameters are described below:
+
+================ ================== ================ ======
+Parameter        Data type          Default Value    Effect
+================ ================== ================ ======
+pinX             int                0                XSC7_2050の5番ピンに接続するピン番号
+pinY             int                1                XSC7_2050の6番ピンに接続するピン番号
+pinZ             int                2                XSC7_2050の7番ピンに接続するピン番号
+voltage          double             3.3              XSC7_2050の電源電圧値
+================ ================== ================ ======
+
+Ports
+=====
+
+The ports provided by the component are described below:
+
+=============== =========== ============================== =======
+Name            Type        Data type                      Purpose
+=============== =========== ============================== =======
+out             OutPort     RTC::TimedAcceleration3D       
+=============== =========== ============================== =======
+
+Examples
+========
+
+An example configuration file is provided in the
+``${prefix}/components/share/AccelerationSensor_KXSC7_2050/examples/conf/`` directory.
+
+Changelog
+=========
+
+
+
+License
+=======
+
+This software is developed at the National Institute of Advanced
+Industrial Science and Technology. Approval number H23PRO-????. This
+software is licensed under the Lesser General Public License. See
+COPYING.LESSER.
+

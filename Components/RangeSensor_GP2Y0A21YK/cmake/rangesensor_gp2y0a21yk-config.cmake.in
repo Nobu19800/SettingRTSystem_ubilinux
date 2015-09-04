@@ -1,0 +1,54 @@
+# RangeSensor_GP2Y0A21YK CMake config file
+#
+# This file sets the following variables:
+# RangeSensor_GP2Y0A21YK_FOUND - Always TRUE.
+# RangeSensor_GP2Y0A21YK_INCLUDE_DIRS - Directories containing the RangeSensor_GP2Y0A21YK include files.
+# RangeSensor_GP2Y0A21YK_IDL_DIRS - Directories containing the RangeSensor_GP2Y0A21YK IDL files.
+# RangeSensor_GP2Y0A21YK_LIBRARIES - Libraries needed to use RangeSensor_GP2Y0A21YK.
+# RangeSensor_GP2Y0A21YK_DEFINITIONS - Compiler flags for RangeSensor_GP2Y0A21YK.
+# RangeSensor_GP2Y0A21YK_VERSION - The version of RangeSensor_GP2Y0A21YK found.
+# RangeSensor_GP2Y0A21YK_VERSION_MAJOR - The major version of RangeSensor_GP2Y0A21YK found.
+# RangeSensor_GP2Y0A21YK_VERSION_MINOR - The minor version of RangeSensor_GP2Y0A21YK found.
+# RangeSensor_GP2Y0A21YK_VERSION_REVISION - The revision version of RangeSensor_GP2Y0A21YK found.
+# RangeSensor_GP2Y0A21YK_VERSION_CANDIDATE - The candidate version of RangeSensor_GP2Y0A21YK found.
+
+message(STATUS "Found RangeSensor_GP2Y0A21YK-@PROJECT_VERSION@")
+set(RangeSensor_GP2Y0A21YK_FOUND TRUE)
+
+find_package(<dependency> REQUIRED)
+
+#set(RangeSensor_GP2Y0A21YK_INCLUDE_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@"
+#    ${<dependency>_INCLUDE_DIRS}
+#    )
+#
+#set(RangeSensor_GP2Y0A21YK_IDL_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@/idl")
+set(RangeSensor_GP2Y0A21YK_INCLUDE_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@"
+    ${<dependency>_INCLUDE_DIRS}
+    )
+set(RangeSensor_GP2Y0A21YK_IDL_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@/idl")
+
+
+if(WIN32)
+    set(RangeSensor_GP2Y0A21YK_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_STATIC_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+else(WIN32)
+    set(RangeSensor_GP2Y0A21YK_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_SHARED_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+endif(WIN32)
+
+set(RangeSensor_GP2Y0A21YK_DEFINITIONS ${<dependency>_DEFINITIONS})
+
+set(RangeSensor_GP2Y0A21YK_VERSION @PROJECT_VERSION@)
+set(RangeSensor_GP2Y0A21YK_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(RangeSensor_GP2Y0A21YK_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(RangeSensor_GP2Y0A21YK_VERSION_REVISION @PROJECT_VERSION_REVISION@)
+set(RangeSensor_GP2Y0A21YK_VERSION_CANDIDATE @PROJECT_VERSION_CANDIDATE@)
+
