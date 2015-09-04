@@ -1,0 +1,9 @@
+#ifndef MOVESERVICE_IDL
+#define MOVESERVICE_IDL
+#include "BasicDataType.idl"
+
+interface MoveService{
+    void drive(in short leftWheel, in short rightWheel);
+};
+
+#endif

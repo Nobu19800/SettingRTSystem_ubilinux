@@ -1,0 +1,54 @@
+# ECandStateSharedComposite CMake config file
+#
+# This file sets the following variables:
+# ECandStateSharedComposite_FOUND - Always TRUE.
+# ECandStateSharedComposite_INCLUDE_DIRS - Directories containing the ECandStateSharedComposite include files.
+# ECandStateSharedComposite_IDL_DIRS - Directories containing the ECandStateSharedComposite IDL files.
+# ECandStateSharedComposite_LIBRARIES - Libraries needed to use ECandStateSharedComposite.
+# ECandStateSharedComposite_DEFINITIONS - Compiler flags for ECandStateSharedComposite.
+# ECandStateSharedComposite_VERSION - The version of ECandStateSharedComposite found.
+# ECandStateSharedComposite_VERSION_MAJOR - The major version of ECandStateSharedComposite found.
+# ECandStateSharedComposite_VERSION_MINOR - The minor version of ECandStateSharedComposite found.
+# ECandStateSharedComposite_VERSION_REVISION - The revision version of ECandStateSharedComposite found.
+# ECandStateSharedComposite_VERSION_CANDIDATE - The candidate version of ECandStateSharedComposite found.
+
+message(STATUS "Found ECandStateSharedComposite-@PROJECT_VERSION@")
+set(ECandStateSharedComposite_FOUND TRUE)
+
+find_package(<dependency> REQUIRED)
+
+#set(ECandStateSharedComposite_INCLUDE_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@"
+#    ${<dependency>_INCLUDE_DIRS}
+#    )
+#
+#set(ECandStateSharedComposite_IDL_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@/idl")
+set(ECandStateSharedComposite_INCLUDE_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@"
+    ${<dependency>_INCLUDE_DIRS}
+    )
+set(ECandStateSharedComposite_IDL_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@/idl")
+
+
+if(WIN32)
+    set(ECandStateSharedComposite_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_STATIC_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+else(WIN32)
+    set(ECandStateSharedComposite_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_SHARED_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+endif(WIN32)
+
+set(ECandStateSharedComposite_DEFINITIONS ${<dependency>_DEFINITIONS})
+
+set(ECandStateSharedComposite_VERSION @PROJECT_VERSION@)
+set(ECandStateSharedComposite_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(ECandStateSharedComposite_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(ECandStateSharedComposite_VERSION_REVISION @PROJECT_VERSION_REVISION@)
+set(ECandStateSharedComposite_VERSION_CANDIDATE @PROJECT_VERSION_CANDIDATE@)
+
