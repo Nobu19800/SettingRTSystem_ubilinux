@@ -1,0 +1,144 @@
+testEdisonName - English
+========================
+
+.. toctree::
+   :hidden:
+
+   index_j
+
+
+Introduction
+============
+
+
+For a full list of classes and functions, see the `API documentation`_.
+
+.. _`API Documentation`:
+   doxygen/html/index.html
+
+Requirements
+============
+
+testEdison uses the `CMake build system`. You will need at least version
+2.8 to be able to build the component.
+
+.. _`CMAke build system`:
+   http://www.cmake.org
+
+
+Installation
+============
+
+Binary
+------
+
+Users of Windows can install the component using the binary installer. This
+will install the component and all its necessary dependencies. It is the
+recommended method of installation in Windows.
+
+- Download the installer from the website.
+- Double-click the executable file to begin installation.
+- Follow the instructions to install the component.
+- You may need to restart your computer for environment variable changes
+  to take effect before using the component.
+
+The component can be launched by double-clicking the
+``testEdisonComp`` executable. The ``testEdison`` library
+is available for loading into a manager, using the initialisation function
+``testEdisonInit``.
+
+From source
+-----------
+
+Follow these steps to install testEdison from source in any operating
+system:
+
+- Download the source, either from the repository or a source archive,
+  and extract it somewhere::
+
+    tar -xvzf testEdison-1.0.0.tar.gz
+
+- Change to the directory containing the extracted source::
+
+    cd testEdison-1.0.0
+
+- Create a directory called ``build``::
+
+    mkdir build
+
+- Change to that directory::
+
+    cd build
+
+- Run cmake or cmake-gui::
+
+    cmake ../
+
+- If no errors occurred, run make::
+
+    make
+
+- Finally, install the component. Ensure the necessary permissions to
+  install into the chosen prefix are available::
+
+    make install
+
+- The install destination can be changed by executing ccmake and changing
+  the variable ``CMAKE_INSTALL_PREFIX``::
+
+    ccmake ../
+
+The component is now ready for use. See the next section for instructions on
+configuring the component.
+
+testEdison can be launched in stand-alone mode by executing the
+``testEdisonComp`` executable (installed into ``${prefix}/components/bin``).
+Alternatively, ``libtestEdison.so`` can be loaded into a manager, using the
+initialisation function ``testEdisonInit``. This shared object can be found in
+``${prefix}/components/lib`` or ``${prefix}/components/lib64``.
+
+
+Configuration
+=============
+
+The available configuration parameters are described below:
+
+================ ================== ================ ======
+Parameter        Data type          Default Value    Effect
+================ ================== ================ ======
+outValueDigital  int                0                out_dpで出力する値を設定
+outValuePWM      double             0                out_pwmで出力する値を設定する
+================ ================== ================ ======
+
+Ports
+=====
+
+The ports provided by the component are described below:
+
+=============== =========== ============================== =======
+Name            Type        Data type                      Purpose
+=============== =========== ============================== =======
+in_adc          InPort      RTC::TimedDouble               ADCコンポーネント(ADC_Edison)の出力を受け取って表示
+out_pwm         OutPort     RTC::TimedDouble               PWMコンポーネント(PWM_Edison)にデューティー比を入力
+out_dp          OutPort     RTC::TimedBoolean              デジタルピン制御RTC(DigitalOutput_Edison)にHighかLowを入力する
+=============== =========== ============================== =======
+
+Examples
+========
+
+An example configuration file is provided in the
+``${prefix}/components/share/testEdison/examples/conf/`` directory.
+
+Changelog
+=========
+
+
+
+License
+=======
+
+This software is developed at the National Institute of Advanced
+Industrial Science and Technology. Approval number H23PRO-????. This
+software is licensed under the Lesser General Public License. See
+COPYING.LESSER.
+

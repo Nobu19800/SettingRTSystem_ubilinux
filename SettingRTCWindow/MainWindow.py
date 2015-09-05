@@ -275,7 +275,7 @@ class MainWindow(QtGui.QMainWindow):
             
             try:
                 ans = self.control_comp._rtcconf._ptr().open(filapath)
-                if ans == False:
+                if ans != True:
                     self.mesBox(u"ファイルを開くのに失敗しました")
                     return
                 wid = self.rtcd_widget.WidList["rtcList"]["Widget"]
@@ -440,6 +440,7 @@ class MainWindow(QtGui.QMainWindow):
     # @param self
     # @param filename ファイル名
     def saveFile(self, filename):
+        result = False
         self.setDataCpp()
         self.setDataPy()
         
@@ -449,12 +450,13 @@ class MainWindow(QtGui.QMainWindow):
             for c in range(0, wid.count()):
                 clist.append(str(wid.itemText(c).toLocal8Bit()))
             self.control_comp._rtcconf._ptr().setExRTCList(clist)
-            self.control_comp._rtcconf._ptr().save(filename)
+            result = self.control_comp._rtcconf._ptr().save(filename)
         except:
             info = sys.exc_info()
             tbinfo = traceback.format_tb( info[2] )
             for tbi in tbinfo:
                 print tbi
+        return result
     ##
     # @brief ファイル保存のスロット
     # @param self
@@ -470,13 +472,15 @@ class MainWindow(QtGui.QMainWindow):
     # @param self
     # @param filename パッケージ名
     def createPack(self, filename):
+        result = False
         try:
-            self.control_comp._rtcconf._ptr().createProject(filename)
+            result = self.control_comp._rtcconf._ptr().createProject(filename)
         except:
             info = sys.exc_info()
             tbinfo = traceback.format_tb( info[2] )
             for tbi in tbinfo:
                 print tbi
+        return result
     ##
     # @brief パッケージを作成、保存のスロット
     # @param self           

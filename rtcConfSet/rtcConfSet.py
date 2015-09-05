@@ -1798,7 +1798,8 @@ class ConfDataInterface_i (RTCConfData__POA.ConfDataInterface):
                 of = open(text, "wb")
                 of.close()
                 s += text
-                
+            elif rtcdFlag == True and d.id == "exec_cxt.periodic.gui":
+                s += "NO"
             else:
                 s += d.data
                 

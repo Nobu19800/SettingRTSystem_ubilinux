@@ -159,7 +159,11 @@ class rtcdWidget(MTabWidget):
     def pkgSlot(self):
         filename = str(self.WidList["packagepath"]["Widget"].text().toLocal8Bit())
         if filename != "":
-            self.parent.createPack(filename)
+            result = self.parent.createPack(filename)
+            if result:
+                self.mesBox(u"パッケージを作成しました")
+            else:
+                self.mesBox(u"パッケージの作成に失敗しました")
         else:
             self.mesBox(u"ファイル名を入力してください")
 
@@ -402,7 +406,11 @@ class rtcdWidget(MTabWidget):
 
         path = str(self.WidList["filepath"]["Widget"].text().toLocal8Bit())
         if path != "":
-            self.parent.saveFile(path)
+            result = self.parent.saveFile(path)
+            if result:
+                self.mesBox(u"プロジェクトを保存しました")
+            else:
+                self.mesBox(u"プロジェクトの保存に失敗しました")
             self.parent.curFile = path
         else:
             self.mesBox(u"ファイル名を入力してください")

@@ -1,0 +1,54 @@
+# testEdison CMake config file
+#
+# This file sets the following variables:
+# testEdison_FOUND - Always TRUE.
+# testEdison_INCLUDE_DIRS - Directories containing the testEdison include files.
+# testEdison_IDL_DIRS - Directories containing the testEdison IDL files.
+# testEdison_LIBRARIES - Libraries needed to use testEdison.
+# testEdison_DEFINITIONS - Compiler flags for testEdison.
+# testEdison_VERSION - The version of testEdison found.
+# testEdison_VERSION_MAJOR - The major version of testEdison found.
+# testEdison_VERSION_MINOR - The minor version of testEdison found.
+# testEdison_VERSION_REVISION - The revision version of testEdison found.
+# testEdison_VERSION_CANDIDATE - The candidate version of testEdison found.
+
+message(STATUS "Found testEdison-@PROJECT_VERSION@")
+set(testEdison_FOUND TRUE)
+
+find_package(<dependency> REQUIRED)
+
+#set(testEdison_INCLUDE_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@"
+#    ${<dependency>_INCLUDE_DIRS}
+#    )
+#
+#set(testEdison_IDL_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@/idl")
+set(testEdison_INCLUDE_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@"
+    ${<dependency>_INCLUDE_DIRS}
+    )
+set(testEdison_IDL_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@/idl")
+
+
+if(WIN32)
+    set(testEdison_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_STATIC_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+else(WIN32)
+    set(testEdison_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_SHARED_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+endif(WIN32)
+
+set(testEdison_DEFINITIONS ${<dependency>_DEFINITIONS})
+
+set(testEdison_VERSION @PROJECT_VERSION@)
+set(testEdison_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(testEdison_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(testEdison_VERSION_REVISION @PROJECT_VERSION_REVISION@)
+set(testEdison_VERSION_CANDIDATE @PROJECT_VERSION_CANDIDATE@)
+
