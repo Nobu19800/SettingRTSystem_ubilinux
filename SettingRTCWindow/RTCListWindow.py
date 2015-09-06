@@ -2,8 +2,8 @@
 # -*- encoding: utf-8 -*-
 
 ##
-#   @file .py
-#   @brief 
+#   @file RTCListWindow.py
+#   @brief RTCのリスト表示ウインドウ
 
 
 
@@ -42,7 +42,7 @@ import imp
 #import RTCConfData
 
 
-
+"""
 def searchFile(name, dir):
     wk = os.walk(dir)
     for i in wk:
@@ -63,7 +63,7 @@ def getDirList(dir):
             ans.append(f)
     return ans
 
-"""
+
 class RTComponentProfile():
     def __init__(self):
         pass
@@ -278,12 +278,13 @@ class RTComponentProfile():
 """
 
 
-
+"""
 class RenderPath_s(QtGui.QWidget):
     def __init__(self, parent=None):
         super(RenderPath_s, self).__init__(parent)
         self.path = QtGui.QPainterPath()
 
+        
         self.penWidth = 1
         self.rotationAngle = 0
 
@@ -294,6 +295,9 @@ class RenderPath_s(QtGui.QWidget):
         self.pos_y = 0
 
         self.setBackgroundRole(QtGui.QPalette.Base)
+        
+
+
         
     def setPath(self, path):
         self.path = path
@@ -344,8 +348,20 @@ class RenderPath_s(QtGui.QWidget):
         gradient.setColorAt(1.0, self.fillColor2)
         painter.setBrush(QtGui.QBrush(gradient))
         painter.drawPath(self.path)
+"""
 
+
+
+##
+# @class RenderPath
+# @brief ペインターパス描画
+#
 class RenderPath(QtGui.QGraphicsItem):
+    ##
+    # @brief コンストラクタ
+    # @param self
+    # @param scene シーンオブジェクト
+    # @param parent 親ウィジェット
     def __init__(self, scene, parent=None):
         super(RenderPath, self).__init__(parent,scene)
         #self.scene = scene
@@ -364,37 +380,87 @@ class RenderPath(QtGui.QGraphicsItem):
         self.width = 10
         self.height = 10
 
+        color = QtGui.QColor("black")
+        self.setPenColor(color)
+        color1 = QtGui.QColor("black")
+        color2 = QtGui.QColor("black")
+        self.setFillGradient(color1,color2)
+        
+    ##
+    # @brief ペインターパス設定
+    # @param self
+    # @param path ペインターパス
     def setPath(self, path):
         self.path = path
 
+    ##
+    # @brief 図形の内側の領域の設定
+    # @param self
+    # @param rule 設定
     def setFillRule(self, rule):
         self.path.setFillRule(rule)
         
-
+    ##
+    # @brief 図形の内側の塗りつぶしの色
+    # @param self
+    # @param color1 グラデーションの最初の色
+    # @param color2 グラデーションの終点の色
     def setFillGradient(self, color1, color2):
         self.fillColor1 = color1
         self.fillColor2 = color2
         
-
+    ##
+    # @brief 線の太さ設定
+    # @param self
+    # @param width 太さ
     def setPenWidth(self, width):
         self.penWidth = width
         
-
+    ##
+    # @brief 線の色設定
+    # @param self
+    # @param color 色
     def setPenColor(self, color):
         self.penColor = color
         
-
+    ##
+    # @brief 角度設定
+    # @param self
+    # @param degrees 角度
     def setRotationAngle(self, degrees):
         self.rotationAngle = degrees
 
+    ##
+    # @brief 中心位置設定
+    # @param self
+    # @param x 中心位置(X)
+    # @param y 中心位置(Y)
     def setCenterPoint(self, x, y):
         self.centerPoint_x = x
         self.centerPoint_y = y
 
+    ##
+    # @brief 位置設定
+    # @param self
+    # @param x 位置(X)
+    # @param y 位置(Y)
     def setPosition(self, x, y):
         self.pos_x = x
         self.pos_y = y
 
+    ##
+    # @brief サイズ設定
+    # @param self
+    # @param x サイズ(X)
+    # @param y サイズ(Y)
+    def setSize(self, width, height):
+        self.width = width
+        self.height = height
+
+    ##
+    # @brief バウンディングボックスの矩形を取得
+    # @param self
+    # @return 矩形
     def boundingRect(self):
         pos_x = self.pos_x*self.scene().width()/100.0
         pos_y = self.pos_y*self.scene().height()/100.0
@@ -410,7 +476,16 @@ class RenderPath(QtGui.QGraphicsItem):
             height = -height
         
         return QtCore.QRectF(pos_x, pos_y, width, height)
-        
+
+    ##
+    # @brief テキスト描画
+    # @param self
+    # @param text 文字列
+    # @param painter ペインターオブジェクト
+    # @param portsize 位置オフセット
+    # @param position 位置
+    # @param color 色
+    # @param size フォントサイズ
     def drawText(self, text, painter, portsize, position, color=[0,0,0], size=10):
         
         if position == Port.LEFT:
@@ -432,10 +507,19 @@ class RenderPath(QtGui.QGraphicsItem):
         
         painter.drawText(posx*self.scene().width()/100.0, posy*self.scene().height()/100.0, text)  
 
-
+    ##
+    # @brief 描画更新スロット
+    # @param self
+    # @param painter ペインターオブジェクト
+    # @param option オプション
+    # @param widget ウィジェット
     def paint(self, painter, option, widget=None):
         self.updatePaint(painter)
-        
+
+    ##
+    # @brief 描画更新
+    # @param self
+    # @param painter ペインターオブジェクト
     def updatePaint(self, painter):
         
         #painter = QtGui.QPainter(self.parent)
@@ -456,12 +540,22 @@ class RenderPath(QtGui.QGraphicsItem):
         painter.drawPath(self.path)
         
     
-
+##
+# @class Port
+# @brief ポート描画基本オブジェクト
+#
 class Port(RenderPath):
     LEFT = 0
     RIGHT = 1
     TOP = 2
     BOTTOM = 3
+    ##
+    # @brief コンストラクタ
+    # @param self
+    # @param profile プロファイル
+    # @param defsize 大きさ
+    # @param scene シーンオブジェクト
+    # @param parent 親ウィジェット
     def __init__(self, profile, defsize, scene, parent):
         super(Port, self).__init__(scene, parent)
         self.profile = profile
@@ -471,7 +565,18 @@ class Port(RenderPath):
         
         self.size = defsize
 
+##
+# @class Port
+# @brief サービスポート描画オブジェクト
+#
 class ServicePort(Port):
+    ##
+    # @brief コンストラクタ
+    # @param self
+    # @param profile プロファイル
+    # @param defsize 大きさ
+    # @param scene シーンオブジェクト
+    # @param parent 親ウィジェット
     def __init__(self, profile, defsize, scene, parent):
         Port.__init__(self, profile, defsize, scene, parent)
 
@@ -496,6 +601,10 @@ class ServicePort(Port):
         #self.renderPath.setPosition(30,30)
         #self.renderPath.setRotationAngle(45)
 
+    ##
+    # @brief ペインターパス取得
+    # @param self
+    # @return ペインターパス
     def getPath(self):
         rectPath = QtGui.QPainterPath()
 
@@ -545,23 +654,47 @@ class ServicePort(Port):
 
         return rectPath
 
-    def setSize(self, size):
+    ##
+    # @brief サイズ設定
+    # @param self
+    # @param size サイズ
+    def setBoxSize(self, size):
         self.size = size
         path = self.getPath()
         self.setPath(path)
 
+    ##
+    # @brief 描画更新スロット
+    # @param self
+    # @param painter ペインターオブジェクト
+    # @param option オプション
+    # @param widget ウィジェット
     def paint(self, painter, option, widget=None):
         text = self.profile.name
-        self.drawText(text, painter, self.size, self.position)
+        self.drawText(text, painter, self.size, self.position, [0,0,0], self.size/1.5)
         self.updatePaint(painter)
 
+    ##
+    # @brief ダブルクリック時のイベント
+    # @param self
+    # @param event イベントオブジェクト
     def mouseDoubleClickEvent(self, event):
         self.vw = ViewServicePort(self.profile)
         self.vw.show()
     
         
-
+##
+# @class Port
+# @brief データポート描画オブジェクト
+#
 class DataPort(Port):
+    ##
+    # @brief コンストラクタ
+    # @param self
+    # @param profile プロファイル
+    # @param defsize 大きさ
+    # @param scene シーンオブジェクト
+    # @param parent 親ウィジェット
     def __init__(self, profile, defsize, scene, parent):
         Port.__init__(self, profile, defsize, scene, parent)
         
@@ -582,6 +715,10 @@ class DataPort(Port):
         #self.renderPath.setPosition(30,30)
         #self.renderPath.setRotationAngle(45)
 
+    ##
+    # @brief ペインターパス取得
+    # @param self
+    # @return ペインターパス
     def getPath(self):
         rectPath = QtGui.QPainterPath()
         
@@ -677,25 +814,48 @@ class DataPort(Port):
 
         return rectPath
 
-    def setSize(self, size):
+    ##
+    # @brief サイズ設定
+    # @param self
+    # @param size サイズ
+    def setBoxSize(self, size):
         self.size = size
         path = self.getPath()
         self.setPath(path)
 
+    ##
+    # @brief 描画更新スロット
+    # @param self
+    # @param painter ペインターオブジェクト
+    # @param option オプション
+    # @param widget ウィジェット
     def paint(self, painter, option, widget=None):
         text = self.profile.name + "(" + self.profile.datatype + ")"
-        self.drawText(text, painter, self.size, self.position)
+        self.drawText(text, painter, self.size, self.position, [0,0,0], self.size/1.5)
         self.updatePaint(painter)
 
+    ##
+    # @brief ダブルクリック時のイベント
+    # @param self
+    # @param event イベントオブジェクト
     def mouseDoubleClickEvent(self, event):
         self.vw = ViewDataPort(self.profile)
         self.vw.show()
     
 
+##
+# @class RenderRTC
+# @brief RTC描画オブジェクト
+#
 class RenderRTC(RenderPath):
+    ##
+    # @brief コンストラクタ
+    # @param self
+    # @param scene シーンオブジェクト
+    # @param parent 親ウィジェット
     def __init__(self, profile, scene, parent=None):
         super(RenderRTC, self).__init__(scene, parent)
-
+        
         self.profile = profile
         
         #print self.parentWidget()
@@ -730,9 +890,12 @@ class RenderRTC(RenderPath):
             #print i.keys()
 
         
-        
+        #self.setCenterPoint(0,0)
         #self.addDataPort()
 
+    ##
+    # @brief ペインターオブジェクト設定
+    # @param self 
     def setRTC(self):
         """lc = len(self.countPort(Port.LEFT))
         rc = len(self.countPort(Port.RIGHT))
@@ -773,12 +936,14 @@ class RenderRTC(RenderPath):
         if self.size_y < size_y:
             self.size_y = size_y
         """
+        self.setPosition(self.rtc_defpos_x,self.rtc_defpos_y)
+        self.setSize(self.rtc_defsize_x,self.rtc_defsize_y)
 
         self.path = QtGui.QPainterPath()
-        self.path.moveTo(self.rtc_defpos_x, self.rtc_defpos_y)
-        self.path.lineTo(self.rtc_defpos_x+self.rtc_defsize_x, self.rtc_defpos_y)
-        self.path.lineTo(self.rtc_defpos_x+self.rtc_defsize_x, self.rtc_defpos_y+self.rtc_defsize_y)
-        self.path.lineTo(self.rtc_defpos_x, self.rtc_defpos_y+self.rtc_defsize_y)
+        self.path.moveTo(0, 0)
+        self.path.lineTo(self.rtc_defsize_x, 0)
+        self.path.lineTo(self.rtc_defsize_x, self.rtc_defsize_y)
+        self.path.lineTo(0, self.rtc_defsize_y)
         self.path.closeSubpath()
 
         
@@ -793,8 +958,12 @@ class RenderRTC(RenderPath):
         self.setFillGradient(color1,color2)
 
         
-
+    ##
+    # @brief 各ポートの描画オブジェクト再設定
+    # @param self 
     def addPort(self):
+        
+            
         
         size,count_d = self.calcPortSize()
 
@@ -820,7 +989,8 @@ class RenderRTC(RenderPath):
             elif dp.position == Port.BOTTOM:
                 dp.setPosition(self.rtc_defpos_x+size*float(count[dp.position])+offxsize*float(count[dp.position]+1),self.rtc_defpos_y+self.rtc_defsize_y)
             count[dp.position] += 1
-            dp.setSize(size)
+            dp.setBoxSize(size)
+            
 
         """
         if dp.position == Port.LEFT:
@@ -833,6 +1003,10 @@ class RenderRTC(RenderPath):
             dp.renderPath.setPosition(self.rtc_defpos_x+size*1.5*count,self.rtc_defpos_y+self.size_y)
         """
 
+    ##
+    # @brief ポート数から各ポート描画オブジェクトの大きさ所得
+    # @param self
+    # @return サイズ、ポート数
     def calcPortSize(self):
 
         
@@ -858,7 +1032,11 @@ class RenderRTC(RenderPath):
 
         return self.rtc_defsize_y/(1.0+float(count*2)),count
         #return self.maxSize_port/count
-        
+
+    ##
+    # @brief サービスポート追加
+    # @param self
+    # @param profile プロファイル
     def addServicePort(self, profile):
         
         
@@ -873,6 +1051,11 @@ class RenderRTC(RenderPath):
 
         self.addPort()
 
+    ##
+    # @brief 同じ位置のポート描画オブジェクト取得
+    # @param self
+    # @param position 位置
+    # @return ポート描画オブジェクトのリスト
     def countPort(self, position):
         ans = []
         for d in self.dataports:
@@ -884,7 +1067,10 @@ class RenderRTC(RenderPath):
 
         return ans
         
-
+    ##
+    # @brief データポート追加
+    # @param self
+    # @param profile プロファイル
     def addDataPort(self, profile):
         
         size,count = self.calcPortSize()
@@ -905,10 +1091,21 @@ class RenderRTC(RenderPath):
         return QtCore.QSize(100, 100)"""
     
 
-    #def paintEvent(self, event):
+    ##
+    # @brief 描画更新スロット
+    # @param self
+    # @param painter ペインターオブジェクト
+    # @param option オプション
+    # @param widget ウィジェット
     def paint(self, painter, option, widget=None):
         self.updatePaint(painter)
-        
+
+
+##
+# @brief テキストボックス追加
+# @param name ネームラベル
+# @param text 初期のテキスト
+# @param layout 追加するレイアウト
 def addLineEditBox(name, text, layout):
     nameLabel = QtGui.QLabel(name)
     nameEdit = QtGui.QLineEdit()
@@ -922,9 +1119,19 @@ def addLineEditBox(name, text, layout):
         
     layout.addLayout(subLayout)
 
+
+##
+# @brief ウェブブラウザで指定したウェブページを開く
+# @param url URL
 def openWeb(url):
     webbrowser.open(str(url.toString().toLocal8Bit()))
 
+
+##
+# @brief ウェブページ表示ウィジェット追加
+# @param name ネームラベル
+# @param text HTML
+# @param layout 追加するレイアウト
 def addWebView(name, text, layout):
     nameLabel = QtGui.QLabel(name)
     nameEdit = QtWebKit.QWebView()
@@ -940,6 +1147,11 @@ def addWebView(name, text, layout):
         
     layout.addLayout(subLayout)
 
+##
+# @brief エディトボックスを追加
+# @param name ネームラベル
+# @param text 初期のテキスト
+# @param layout 追加するレイアウト
 def addTextEditBox(name, text, layout):
     nameLabel = QtGui.QLabel(name)
     nameEdit = QtGui.QTextEdit()
@@ -954,8 +1166,16 @@ def addTextEditBox(name, text, layout):
     layout.addLayout(subLayout)
 
 
-
+##
+# @class ViewConfiguration
+# @brief コンフィギュレーションパラメータ表示ダイアログ
+#
 class ViewConfiguration(QtGui.QDialog):
+    ##
+    # @brief コンストラクタ
+    # @param self
+    # @param profile プロファイル
+    # @param parent 親ウィジェット
     def __init__(self, profile, parent=None):
         super(ViewConfiguration, self).__init__(parent)
         
@@ -979,7 +1199,11 @@ class ViewConfiguration(QtGui.QDialog):
 
         self.descriptionEdit = QtGui.QTextEdit()
         self.mainLayout.addWidget(self.descriptionEdit)
-        
+
+    ##
+    # @brief 表を操作したときのスロット
+    # @param self 
+    # @param item テーブルアイテム
     def setTableSlot(self, item):
         
         num = self.table.currentRow()
@@ -987,7 +1211,11 @@ class ViewConfiguration(QtGui.QDialog):
             text = self.profile.confs[num].doc.description
             self.descriptionEdit.setText(text)
         
-
+    ##
+    # @brief 表にアイテム追加
+    # @param self 
+    # @param conf コンフィギュレーションパラメータ
+    # @param num 位置
     def addTable(self, conf, num):
         name = QtGui.QTableWidgetItem(conf.name)
         defaultValue = QtGui.QTableWidgetItem(conf.defaultValue)
@@ -997,7 +1225,17 @@ class ViewConfiguration(QtGui.QDialog):
         self.table.setItem(num, 1, defaultValue)
         self.table.setItem(num, 2, detaType)
 
+
+##
+# @class ViewServicePort
+# @brief サービスポート表示ダイアログ
+#
 class ViewServicePort(QtGui.QDialog):
+    ##
+    # @brief コンストラクタ
+    # @param self
+    # @param profile プロファイル
+    # @param parent 親ウィジェット
     def __init__(self, profile, parent=None):
         super(ViewServicePort, self).__init__(parent)
         name = profile.name
@@ -1030,6 +1268,11 @@ class ViewServicePort(QtGui.QDialog):
 
         self.descriptionEdit = QtGui.QTextEdit()
         self.mainLayout.addWidget(self.descriptionEdit)
+
+    ##
+    # @brief 表を操作したときのスロット
+    # @param self 
+    # @param item テーブルアイテム
     def setTableSlot(self, item):
         
         num = self.table.currentRow()
@@ -1038,6 +1281,11 @@ class ViewServicePort(QtGui.QDialog):
             self.descriptionEdit.setText(text)
         
 
+    ##
+    # @brief 表にアイテム追加
+    # @param self 
+    # @param conf コンフィギュレーションパラメータ
+    # @param num 位置
     def addTable(self, interface, num):
         name = QtGui.QTableWidgetItem(interface.name)
         direction = QtGui.QTableWidgetItem(interface.direction)
@@ -1047,8 +1295,16 @@ class ViewServicePort(QtGui.QDialog):
         self.table.setItem(num, 1, direction)
         self.table.setItem(num, 2, idlFile)
         
-
+##
+# @class ViewDataPort
+# @brief データポート表示ダイアログ
+#
 class ViewDataPort(QtGui.QDialog):
+    ##
+    # @brief コンストラクタ
+    # @param self
+    # @param profile プロファイル
+    # @param parent 親ウィジェット
     def __init__(self, profile, parent=None):
         super(ViewDataPort, self).__init__(parent)
         name = profile.name
@@ -1060,8 +1316,17 @@ class ViewDataPort(QtGui.QDialog):
         addLineEditBox(u"ポート",profile.portType,self.mainLayout)
         addLineEditBox(u"データ型",profile.datatype,self.mainLayout)
         addTextEditBox(u"概要",profile.doc.description,self.mainLayout)
-        
+
+##
+# @class ViewWindow
+# @brief RTCの詳細表示ダイアログ
+#
 class ViewWindow(QtGui.QDialog):
+    ##
+    # @brief コンストラクタ
+    # @param self
+    # @param profile プロファイル
+    # @param parent 親ウィジェット
     def __init__(self, profile, parent=None):
         super(ViewWindow, self).__init__(parent)
         name = profile.name
@@ -1073,7 +1338,7 @@ class ViewWindow(QtGui.QDialog):
         self.profile = profile
         self.scene = QtGui.QGraphicsScene(0, 0, 170, 170)
         
-        self.view = QtGui.QGraphicsView(self.scene)
+        self.view = GraphicsView(self.scene)
         self.view.setViewportUpdateMode(QtGui.QGraphicsView.BoundingRectViewportUpdate)
         self.view.setBackgroundBrush(QtGui.QColor(230, 200, 167))
 
@@ -1096,6 +1361,9 @@ class ViewWindow(QtGui.QDialog):
         self.mainLayout.addWidget(self.showConfigurationButton)
         
 
+    ##
+    # @brief コンフィギュレーションパラメータ表示ボタンのスロット
+    # @param self
     def showConfigurationSlot(self):
         
         self.ViewConfiguration = ViewConfiguration(self.profile,self)
@@ -1103,8 +1371,40 @@ class ViewWindow(QtGui.QDialog):
         #self.show()
 
 
+##
+# @class GraphicsView
+# @brief グラフィクスビューウィジェット
+#
+class GraphicsView(QtGui.QGraphicsView):
+    ##
+    # @brief コンストラクタ
+    # @param self
+    # @param profile プロファイル
+    # @param parent 親ウィジェット
+    def __init__(self, scene, parent=None):
+        super(GraphicsView, self).__init__(scene, parent)
 
+    ##
+    # @brief キー押下時のイベント
+    # @param self
+    # @param k キー
+    def keyPressEvent(self, k):
+        if k.key() == QtCore.Qt.Key_Up:
+            self.scale(1.1,1.1)
+        elif k.key() == QtCore.Qt.Key_Down:
+            self.scale(0.9,0.9)
+        
+
+##
+# @class RTCItem
+# @brief リストで表示するRTC
+#
 class RTCItem(QtGui.QGroupBox):
+    ##
+    # @brief コンストラクタ
+    # @param self
+    # @param profile プロファイル
+    # @param parent 親ウィジェット
     def __init__(self, profile, m_window=None, name="", parent=None):
         super(RTCItem, self).__init__(name, parent)
         self.profile = profile
@@ -1119,11 +1419,13 @@ class RTCItem(QtGui.QGroupBox):
         #bar.valueChanged.connect(self.valueChanged)
         #self.scene.changed.connect(self.valueChanged)
 
-        self.view = QtGui.QGraphicsView(self.scene)
+        self.view = GraphicsView(self.scene)
+        
         self.view.setViewportUpdateMode(QtGui.QGraphicsView.BoundingRectViewportUpdate)
         self.view.setBackgroundBrush(QtGui.QColor(230, 200, 167))
         self.mainLayout.addWidget(self.view)
         self.renderWindow = RenderRTC(profile, self.scene)
+        #self.renderWindow.updatePaint()
         #self.scene.addItem(self.renderWindow)
         #self.mainLayout.addWidget(self.renderWindow)
 
@@ -1158,23 +1460,43 @@ class RTCItem(QtGui.QGroupBox):
             #i.updatePaint(painter,)
         #self.widget().update()
         
-
+    ##
+    # @brief 詳細表示ボタンのスロット
+    # @param self
     def showProfileSlot(self):
         self.viewWindow = ViewWindow(self.profile, self)
         self.viewWindow.show()
 
+    ##
+    # @brief 別プロセスで起動ボタンのスロット
+    # @param self
     def runexeSlot(self):
         self.m_window.createComp(encodestr(self.profile.name),1)
-    
+
+    ##
+    # @brief rtcdで起動ボタンのスロット
+    # @param self
     def runSlot(self):
         self.m_window.createComp(encodestr(self.profile.name),0)
 
+##
+# @brief unicocdeをstrに変換
+# @param s 変換前の文字列
+# @return 変換後の文字列
 def encodestr(s):
     if isinstance(s, unicode):
         return s.encode('utf-8')
     return s
 
+##
+# @class RTC_Window
+# @brief RTCのリスト表示ウィジェット
+#
 class RTC_Window(QtGui.QWidget):
+    ##
+    # @brief コンストラクタ
+    # @param self
+    # @param parent 親ウィジェット
     def __init__(self, parent=None):
         super(RTC_Window, self).__init__(parent)
         self.tab_widget = QtGui.QTabWidget(self)
@@ -1183,6 +1505,11 @@ class RTC_Window(QtGui.QWidget):
         self.mainLayout.addWidget(self.tab_widget)
         self.parent = parent
         self.tab_list = {}
+
+    ##
+    # @brief RTCのリスト読み込み
+    # @param self
+    # @param data RTCのリスト
     def loadList(self, data):
         category_List = {}
         for i in range(len(data)):
@@ -1198,8 +1525,15 @@ class RTC_Window(QtGui.QWidget):
             self.tab_widget.addTab(cw,k)
             
             
-
+##
+# @class Category_Window
+# @brief カテゴリ表示ウィジェット
+#
 class Category_Window(QtGui.QWidget):
+    ##
+    # @brief コンストラクタ
+    # @param self
+    # @param parent 親ウィジェット
     def __init__(self, parent=None):
         super(Category_Window, self).__init__(parent)
         self.parent = parent
@@ -1212,6 +1546,11 @@ class Category_Window(QtGui.QWidget):
         self.mainLayout.addWidget(item1)"""
         self.items = {}
         self.layouts = []
+
+    ##
+    # @brief RTCのカテゴリ読み込み
+    # @param self
+    # @param data RTCのカテゴリ
     def loadList(self, data):
         for i in range(len(data)):
             if i%3 == 0:
@@ -1226,13 +1565,24 @@ class Category_Window(QtGui.QWidget):
             
             
     
-
+##
+# @class ScrollArea
+# @brief スクロールエリア
+#
 class ScrollArea(QtGui.QScrollArea):
+    ##
+    # @brief コンストラクタ
+    # @param self
+    # @param parent 親ウィジェット
     def __init__(self, parent=None):
         super(ScrollArea, self).__init__(parent)
         bar = self.verticalScrollBar()
         bar.valueChanged.connect(self.valueChanged)
 
+    ##
+    # @brief バーの位置変更時のスロット
+    # @param self
+    # @param v 現在位置
     def valueChanged(self, v):
         #print v
         #bar = self.verticalScrollBar()

@@ -2,8 +2,8 @@
 # -*- encoding: utf-8 -*-
 
 ##
-#   @file .py
-#   @brief 
+#   @file TabWidget.py
+#   @brief タブの基本ウィジェット
 
 
 
@@ -42,7 +42,17 @@ from SettingRTCConf.NamingWidget import NamingWidget
 from SettingRTCConf.TimerWidget import TimerWidget
 
 
+##
+# @class MTabWidget
+# @brief 各言語の設定データ表示表示タブのウィジェット
+#
 class TabWidget(QtGui.QTabWidget):
+    ##
+    # @brief コンストラクタ
+    # @param self 
+    # @param mgrc マネージャ操作オブジェクト
+    # @param language 言語
+    # @param parent 親ウィジェット
     def __init__(self, mgrc, language="Python", parent=None):
         super(TabWidget, self).__init__(parent)
         self.language = language
@@ -52,30 +62,37 @@ class TabWidget(QtGui.QTabWidget):
         self.createTabs()
         
 
+    ##
+    # @brief タブ作成
+    # @param self 
     def createTabs(self):
         self.Tabs = []
         self.ManagerTab = ManagerWidget(self.mgrc,self.language)
         self.addTab(self.ManagerTab, u"マネージャ")
         self.Tabs.append(self.ManagerTab)
         self.CorbaTab = CorbaWidget(self.mgrc)
-	self.addTab(self.CorbaTab, u"CORBA")
-	self.Tabs.append(self.CorbaTab)
-	self.ConfigTab = ConfigWidget(self.mgrc)
-	self.addTab(self.ConfigTab, u"一般的")
-	self.Tabs.append(self.ConfigTab)
-	self.NamingTab = NamingWidget(self.mgrc)
-	self.addTab(self.NamingTab, u"ネームサービス")
-	self.Tabs.append(self.NamingTab)
-	self.LoggerTab = LoggerWidget(self.mgrc)
-	self.addTab(self.LoggerTab, u"ロガー")
-	self.Tabs.append(self.LoggerTab)
-	self.TimerTab = TimerWidget(self.mgrc)
-	self.addTab(self.TimerTab, u"タイマ")
-	self.Tabs.append(self.TimerTab)
-	self.ExecCxtTab = ExecCxtWidget(self.mgrc, self.ManagerTab,self.language)
-	self.addTab(self.ExecCxtTab, u"実行コンテキスト")
-	self.Tabs.append(self.ExecCxtTab)
+        self.addTab(self.CorbaTab, u"CORBA")
+        self.Tabs.append(self.CorbaTab)
+        self.ConfigTab = ConfigWidget(self.mgrc)
+        self.addTab(self.ConfigTab, u"一般的")
+        self.Tabs.append(self.ConfigTab)
+        self.NamingTab = NamingWidget(self.mgrc)
+        self.addTab(self.NamingTab, u"ネームサービス")
+        self.Tabs.append(self.NamingTab)
+        self.LoggerTab = LoggerWidget(self.mgrc)
+        self.addTab(self.LoggerTab, u"ロガー")
+        self.Tabs.append(self.LoggerTab)
+        self.TimerTab = TimerWidget(self.mgrc)
+        self.addTab(self.TimerTab, u"タイマ")
+        self.Tabs.append(self.TimerTab)
+        self.ExecCxtTab = ExecCxtWidget(self.mgrc, self.ManagerTab,self.language)
+        self.addTab(self.ExecCxtTab, u"実行コンテキスト")
+        self.Tabs.append(self.ExecCxtTab)
 
+    ##
+    # @brief 設定データ取得
+    # @param self
+    # @return 設定データ
     def getConfData(self):
         datas = []
         for t in self.Tabs:
