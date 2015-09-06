@@ -2,6 +2,7 @@
 /*!
  * @file  ManipulatorCommonInterface_MiddleLevelSVC_impl.h
  * @brief サインスマート製4自由度ロボットアーム用中レベルモーションコマンド
+ * コメント文はロボットアーム制御機能共通インタフェース仕様書か引用しました
  *
  */
 

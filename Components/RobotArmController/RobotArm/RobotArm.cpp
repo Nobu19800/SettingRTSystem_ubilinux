@@ -286,10 +286,10 @@ RobotArm::RobotArm()
 
 	serbo = true;
 
-	manifactur = "";
-	type = "";
+	manifactur = "SainSmart";
+	type = "DIY 4-Axis Servos Control Palletizing Robot Arm";
 	axisNum = 4;
-	cmdCycle = 100;
+	cmdCycle = 50;
 	isGripper = false;
 
 	//speedPoint = 10;
@@ -321,7 +321,8 @@ void RobotArm::goHomePosition()
 
 	//targetPoint = homePosition;
 
-	addTargetJointPos(homeTheta, -1);
+	//addTargetJointPos(homeTheta, -1);
+	setStartPos(homeTheta[0], homeTheta[1], homeTheta[2], homeTheta[3]);
 	
 
 	//startPoint = homePosition;
@@ -847,8 +848,9 @@ void RobotArm::setStartPos(double j1, double j2, double j3, double j4)
 	//targetPoint = homePosition;
 	//startPoint = homePosition;
 
-	if(targetPoints.size() > 0)
-		targetPoints.erase(targetPoints.begin());
+	targetPoints.clear();
+	//if(targetPoints.size() > 0)
+	//	targetPoints.erase(targetPoints.begin());
 	//endTime = -1;
 
 	start();

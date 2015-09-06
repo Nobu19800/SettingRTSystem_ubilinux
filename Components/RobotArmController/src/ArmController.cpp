@@ -153,7 +153,8 @@ RTC::ReturnCode_t ArmController::onExecute(RTC::UniqueId ec_id)
   
   if(m_ra->stopFalg)
   {
-	return RTC::RTC_ERROR;
+	//return RTC::RTC_ERROR;
+	  return RTC::RTC_OK;
   }
 
   RTC::ExecutionContextList_var ecs = get_owned_contexts();

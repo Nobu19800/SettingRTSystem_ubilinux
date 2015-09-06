@@ -32,6 +32,7 @@ ManipulatorCommonInterface_CommonSVC_impl::~ManipulatorCommonInterface_CommonSVC
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_CommonSVC_impl::clearAlarms()
 {
+	alarmList.clear();
 	RETURNID_OK;
 }
 /*!
@@ -42,6 +43,13 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_CommonSVC_impl::clearAlarms()
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_CommonSVC_impl::getActiveAlarm(JARA_ARM::AlarmSeq_out alarms)
 {
 	alarms = new JARA_ARM::AlarmSeq;
+	alarms->length(alarmList.size());
+	for (int i = 0; i < alarmList.size(); i++)
+	{
+		(*alarms)[i].code = alarmList[i].code;
+		(*alarms)[i].type = alarmList[i].type;
+		(*alarms)[i].description = alarmList[i].description;
+	}
 	RETURNID_OK;
 }
 /*!
@@ -100,7 +108,23 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_CommonSVC_impl::getSoftLimitJoin
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_CommonSVC_impl::getState(JARA_ARM::ULONG& state)
 {
-	state = 0;
+	state = 0x00;
+	if (m_robotArm->serbo)
+	{
+		state += JARA_ARM::CONST_BINARY_00000001;
+	}
+	if (!m_robotArm->stopFalg)
+	{
+		state += JARA_ARM::CONST_BINARY_00000010;
+	}
+	if (alarmList.size() > 0)
+	{
+		state += JARA_ARM::CONST_BINARY_00000100;
+	}
+	if (m_robotArm->pauseFalg > 0)
+	{
+		state += 0x10;
+	}
 	RETURNID_OK;
 }
 /*!

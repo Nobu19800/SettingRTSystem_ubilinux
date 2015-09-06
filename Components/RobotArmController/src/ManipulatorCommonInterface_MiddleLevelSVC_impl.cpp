@@ -36,7 +36,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::closeGripper()
 {
 	m_robotArm->closeGripper();
 
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -46,7 +46,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::closeGripper()
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::getBaseOffset(JARA_ARM::HgMatrix offset)
 {
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -79,7 +79,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::getFeedbackPosCa
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::getMaxSpeedCartesian(JARA_ARM::CartesianSpeed_out speed)
 {
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -90,7 +90,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::getMaxSpeedCarte
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::getMaxSpeedJoint(JARA_ARM::DoubleSeq_out speed)
 {
 	speed = new JARA_ARM::DoubleSeq;
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 
@@ -101,7 +101,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::getMaxSpeedJoint
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::getMinAccelTimeCartesian(CORBA::Double& aclTime)
 {
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -111,7 +111,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::getMinAccelTimeC
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::getMinAccelTimeJoint(CORBA::Double& aclTime)
 {
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -123,7 +123,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::getMinAccelTimeJ
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::getSoftLimitCartesian(JARA_ARM::LimitValue_out xLimit, JARA_ARM::LimitValue_out yLimit, JARA_ARM::LimitValue_out zLimit)
 {
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -133,7 +133,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::getSoftLimitCart
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::moveGripper(JARA_ARM::ULONG angleRatio)
 {
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -143,7 +143,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::moveGripper(JARA
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::moveLinearCartesianAbs(const JARA_ARM::CarPosWithElbow& carPoint)
 {
-	
+	if(m_robotArm->stopFalg)RETURNID_NG;
 	m_robotArm->addTargetPos(Vector3d(carPoint.carPos[0][3], carPoint.carPos[1][3], carPoint.carPos[2][3]), atan2(carPoint.carPos[1][0],carPoint.carPos[0][0]), -1);
 	RETURNID_OK;
 }
@@ -155,6 +155,8 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::moveLinearCartes
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::moveLinearCartesianRel(const JARA_ARM::CarPosWithElbow& carPoint)
 {
+	if(m_robotArm->stopFalg)RETURNID_NG;
+
 	Vector3d pos = m_robotArm->calcKinematics();
 	
 	m_robotArm->addTargetPos(Vector3d(carPoint.carPos[0][3]+pos(0), carPoint.carPos[1][3]+pos(1), carPoint.carPos[2][3]+pos(2)), atan2(carPoint.carPos[1][0],carPoint.carPos[0][0])+m_robotArm->theta[3], -1);
@@ -168,7 +170,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::moveLinearCartes
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::movePTPCartesianAbs(const JARA_ARM::CarPosWithElbow& carPoint)
 {
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -178,7 +180,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::movePTPCartesian
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::movePTPCartesianRel(const JARA_ARM::CarPosWithElbow& carPoint)
 {
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -188,7 +190,8 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::movePTPCartesian
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::movePTPJointAbs(const JARA_ARM::JointPos& jointPoints)
 {
-	
+	if(m_robotArm->stopFalg)RETURNID_NG;
+
 	double tp[4] = {jointPoints[0], jointPoints[1], jointPoints[2], jointPoints[3]};
 	m_robotArm->addTargetJointPos(tp, -1);
 	RETURNID_OK;
@@ -201,7 +204,8 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::movePTPJointAbs(
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::movePTPJointRel(const JARA_ARM::JointPos& jointPoints)
 {
-	
+	if(m_robotArm->stopFalg)RETURNID_NG;
+
 	double tp[4] = {jointPoints[0]+m_robotArm->theta[0], jointPoints[1]+m_robotArm->theta[1], jointPoints[2]+m_robotArm->theta[2], jointPoints[3]+m_robotArm->theta[3]};
 	m_robotArm->addTargetJointPos(tp, -1);
 	
@@ -215,7 +219,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::movePTPJointRel(
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::openGripper()
 {
 	m_robotArm->openGripper();
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -224,6 +228,8 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::openGripper()
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::pause()
 {
+	if(m_robotArm->pauseFalg)RETURNID_NG;
+
 	m_robotArm->pause();
 	RETURNID_OK;
 }
@@ -234,6 +240,8 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::pause()
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::resume()
 {
+	if(!m_robotArm->pauseFalg)RETURNID_NG;
+
 	m_robotArm->resume();
 	RETURNID_OK;
 }
@@ -244,6 +252,8 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::resume()
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::stop()
 {
+	if(m_robotArm->stopFalg)RETURNID_NG;
+
 	m_robotArm->stop();
 	RETURNID_OK;
 }
@@ -255,7 +265,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::stop()
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setAccelTimeCartesian(CORBA::Double aclTime)
 {
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -265,7 +275,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setAccelTimeCart
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setAccelTimeJoint(CORBA::Double aclTime)
 {
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -275,7 +285,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setAccelTimeJoin
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setBaseOffset(const JARA_ARM::HgMatrix offset)
 {
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -285,7 +295,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setBaseOffset(co
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setControlPointOffset(const JARA_ARM::HgMatrix offset)
 {
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -323,7 +333,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setMaxSpeedJoint
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setMinAccelTimeCartesian(CORBA::Double aclTime)
 {
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -333,7 +343,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setMinAccelTimeC
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setMinAccelTimeJoint(CORBA::Double aclTime)
 {
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -345,7 +355,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setMinAccelTimeJ
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setSoftLimitCartesian(const JARA_ARM::LimitValue& xLimit, const JARA_ARM::LimitValue& yLimit, const JARA_ARM::LimitValue& zLimit)
 {
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -355,7 +365,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setSoftLimitCart
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setSpeedCartesian(JARA_ARM::ULONG spdRatio)
 {
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -365,7 +375,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setSpeedCartesia
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setSpeedJoint(JARA_ARM::ULONG spdRatio)
 {
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -376,7 +386,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setSpeedJoint(JA
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::moveCircularCartesianAbs(const JARA_ARM::CarPosWithElbow& carPointR, const JARA_ARM::CarPosWithElbow& carPointT)
 {
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -387,7 +397,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::moveCircularCart
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::moveCircularCartesianRel(const JARA_ARM::CarPosWithElbow& carPointR, const JARA_ARM::CarPosWithElbow& carPointT)
 {
-	RETURNID_OK;
+	RETURNID_NOT_IMPLEMENTED;
 }
 
 /*!
@@ -397,9 +407,9 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::moveCircularCart
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setHome(const JARA_ARM::JointPos& jointPoint)
 {
-	if(jointPoint.length() > 2)
+	if(jointPoint.length() > 3)
 	{
-		double jpos[3] = {jointPoint[0], jointPoint[1], jointPoint[2]};
+		double jpos[4] = { jointPoint[0], jointPoint[1], jointPoint[2], jointPoint[3] };
 		m_robotArm->setHomePosition(jpos);
 	}
 

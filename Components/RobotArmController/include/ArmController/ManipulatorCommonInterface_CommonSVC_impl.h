@@ -2,6 +2,7 @@
 /*!
  * @file  ManipulatorCommonInterface_CommonSVC_impl.h
  * @brief サインスマート製4自由度ロボットアーム用低レベルモーションコマンド
+ * コメント文はロボットアーム制御機能共通インタフェース仕様書か引用しました
  *
  */
 
@@ -94,6 +95,7 @@ class ManipulatorCommonInterface_CommonSVC_impl
 
 private:
    RobotArm *m_robotArm;
+   std::vector<JARA_ARM::Alarm> alarmList;
 
 };
 
