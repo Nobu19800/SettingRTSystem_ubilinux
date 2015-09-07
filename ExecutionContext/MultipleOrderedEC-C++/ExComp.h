@@ -1,4 +1,9 @@
-﻿
+﻿/*!
+* @file  ExComp.h
+* @brief RTCのブロックのウィジェット
+*
+*/
+
 #ifndef EXCOMP_H
 #define EXCOMP_H
 
@@ -44,38 +49,50 @@ class FEComp;
 
 class AddButton2;
 
-/*
-*RTCのブロックのウィジェット
-*/
 
+/**
+* @class ExComp
+*@brief RTCのブロックのウィジェット
+*/
 class ExComp : public QWidget
 {
 	Q_OBJECT
 public:
+	/**
+	*@brief コンストラクタ
+	* @param parent 親ウィジェット
+	*/
+    	ExComp(QWidget *parent = 0);
 	
-    ExComp(QWidget *parent = 0);
-	/*
-    *RTCが追加、削除されたときに実行条件に反映する関数
-    */
+	/**
+	*@brief RTCが追加、削除されたときに実行条件に反映する関数
+	* @param rtclist RTCのリスト
+	* @param rtclist2 未使用
+	*/
 	void UpdateComp(std::vector<std::string> &rtclist, std::vector<CORBA::Object_ptr> &rtclist2);
 	FEComp *Fc;
 	QComboBox *CB;
 	QWidget *subWidget;
 
 signals:
-	/*
-	*RTCを追加ボタンを押したときに発行するシグナル
+	
+	/**
+	*@brief RTCを追加ボタンを押したときに呼び出すシグナル
+	* @param ec RTCのブロックのウィジェット
+	* @param fc 直列ブロックのウィジェット
 	*/
 	void AddCompSignal(ExComp *ec, FEComp *fc);
 
 
 public slots:
-	/*
-	*ブロックを削除したときに呼び出されるスロット
+	
+	/**
+	*@brief ブロック削除ボタンのスロット
 	*/
 	void DeleteComp();
-	/*
-	*RTCを追加ボタンを押したときに呼び出されるスロット
+	
+	/**
+	*@brief RTCを追加ボタンを押したときに呼び出されるスロット
 	*/
 	void AddCompSlot();
 
@@ -100,13 +117,17 @@ private:
 
 
 
-/*
-*RTCのブロックのレイアウト
-*/
 
+/**
+* @class CompLayout
+*@brief 並列ブロックのレイアウト
+*/
 class CompLayout
 {
 public:
+	/**
+	*@brief コンストラクタ
+	*/
 	CompLayout();
 	std::vector<QVBoxLayout *> VL;
 	QHBoxLayout * subLayout;

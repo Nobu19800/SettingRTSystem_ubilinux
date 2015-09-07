@@ -1,4 +1,9 @@
-﻿
+﻿/*!
+* @file  SetComp.cpp
+* @brief 全実行順序のブロック表示ウィジェット
+*
+*/
+
 #include <QtWidgets>
 #include <sstream>
 #include "SetComp.h"
@@ -6,7 +11,11 @@
 using namespace std;
 
 
-
+/**
+*@brief 全実行順序のブロック表示ウィジェットのコンストラクタ
+* @param ec 実行コンテキストオブジェクト
+* @param parent 親ウィジェット
+*/
 SetComp::SetComp(RTC::MultipleOrderedEC *ec, QWidget *parent)
     : QTabWidget(parent)
 {
@@ -37,6 +46,10 @@ SetComp::SetComp(RTC::MultipleOrderedEC *ec, QWidget *parent)
 		newFile();
 }
 
+/**
+*@brief 実行順序の削除の関数
+* @param fc 実行順序ウィジェット
+*/
 void SetComp::DeleteComp(FrameComp *fc)
 {
 	{
@@ -59,6 +72,10 @@ void SetComp::DeleteComp(FrameComp *fc)
 	fc->close();
 }
 
+
+/**
+*@brief 実行順序追加のスロット
+*/
 void SetComp::CreateComp()
 {
 	FrameComp *FC = new FrameComp(m_ec, this);
@@ -85,6 +102,11 @@ void SetComp::CreateComp()
 	
 }
 
+/**
+*@brief ファイル保存スロット
+* @param Name ファイル名
+* @return 成功でTrue、失敗でFalse
+*/
 bool SetComp::save(const char *Name)
 {
 	std::vector<main_Rule> mR;
@@ -106,6 +128,9 @@ bool SetComp::save(const char *Name)
 	return true;
 }
 
+/**
+*@brief ブロック図に現在のRTCのリストを反映するスロット
+*/
 void SetComp::UpdateComp2()
 {
 	for(int h=0;h < FCS.size();h++)
@@ -202,6 +227,9 @@ void SetComp::UpdateComp2()
 	}
 }
 
+/**
+*@brief RTCが追加、削除されたときにブロック図に反映するスロット
+*/
 void SetComp::UpdateComps()
 {
 	
@@ -244,7 +272,11 @@ void SetComp::UpdateComps()
 
 
 
-
+/**
+*@brief ファイル読み込みスロット
+* @param Name ファイル名
+* @return 成功でTrue、失敗でFalse
+*/
 bool SetComp::open(const char *Name)
 {
 	std::vector<main_Rule> mR;
@@ -287,6 +319,9 @@ bool SetComp::open(const char *Name)
 	return true;
 }
 
+/**
+*@brief 実行しているRTCのブロックの色を変えるスロット
+*/
 void SetComp::UpdateEC()
 {
 	for(int h=0;h < m_ec->rs.size();h++)
@@ -302,6 +337,9 @@ void SetComp::UpdateEC()
 	
 }
 
+/**
+*@brief サイズ変更時に呼ばれるスロット
+*/
 void SetComp::UpdateSizeSlot()
 {
 	
@@ -352,6 +390,9 @@ void SetComp::UpdateSizeSlot()
 	
 }
 
+/**
+*@brief 未使用
+*/
 void SetComp::UpdateComp()
 {
 	for(int i=0;i < FCS.size();i++)
@@ -360,11 +401,19 @@ void SetComp::UpdateComp()
 	}
 }
 
+/**
+*@brief RTCを駆動したときにブロック図に反映するスロット
+* @param rs 並列ブロックのリスト
+*/
 void SetComp::UpdateRTC(std::vector<Rule> &rs)
 {
 	FCS[0]->UpdateRTC(rs);
 }
 
+
+/**
+*@brief 初期化
+*/
 void SetComp::newFile()
 {
 	for(int i=0;i < FCS.size();i++)

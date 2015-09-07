@@ -1,4 +1,9 @@
-﻿
+﻿/*!
+* @file  mainwindow.h
+* @brief メインウインドウ
+*
+*/
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -28,42 +33,60 @@ class QGraphicsView;
 class QPushButton;
 QT_END_NAMESPACE
 
-/*
-*メインウィンドウのウィジェット
-*/
 
+/**
+* @class MainWindow
+*@brief メインウインドウ
+*/
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
+	/**
+	*@brief コンストラクタ
+	* @param ec 実行コンテキストオブジェクト
+	*/
 	MainWindow(RTC::MultipleOrderedEC *ec);
-   /*
-   *実行順序をGUIに反映させる関数
-   */
+   
+	/**
+	*@brief 実行順序をGUIに反映させる関数
+	* @param rs 並列ブロックのリスト
+	*/
    void UpdateRTC(std::vector<Rule> &rs);
    RTC::MultipleOrderedEC *m_ec;
 
 private slots:
-	/*
-	*RTCが追加、削除されたときに呼び出されるスロット
+	
+	/**
+	*@brief RTCが追加、削除されたときに呼び出されるスロット
 	*/
 	void UpdateComp();
-	/*
-	*サイズを変更するときに呼び出されるスロット
+	
+	/**
+	*@brief サイズを変更するときに呼び出されるスロット
+	* @param w 幅
+	* @param h 高さ
 	*/
 	void m_resize(int w, int h);
-	/*
-	*ファイル保存のスロット
+	/**
+	*@brief ファイル保存のスロット
+	* @return 成功でTrue、失敗でFalse
 	*/
 	bool save();
+	/**
+	*@brief 別のファイル保存のスロット
+	* @return 成功でTrue、失敗でFalse
+	*/
 	bool saveAs();
-	/*
-	*ファイル読み込みスロット
+	
+	/**
+	*@brief ファイル読み込みスロット
 	*/
 	void open();
-	/*
-	*初期化のスロット
+	
+	/**
+	*@brief 初期化のスロット
 	*/
 	void newFile();
 
@@ -71,12 +94,14 @@ protected:
 
 
 private:
-	/*
-	*メニューの作成の関数
+	
+	/**
+	*@brief メニューの作成の関数
 	*/
 	void createMenus();
-	/*
-	*アクションの作成の関数
+	
+	/**
+	*@brief アクションの作成の関数
 	*/
 	void createAction();
 	SetComp *SC;

@@ -1,12 +1,29 @@
-﻿#include "MPTask.h"
+﻿/*!
+* @file  MPTask.cpp
+* @brief GUI、直列ブロック実行スレッド
+*
+*/
+
+
+#include "MPTask.h"
 
 bool GUITask::app_flag = false;
 
+/**
+*@brief 直列ブロックを実行するスレッドのクラスのコンストラクタ
+*/
 MPTask::MPTask(RTC::MultipleOrderedEC *c)
 {
 	m_ec = c;
 }
 
+/**
+*@brief
+* @param c ブロック
+* @param I 全体の並列ブロックの番号
+* @param J 並列ブロック内の直列ブロックの番号
+* @param K 直列ブロック内のブロックの番号
+*/
 void MPTask::addComp(sub_Rule *c, int I, int J, int K)
 {
 	MPComp mc;
@@ -18,6 +35,10 @@ void MPTask::addComp(sub_Rule *c, int I, int J, int K)
 	
 }
 
+/**
+*@brief スレッド実行関数
+* @return
+*/
 int MPTask::svc()
 {
 	if(m_ec->rs.size() > m_ec->r_num)
@@ -34,7 +55,10 @@ int MPTask::svc()
 	return 0;
 }
 
-
+/**
+*@brief GUIを実行するスレッドのコンストラクタ
+* @param ec 実行コンテキストオブジェクト
+*/
 GUITask::GUITask(RTC::MultipleOrderedEC *ec)
 {
 	
@@ -43,6 +67,10 @@ GUITask::GUITask(RTC::MultipleOrderedEC *ec)
 	
 }
 
+/**
+*@brief スレッド実行関数
+* @return
+*/
 int GUITask::svc()
 {
 	
@@ -83,7 +111,10 @@ int GUITask::svc()
 	
 }
 
-
+/**
+*@brief 未使用
+* @return
+*/
 void GUITask::updateRTC()
 {
 

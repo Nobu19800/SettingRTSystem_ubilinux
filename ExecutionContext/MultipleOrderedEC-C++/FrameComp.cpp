@@ -1,7 +1,12 @@
-﻿
+﻿/*!
+* @file  FrameComp.cpp
+* @brief 実行順序のブロックを表示するウィジェット
+*
+*/
+
 #include <QtWidgets>
 #include "FrameComp.h"
-#include "CompSearch.h"
+#include "FileStreamFunc.h"
 
 
 
@@ -11,7 +16,12 @@ using namespace std;
 
 
 
-
+/**
+*@brief 実行順序のブロックを表示するウィジェットのコンストラクタ
+* @param ec 実行コンテキストオブジェクト
+* @param sc 全実行順序のブロック表示ウィジェット
+* @param parent 親ウィジェット
+*/
 FrameComp::FrameComp(RTC::MultipleOrderedEC *ec, SetComp *sc, QWidget *parent)
     : QWidget(parent)
 {
@@ -67,12 +77,18 @@ FrameComp::FrameComp(RTC::MultipleOrderedEC *ec, SetComp *sc, QWidget *parent)
 }
 
 
+/**
+*@brief このブロックを削除する関数
+*/
 void FrameComp::DeleteFrame()
 {
 	Sc->DeleteComp(this);
 }
 
-
+/**
+*@brief 並列ブロックの先頭に直列ブロックを追加
+* @param c 並列ブロックレイアウト
+*/
 void FrameComp::AddCompSlot3(CompLayout *c)
 {
 	AddButton *AB2 = new AddButton(tc->toUnicode("追加"));
@@ -155,7 +171,11 @@ void FrameComp::AddCompSlot3(CompLayout *c)
 	
 }
 
-
+/**
+*@brief 並列ブロック削除
+* @param Vl 並列ブロック追加ボタンのウィジェット
+* @param c 並列ブロック削除
+*/
 void FrameComp::DeleteComp(QWidget *Vl, CompLayout *c)
 {
 	
@@ -207,6 +227,10 @@ void FrameComp::DeleteComp(QWidget *Vl, CompLayout *c)
 	//Sc->UpdateComp2();
 }
 
+/**
+*@brief 並列ブロック初期化
+* @param c 並列ブロックレイアウト
+*/
 void FrameComp::AddCompSlot2(CompLayout *c)
 {
 	c->subLayout = new QHBoxLayout;
@@ -277,7 +301,9 @@ void FrameComp::AddCompSlot2(CompLayout *c)
 	//Sc->UpdateComp2();
 }
 
-
+/**
+*@brief サイズ変更の関数
+*/
 void FrameComp::UpdateSize()
 {
 	int Ws = 0;
@@ -318,6 +344,9 @@ void FrameComp::UpdateSize()
 		Comps[i]->Lb->setPixmap(QPixmap(":/images/arrow.png").scaled(Ws*180,30));
 }
 
+/**
+*@brief 並列ブロックを先頭に追加するスロット
+*/
 void FrameComp::AddCompsT()
 {
 	InsertComps2(2);
@@ -325,6 +354,10 @@ void FrameComp::AddCompsT()
 
 }
 
+/**
+*@brief 並列ブロックを指定並列ブロックの後に追加するスロット
+* @param c 指定並列ブロック
+*/
 void FrameComp::AddCompsU(CompLayout *c)
 {
 	int t = mainLayout->indexOf(c->mainWidget);
@@ -332,7 +365,9 @@ void FrameComp::AddCompsU(CompLayout *c)
 }
 
 
-
+/**
+*@brief 並列ブロック追加
+*/
 void FrameComp::AddComps2()
 {
 	CompLayout *CL = new CompLayout();
@@ -349,6 +384,10 @@ void FrameComp::AddComps2()
 
 }
 
+/**
+*@brief 並列ブロックを指定位置に追加
+* @param num 指定位置
+*/
 void FrameComp::InsertComps2(int num)
 {
 	CompLayout *CL = new CompLayout();
@@ -364,6 +403,10 @@ void FrameComp::InsertComps2(int num)
 
 }
 
+/**
+*@brief 直列ブロック初期化
+* @param FC 直列ブロックウィジェット
+*/
 void FrameComp::AddComp(FEComp *FC)
 {
 	ExComp *EC = new ExComp();
@@ -383,6 +426,11 @@ void FrameComp::AddComp(FEComp *FC)
 	//Sc->UpdateComp2();
 }
 
+/**
+*@brief 直列ブロック追加
+* @param num 指定位置
+* @param FC 直列ブロックウィジェット
+*/
 void FrameComp::InsertComp(int num, FEComp *FC)
 {
 	ExComp *EC = new ExComp();
@@ -401,6 +449,12 @@ void FrameComp::InsertComp(int num, FEComp *FC)
 	//Sc->UpdateComp2();
 }
 
+
+/**
+*@brief RTCが追加、削除されたときにブロックに反映する関数
+* @param rtclist RTCのリスト
+* @param rtclist2 未使用
+*/
 void FrameComp::UpdateComp2(std::vector<std::string> rtclist, std::vector<CORBA::Object_ptr> rtclist2)
 {
 	for(int i=0;i < CLS.size();i++)
@@ -413,18 +467,29 @@ void FrameComp::UpdateComp2(std::vector<std::string> rtclist, std::vector<CORBA:
 }
 
 
-
+/**
+*@brief 直列ブロックの指定位置にブロック追加するスロット
+* @param ec 挿入箇所手前のブロックウィジェット
+* @param fc 直列ブロックウィジェット
+*/
 void FrameComp::AddCompSlot(ExComp *ec, FEComp *fc)
 {
 	InsertComp(fc->CL->indexOf(ec)+1, fc);
 }
 
+/**
+*@brief 直列ブロックの先頭にブロックを追加するスロット
+* @param fc 直列ブロックウィジェット
+*/
 void FrameComp::AddCompSlot1(FEComp *fc)
 {
 	InsertComp(0, fc);
 }
 
-
+/**
+*@brief RTCが追加、削除されたときに実行条件に反映する関数
+* @param mR 実行順序
+*/
 void FrameComp::SetFrame(main_Rule &mR)
 {
 	
@@ -504,6 +569,12 @@ void FrameComp::SetFrame(main_Rule &mR)
 	}
 }
 
+/**
+*@brief 削除予定
+* @param ifs
+* @param mR
+* @return 成功でTrue、失敗でFalse
+*/
 bool FrameComp::openb(std::ifstream &ifs, std::vector<main_Rule> &mR)
 {
 	main_Rule rs;
@@ -636,7 +707,13 @@ bool FrameComp::openb(std::ifstream &ifs, std::vector<main_Rule> &mR)
 	
 }
 
-
+/**
+*@brief 削除予定
+* @param Str
+* @param an
+* @param mR
+* @return
+*/
 bool FrameComp::open(std::vector<std::string> &Str, int &an, std::vector<main_Rule> &mR)
 {
 	main_Rule rs;
@@ -650,7 +727,12 @@ bool FrameComp::open(std::vector<std::string> &Str, int &an, std::vector<main_Ru
 	return true;
 }
 
-
+/**
+*@brief バイナリファイル保存の関数
+* @param ofs2 ファイルストリーム
+* @param mR 実行順序
+* @return 成功でTrue、失敗でFalse
+*/
 bool FrameComp::save(ofstream &ofs2, std::vector<main_Rule> &mR)
 {
 	main_Rule rs;
@@ -779,7 +861,10 @@ bool FrameComp::save(ofstream &ofs2, std::vector<main_Rule> &mR)
 }
 
 
-
+/**
+*@brief ブロックの色を変えるスロット
+* @param rs 並列ブロックのリスト
+*/
 void FrameComp::UpdateEC(std::vector<Rule> &rs)
 {				
 	for(int i=0;i < rs.size();i++)
@@ -833,12 +918,19 @@ void FrameComp::UpdateEC(std::vector<Rule> &rs)
 	
 }
 
+/**
+*@brief 未使用
+* @param rs
+*/
 void FrameComp::UpdateRTC(std::vector<Rule> &rs)
 {
 	
 	
 }
 
+/**
+*@brief 初期化
+*/
 void FrameComp::newFile()
 {
 	for(int i=0;i < Comps.size();i++)

@@ -1,17 +1,31 @@
-﻿#include "MPLua.h"
-#include "CompSearch.h"
+﻿/*!
+* @file  MPLua.cpp
+* @brief Luaから実行順序を読み込む関数
+*
+*/
+
+
+#include "MPLua.h"
+#include "FileStreamFunc.h"
 #include <luabind/luabind.hpp>
 #include <lua.hpp>
 
 using namespace luabind;
 
-
+/**
+*@brief 実行順序追加
+*/
 void MainLules::addMainRule()
 {
 	main_Rule sr;
 	rs.push_back(sr);
 }
 
+/**
+*@brief 指定番号の実行順序取得
+* @param num 番号
+* @return 実行順序取得
+*/
 main_Rule* MainLules::getMainRule(int num)
 {
 	if(rs.size() > num)
@@ -19,7 +33,12 @@ main_Rule* MainLules::getMainRule(int num)
 	return NULL;
 }
 
-
+/**
+*@brief Luaより実行順序の読み込む関数
+* @param rs 実行順序リスト
+* @param Name ファイルパス
+* @return 成功でTrue、失敗でFalse
+*/
 bool LoadMainRule_Lua(std::vector<main_Rule> &rs, std::string Name)
 {
 	lua_State* lua;

@@ -1,4 +1,11 @@
-﻿#ifndef ADDBUTTON_H
+﻿/*!
+* @file  AddButton.h
+* @brief 直列ブロックの先頭にブロックを追加するボタン
+*
+*/
+
+
+#ifndef ADDBUTTON_H
 #define ADDBUTTON_H
 
 #include "ExComp.h"
@@ -22,27 +29,35 @@ class QHBoxLayout;
 class QVBoxLayout;
 QT_END_NAMESPACE
 
-/*
-*ブロック追加ボタンを含むウィジェット
-*/
 
+/**
+* @class AddButton
+*@brief 直列ブロックの先頭にブロックを追加するボタン
+*/
 class AddButton : public QWidget
 {
 	Q_OBJECT
 public:
+	/**
+	*@brief コンストラクタ
+	* @param text 表示テキスト
+	* @param parent 親ウィジェット
+	*/
 	AddButton(QString text,QWidget *parent = 0);
 	FEComp *Fc;
 	QPushButton *PB;
 
 signals:
-	/*
-	*ボタンクリック時に発行するシグナル
+	
+	/**
+	*@brief ボタンクリック時に呼び出すシグナル
+	* @param fc 直列ブロックウィジェット
 	*/
 	void clicked(FEComp *fc);
 
 public slots:
-	/*
-	*ボタンクリック時に呼び出すスロット
+	/**
+	*@brief ボタンクリック時に呼び出すスロット
 	*/
 	void clickedSlot();
 

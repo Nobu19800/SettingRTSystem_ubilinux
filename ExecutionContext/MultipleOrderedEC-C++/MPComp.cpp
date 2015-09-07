@@ -1,16 +1,31 @@
-﻿#include <coil/stringutil.h>
+﻿/*!
+* @file  MPComp.cpp
+* @brief 実行順序設定関連のクラス、関数
+*
+*/
+
+#include <coil/stringutil.h>
 #include "MPComp.h"
-#include "CompSearch.h"
+#include "FileStreamFunc.h"
 #include "MPLua.h"
 
 using namespace std;
 
+
+/**
+*@brief 直列ブロック追加
+*/
 void Rule::addP()
 {
 	std::vector<sub_Rule> s;
 	SR.push_back(s);
 }
 
+/**
+*@brief 指定番号の直列ブロックにブロック追加
+* @param num 番号
+* @param s ブロックのRTC名
+*/
 void Rule::addsubRule(int num, std::string v)
 {
 	if(SR.size() > num)
@@ -22,12 +37,20 @@ void Rule::addsubRule(int num, std::string v)
 	}
 }
 
+/**
+*@brief 並列ブロック追加
+*/
 void main_Rule::addRule()
 {
 	Rule r;
 	rs.push_back(r);
 }
 
+/**
+*@brief 実行条件追加
+* @param n RTC名
+* @param s 状態
+*/
 void main_Rule::addaddRule(std::string n, int s)
 {
 	add_Rule a;
@@ -36,6 +59,11 @@ void main_Rule::addaddRule(std::string n, int s)
 	ar.push_back(a);
 }
 
+/**
+*@brief 指定した番号の並列ブロックを取得
+* @param num 番号
+* @return 並列ブロック
+*/
 Rule *main_Rule::getRule(int num)
 {
 	if(rs.size() > num)
@@ -43,6 +71,11 @@ Rule *main_Rule::getRule(int num)
 	return NULL;
 }
 
+/**
+*@brief 指定した番号の実行条件を取得
+* @param num 番号
+* @return 実行条件
+*/
 add_Rule *main_Rule::getaddRule(int num)
 {
 	if(ar.size() > num)
@@ -53,7 +86,12 @@ add_Rule *main_Rule::getaddRule(int num)
 
 
 
-
+/**
+*@brief テキストファイルからの実行順序(直列ブロックのリスト)読み込む関数
+* @param cs ファイルから読み込んだ単語のリスト
+* @param nm 現在の位置
+* @param r 並列ブロック
+*/
 void LoadSRule(std::vector<std::string> &cs, int &nm,Rule &r)
 {
 	bool flag = true;
@@ -79,6 +117,12 @@ void LoadSRule(std::vector<std::string> &cs, int &nm,Rule &r)
 }
 
 
+/**
+*@brief テキストファイルからの実行順序(並列ブロック)読み込む関数
+* @param cs ファイルから読み込んだ単語のリスト
+* @param nm 現在の位置
+* @param rs 実行順序
+*/
 void LoadHRule(std::vector<std::string> &cs, int &nm,std::vector<Rule> &rs)
 {
 	bool flag = true;
@@ -123,6 +167,12 @@ void LoadHRule(std::vector<std::string> &cs, int &nm,std::vector<Rule> &rs)
 	}
 }
 
+/**
+*@brief 単語のリストの位置を移動する
+* @param cs ファイルから読み込んだ単語のリスト
+* @param nm 現在の位置
+* @return 成功でTrue、失敗でFalse
+*/
 bool AddCount(std::vector<std::string> &cs, int &nm)
 {
 	nm++;
@@ -133,6 +183,12 @@ bool AddCount(std::vector<std::string> &cs, int &nm)
 	return true;
 }
 
+/**
+*@brief テキストファイルからの実行順序(実行条件)読み込む関数
+* @param cs ファイルから読み込んだ単語のリスト
+* @param nm 現在の位置
+* @param ar 条件のリスト
+*/
 void LoadAddRule(std::vector<std::string> &cs, int &nm,std::vector<add_Rule> &ar)
 {
 	
@@ -182,6 +238,12 @@ void LoadAddRule(std::vector<std::string> &cs, int &nm,std::vector<add_Rule> &ar
 	}
 }
 
+/**
+*@brief テキストファイルからの実行順序(直列ブロック)読み込む関数
+* @param cs ファイルから読み込んだ単語のリスト
+* @param nm 現在の位置
+* @param sr 条件のリスト
+*/
 void LoadSubRule(std::vector<std::string> &cs, int &nm,std::vector<sub_Rule> &sr)
 {
 	bool flag = true;
@@ -216,6 +278,12 @@ void LoadSubRule(std::vector<std::string> &cs, int &nm,std::vector<sub_Rule> &sr
 	}
 }
 
+/**
+*@brief ファイルより実行順序の読み込む関数
+* @param rs 実行順序
+* @param Name ファイル名
+* @return 成功でTrue、失敗でFalse
+*/
 bool LoadMainRule(std::vector<main_Rule> &rs, std::string Name)
 {
 	if (Name == "")

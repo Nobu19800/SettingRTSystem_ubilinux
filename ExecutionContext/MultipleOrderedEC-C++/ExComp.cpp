@@ -1,4 +1,9 @@
-﻿
+﻿/*!
+* @file  ExComp.cpp
+* @brief RTCのブロックのウィジェット
+*
+*/
+
 #include <QtWidgets>
 #include "ExComp.h"
 
@@ -7,6 +12,10 @@ using namespace RTC;
 using namespace std;
 
 
+/**
+*@brief RTCのブロックのウィジェットのコンストラクタ
+* @param parent 親ウィジェット
+*/
 ExComp::ExComp(QWidget *parent)
     : QWidget(parent)
 {
@@ -70,12 +79,19 @@ ExComp::ExComp(QWidget *parent)
 }
 
 
-
+/**
+*@brief RTCを追加ボタンを押したときに呼び出されるスロット
+*/
 void ExComp::AddCompSlot()
 {
 	AddCompSignal(this, Fc);
 }
 
+/**
+*@brief RTCが追加、削除されたときに実行条件に反映する関数
+* @param rtclist RTCのリスト
+* @param rtclist2 未使用
+*/
 void ExComp::UpdateComp(std::vector<std::string> &rtclist, std::vector<CORBA::Object_ptr> &rtclist2)
 {
 	int Id = CB->currentIndex();
@@ -93,6 +109,9 @@ void ExComp::UpdateComp(std::vector<std::string> &rtclist, std::vector<CORBA::Ob
 
 }
 
+/**
+*@brief ブロック削除ボタンのスロット
+*/
 void ExComp::DeleteComp()
 {
 
@@ -116,7 +135,9 @@ void ExComp::DeleteComp()
 
 
 
-
+/**
+*@brief 並列ブロックのレイアウトのコンストラクタ
+*/
 CompLayout::CompLayout()
 {
 

@@ -1,4 +1,10 @@
-﻿#ifndef ADDBUTTON3_H
+﻿/*!
+* @file  AddButton3.h
+* @brief 並列ブロック削除ボタンを含むウィジェット
+*
+*/
+
+#ifndef ADDBUTTON3_H
 #define ADDBUTTON3_H
 
 #include "ExComp.h"
@@ -24,28 +30,37 @@ QT_END_NAMESPACE
 
 class CompLayout;
 
-/*
-*並列ブロック追加ボタンを含むウィジェット
-*/
 
+/**
+* @class AddButton3
+*@brief 並列ブロック削除ボタンを含むウィジェット
+*/
 class AddButton3 : public QWidget
 {
 	Q_OBJECT
 public:
+	/**
+	*@brief コンストラクタ
+	* @param text 表示テキスト
+	* @param parent 親ウィジェット
+	*/
 	AddButton3(QString text,QWidget *parent = 0);
 	QWidget *Vl;
 	QPushButton *PB;
 	CompLayout *c;
 
 signals:
-	/*
-	*ボタンクリック時に発行するシグナル
+	
+	/**
+	*@brief 
+	* @param Vl ウィジェット
+	* @param cl 並列ブロックのレイアウト
 	*/
 	void clicked(QWidget *Vl, CompLayout *cl);
 
 public slots:
-	/*
-	*ボタンクリック時に呼び出すスロット
+	/**
+	*@brief ボタンクリック時に呼び出すスロット
 	*/
 	void clickedSlot();
 

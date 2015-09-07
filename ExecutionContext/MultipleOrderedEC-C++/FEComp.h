@@ -1,4 +1,10 @@
-﻿#ifndef FECOMP_H
+﻿/*!
+* @file  FEComp.h
+* @brief 直列ブロックのウィジェット
+*
+*/
+
+#ifndef FECOMP_H
 #define FECOMP_H
 
 #include <QWidget>
@@ -24,14 +30,19 @@ QT_END_NAMESPACE
 
 class ExComp;
 
-/*
-*直列ブロックのウィジェット
-*/
 
+/**
+* @class FEComp
+*@brief 直列ブロックのウィジェット
+*/
 class FEComp : public QWidget
 {
 	Q_OBJECT
 public:
+	/**
+	*@brief コンストラクタ
+	* @param parent 親ウィジェット
+	*/
 	FEComp(QWidget *parent = 0);
 	std::vector<ExComp *> ECS;
 	QVBoxLayout *CL;

@@ -1,16 +1,24 @@
-﻿
+﻿/*!
+* @file  mainwindow.cpp
+* @brief メインウインドウ
+*
+*/
+
 #include <QLabel>
 #include <QtWidgets>
 
 #include "mainwindow.h"
-#include "CompSearch.h"
+#include "FileStreamFunc.h"
 
 
 
 
 
 
-
+/**
+*@brief メインウインドウのコンストラクタ
+* @param ec 実行コンテキストオブジェクト
+*/
 MainWindow::MainWindow(RTC::MultipleOrderedEC *ec)
 {
 	
@@ -67,17 +75,28 @@ MainWindow::MainWindow(RTC::MultipleOrderedEC *ec)
 	createMenus();
 }
 
+/**
+*@brief サイズを変更するときに呼び出されるスロット
+* @param w 幅
+* @param h 高さ
+*/
 void MainWindow::m_resize(int w, int h)
 {
 	widget->resize(w, h);
 }
 
+/**
+*@brief RTCが追加、削除されたときに呼び出されるスロット
+*/
 void MainWindow::UpdateComp()
 {
 	SC->UpdateComps();
 	SC->UpdateComp2();
 }
 
+/**
+*@brief アクションの作成の関数
+*/
 void MainWindow::createAction()
 {
 	newAct = new QAction(tr("&New..."),this);
@@ -99,6 +118,9 @@ void MainWindow::createAction()
 	connect(saveAsAct, SIGNAL(triggered()), this, SLOT(saveAs()));
 }
 
+/**
+*@brief メニューの作成の関数
+*/
 void MainWindow::createMenus()
 {
 	fileMenu = menuBar()->addMenu(tr("&File"));
@@ -110,7 +132,9 @@ void MainWindow::createMenus()
 
 }
 
-
+/**
+*@brief ファイル読み込みスロット
+*/
 void MainWindow::open()
 {
 	QString fileName = QFileDialog::getOpenFileName(this,
@@ -125,6 +149,10 @@ void MainWindow::open()
 
 }
 
+/**
+*@brief ファイル保存のスロット
+* @return 成功でTrue、失敗でFalse
+*/
 bool MainWindow::save()
 {
 	
@@ -150,6 +178,10 @@ bool MainWindow::save()
 	}
 }
 
+/**
+*@brief 別のファイル保存のスロット
+* @return 成功でTrue、失敗でFalse
+*/
 bool MainWindow::saveAs()
 {
 	QString fileName = QFileDialog::getSaveFileName(this,
@@ -165,7 +197,9 @@ bool MainWindow::saveAs()
     return SC->save(ba);
 }
 
-
+/**
+*@brief 初期化のスロット
+*/
 void MainWindow::newFile()
 {
 	SC->newFile();
@@ -174,7 +208,10 @@ void MainWindow::newFile()
     
 }
 
-
+/**
+*@brief 実行順序をGUIに反映させる関数
+* @param rs 並列ブロックのリスト
+*/
 void MainWindow::UpdateRTC(std::vector<Rule> &rs)
 {
 	SC->UpdateRTC(rs);

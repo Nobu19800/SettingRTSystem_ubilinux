@@ -1,4 +1,11 @@
-﻿#include "MultipleOrderedEC.h"
+﻿/*!
+* @file  MultipleOrderedEC.cpp
+* @brief 実行順序の設定ができる実行コンテキスト
+*
+*/
+
+
+#include "MultipleOrderedEC.h"
 #include <rtm/ECFactory.h>
 #include <iostream>
 #include <rtm/CorbaConsumer.h>
@@ -7,12 +14,15 @@
 
 
 #include "MPTask.h"
-#include "CompSearch.h"
+#include "FileStreamFunc.h"
 
 using namespace std;
 
 namespace RTC
 {
+	/**
+	*@brief 実行順序の設定ができる実行コンテキストのコンストラクタ
+	*/
   MultipleOrderedEC::MultipleOrderedEC()
 	   : PeriodicExecutionContext()
   {
@@ -57,13 +67,20 @@ namespace RTC
 
   }
 
+  /**
+  *@brief 実行順序の設定ができる実行コンテキストのデストラクタ
+  */
   MultipleOrderedEC::~MultipleOrderedEC()
   {
   }
 
   
    
-
+  /**
+  *@brief 番号からコンポーネントの名前取得の関数
+  * @param num 番号
+  * @return RTC名
+  */
   std::string MultipleOrderedEC::getCompName(int num)
   {
 	  mutex_2.lock();
@@ -74,11 +91,20 @@ namespace RTC
 	   mutex_2.unlock();
 	  return Name;
   }
+
+  /**
+  *@brief コンポーネントの数取得の関数
+  * @return RTC数
+  */
   int MultipleOrderedEC::getCompNum()
   {
 	return m_comps.size();
   }
 
+  /**
+  *@brief コンポーネントのロジック実行の関数
+  * @param c ブロック
+  */
   void MultipleOrderedEC::workerComp(sub_Rule *c)
   {
 	  
@@ -118,6 +144,9 @@ namespace RTC
 	  
   }
 
+  /**
+  *@brief ファイルから実行順序の読み込みの関数
+  */
   void MultipleOrderedEC::LoadRules()
   {
 	  mutex_2.lock();
@@ -165,6 +194,10 @@ namespace RTC
 
   }
 
+  /**
+  *@brief GUIから実行順序の読み込みの関数
+  * @param RS_d 実行順序のリスト
+  */
   void MultipleOrderedEC::LoadRuleGUI(std::vector<main_Rule> &RS_d)
   {
 
@@ -178,6 +211,9 @@ namespace RTC
 	  m_worker.mutex_.unlock();
   }
 
+  /**
+  *@brief ファイルから実行順序の読み込みの関数
+  */
   void MultipleOrderedEC::LoadRule()
   {
 
@@ -202,7 +238,10 @@ namespace RTC
 
   }
 
-
+  /**
+  *@brief スレッド実行関数
+  * @return
+  */
   int MultipleOrderedEC::svc(void)
   {
 	  RTC_TRACE(("svc()"));

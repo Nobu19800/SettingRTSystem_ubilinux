@@ -489,7 +489,7 @@ class RenderPath(QtGui.QGraphicsItem):
     def drawText(self, text, painter, portsize, position, color=[0,0,0], size=10):
         
         if position == Port.LEFT:
-            posx = 0
+            posx = self.pos_x - len(text)*size/10.0
             posy = self.pos_y
         elif position == Port.RIGHT:
             posx = self.pos_x
@@ -559,11 +559,181 @@ class Port(RenderPath):
     def __init__(self, profile, defsize, scene, parent):
         super(Port, self).__init__(scene, parent)
         self.profile = profile
-        self.defsize = defsize
+        self.size = defsize
         #self.parent = parent
 
+        self.interfaces = []
         
+        self.textVisible = True
+
+    ##
+    # @brief テキストを表示するか設定
+    # @param self
+    # @param visi Trueで表示、Falseで非表示
+    def drawTextVisible(self, visi):
+        self.textVisible = visi
+
+    ##
+    # @brief サイズ設定
+    # @param self
+    # @param size サイズ
+    def setBoxSize(self, size):
+        self.size = size
+        path = self.getPath()
+        self.setPath(path)
+
+    ##
+    # @brief ダブルクリック時のイベント
+    # @param self
+    # @param event イベントオブジェクト
+    def mouseDoubleClickEvent(self, event):
+        self.vw = ViewServicePort(self.profile)
+        self.vw.show()
+
+##
+# @class ServiceInterfaceProvided
+# @brief インターフェースのプロバイダ側描画クラス
+#
+class ServiceInterfaceProvided:
+    ##
+    # @brief コンストラクタ
+    # @param self 
+    # @param profile プロファイル
+    # @param defsize 大きさ
+    # @param position 方向
+    # @param scene シーンオブジェクト
+    # @param parent 親ウィジェット
+    def __init__(self, profile, defsize, position, scene, parent):
+        self.scene = scene
+        self.profile = profile
         self.size = defsize
+        self.position = position
+        self.posx = 0
+        self.posy = 0
+        self.m_obj = QtGui.QGraphicsEllipseItem(self.posx,self.posy,self.size,self.size)
+        self.m_obj.setBrush( QtGui.QColor( 0, 0, 0 ) )
+        self.scene.addItem( self.m_obj )
+        self.m_line = QtGui.QGraphicsLineItem( self.posx,self.posy,self.posx,self.posy )
+        pen = QtGui.QPen( QtGui.QColor( 0, 0, 0 ) )
+        pen.setWidth( 3 )
+        self.m_line.setPen( pen )
+        self.scene.addItem( self.m_line )
+
+    ##
+    # @brief 位置設定
+    # @param self 
+    # @param spx 開始位置(X)
+    # @param spy 開始位置(Y)
+    # @param epx 終了位置(X)
+    # @param epy 終了位置(Y)
+    def setPos(self, spx, spy, epx, epy):
+        spx = spx*self.scene.width()/100.0
+        spy = spy*self.scene.height()/100.0
+        epx = epx*self.scene.width()/100.0
+        epy = epy*self.scene.height()/100.0
+        self.posx = epx
+        self.posy = epy
+        size = self.size*self.scene.height()/100.0
+        
+        self.m_obj.setRect(self.posx-size/2,self.posy-size/2,size,size)
+        self.m_line.setLine(spx, spy, epx, epy)
+
+
+##
+# @class ServiceInterfaceProvided
+# @brief インターフェースのコンシュマー側描画クラス
+#
+class ServiceInterfaceRequired(RenderPath):
+    ##
+    # @brief コンストラクタ
+    # @param self 
+    # @param profile プロファイル
+    # @param defsize 大きさ
+    # @param position 方向
+    # @param scene シーンオブジェクト
+    # @param parent 親ウィジェット
+    def __init__(self, profile, defsize, position, scene, parent):
+        self.scene = scene
+        self.profile = profile
+        self.size = defsize
+        self.position = position
+        self.posx = 0
+        self.posy = 0
+        self.m_obj = RenderPath(scene, parent)
+        self.m_obj.setPath(self.getPath())
+        color1 = QtGui.QColor("white")
+        color2 = QtGui.QColor("white")
+        self.m_obj.setFillGradient(color1,color2)
+        
+        self.m_line = QtGui.QGraphicsLineItem( self.posx,self.posy,self.posx,self.posy )
+        pen = QtGui.QPen( QtGui.QColor( 0, 0, 0 ) )
+        pen.setWidth( 3 )
+        self.m_line.setPen( pen )
+        self.scene.addItem( self.m_line )
+
+    
+    ##
+    # @brief ペインターパス取得
+    # @param self 
+    # @return ペインターパス
+    def getPath(self):
+        rectPath = QtGui.QPainterPath()
+        
+        count = 20
+        #rectPath.moveTo(0, 0)
+        size = self.size/2.0
+        if self.position == Port.LEFT:
+            rectPath.moveTo(-size, size)
+            for c in range(0,count):
+                px = size*math.sin(math.pi/float(count)*float(c)) - size
+                py = size*math.cos(math.pi/float(count)*float(c))
+                rectPath.lineTo(px, py)
+        elif self.position == Port.RIGHT:
+            rectPath.moveTo(size, size)
+            for c in range(0,count):
+                px = -size*math.sin(math.pi/float(count)*float(c)) + size
+                py = size*math.cos(math.pi/float(count)*float(c))
+                rectPath.lineTo(px, py)
+        elif self.position == Port.TOP:
+            rectPath.moveTo(size, -size)
+            for c in range(0,count):
+                px = size*math.cos(math.pi/float(count)*float(c))
+                py = size*math.sin(math.pi/float(count)*float(c)) - size
+                rectPath.lineTo(px, py)
+        elif self.position == Port.BOTTOM:
+            rectPath.moveTo(size, size)
+            for c in range(0,count):
+                px = -size*math.cos(math.pi/float(count)*float(c))
+                py = size*math.sin(math.pi/float(count)*float(c)) + size
+                rectPath.lineTo(px, py)
+    
+        #rectPath.closeSubpath()
+
+        return rectPath
+
+    ##
+    # @brief 位置設定
+    # @param self 
+    # @param spx 開始位置(X)
+    # @param spy 開始位置(Y)
+    # @param epx 終了位置(X)
+    # @param epy 終了位置(Y)
+    def setPos(self, spx, spy, epx, epy):
+        self.m_obj.setPosition(epx,epy)
+        self.m_obj.setPath(self.getPath())
+        
+        spx = spx*self.scene.width()/100.0
+        spy = spy*self.scene.height()/100.0
+        epx = epx*self.scene.width()/100.0
+        epy = epy*self.scene.height()/100.0
+        self.posx = epx
+        self.posy = epy
+        size = self.size*self.scene.height()/100.0
+        
+        
+        self.m_line.setLine(spx, spy, epx, epy)
+        
+        
 
 ##
 # @class Port
@@ -580,7 +750,8 @@ class ServicePort(Port):
     def __init__(self, profile, defsize, scene, parent):
         Port.__init__(self, profile, defsize, scene, parent)
 
-
+        self.interfacesWindow = []
+        
         
         
         rectPath = self.getPath()
@@ -597,9 +768,19 @@ class ServicePort(Port):
 
         self.setCenterPoint(0,0)
 
+        for i in profile.interfaces:
+            if i.direction == "Provided":
+                self.interfacesWindow.append(ServiceInterfaceProvided(i,defsize,self.position,self.scene(),parent))
+            elif i.direction == "Required":
+                self.interfacesWindow.append(ServiceInterfaceRequired(i,defsize,self.position,self.scene(),parent))
+            #self.interfacesWindow.append(ServiceInterfaceProvided(i,defsize,self.position,self.scene(),parent))
+            self.interfaces.append(i)
+
         
         #self.renderPath.setPosition(30,30)
         #self.renderPath.setRotationAngle(45)
+
+    
 
     ##
     # @brief ペインターパス取得
@@ -607,7 +788,12 @@ class ServicePort(Port):
     # @return ペインターパス
     def getPath(self):
         rectPath = QtGui.QPainterPath()
-
+        spx = self.pos_x
+        spy = self.pos_y
+        epx = self.pos_x
+        epy = self.pos_y
+        cofx = 0
+        cofy = 0
         
         
         if self.profile.position == "LEFT":
@@ -620,6 +806,13 @@ class ServicePort(Port):
             self.width = -self.size
             self.height = self.size
 
+            spx -= self.size
+            epx -= self.size
+            spy += self.size/2
+            epy += self.size/2
+            epx -= self.size
+            cofx = 1
+
         elif self.profile.position == "RIGHT":
             rectPath.moveTo(0, 0)
             rectPath.lineTo(self.size, 0)
@@ -629,6 +822,13 @@ class ServicePort(Port):
             self.position = Port.RIGHT
             self.width = self.size
             self.height = self.size
+
+            spx += self.size
+            epx += self.size
+            spy += self.size/2
+            epy += self.size/2
+            epx += self.size
+            cofx = 1
 
         elif self.profile.position == "TOP":
             rectPath.moveTo(0, 0)
@@ -640,6 +840,13 @@ class ServicePort(Port):
             self.width = self.size
             self.height = -self.size
 
+            spx += self.size/2
+            epx += self.size/2
+            spy -= self.size
+            epy -= self.size
+            epy -= self.size
+            cofy = 1
+
         elif self.profile.position == "BOTTOM":
             rectPath.moveTo(0, 0)
             rectPath.lineTo(0, self.size)
@@ -650,18 +857,31 @@ class ServicePort(Port):
             self.width = self.size
             self.height = self.size
 
+            spx += self.size/2
+            epx += self.size/2
+            spy += self.size
+            epy += self.size
+            epy += self.size
+            cofy = 1
+
         rectPath.closeSubpath()
+
+        count = 0
+        for i in self.interfacesWindow:
+            i.size = self.size*0.7
+            cx = cofx*self.size*2*count
+            cy = cofy*self.size*2*count
+            spx += cx
+            epx += cx
+            spy += cy
+            epy += cy
+            i.setPos(spx,spy,epx,epy)
+            count += 1
+            
 
         return rectPath
 
-    ##
-    # @brief サイズ設定
-    # @param self
-    # @param size サイズ
-    def setBoxSize(self, size):
-        self.size = size
-        path = self.getPath()
-        self.setPath(path)
+
 
     ##
     # @brief 描画更新スロット
@@ -670,21 +890,16 @@ class ServicePort(Port):
     # @param option オプション
     # @param widget ウィジェット
     def paint(self, painter, option, widget=None):
-        text = self.profile.name
-        self.drawText(text, painter, self.size, self.position, [0,0,0], self.size/1.5)
+        if self.textVisible:
+            text = self.profile.name
+            self.drawText(text, painter, self.size, self.position, [0,0,0], self.size*3)
         self.updatePaint(painter)
 
-    ##
-    # @brief ダブルクリック時のイベント
-    # @param self
-    # @param event イベントオブジェクト
-    def mouseDoubleClickEvent(self, event):
-        self.vw = ViewServicePort(self.profile)
-        self.vw.show()
+    
     
         
 ##
-# @class Port
+# @class DataPort
 # @brief データポート描画オブジェクト
 #
 class DataPort(Port):
@@ -712,6 +927,7 @@ class DataPort(Port):
         self.setFillGradient(color1,color2)
 
         self.setCenterPoint(0,0)
+        self.interfaces = [self]
         #self.renderPath.setPosition(30,30)
         #self.renderPath.setRotationAngle(45)
 
@@ -814,14 +1030,7 @@ class DataPort(Port):
 
         return rectPath
 
-    ##
-    # @brief サイズ設定
-    # @param self
-    # @param size サイズ
-    def setBoxSize(self, size):
-        self.size = size
-        path = self.getPath()
-        self.setPath(path)
+    
 
     ##
     # @brief 描画更新スロット
@@ -830,17 +1039,12 @@ class DataPort(Port):
     # @param option オプション
     # @param widget ウィジェット
     def paint(self, painter, option, widget=None):
-        text = self.profile.name + "(" + self.profile.datatype + ")"
-        self.drawText(text, painter, self.size, self.position, [0,0,0], self.size/1.5)
+        if self.textVisible:
+            text = self.profile.name + "(" + self.profile.datatype + ")"
+            self.drawText(text, painter, self.size, self.position, [0,0,0], self.size*3)
         self.updatePaint(painter)
 
-    ##
-    # @brief ダブルクリック時のイベント
-    # @param self
-    # @param event イベントオブジェクト
-    def mouseDoubleClickEvent(self, event):
-        self.vw = ViewDataPort(self.profile)
-        self.vw.show()
+    
     
 
 ##
@@ -853,11 +1057,11 @@ class RenderRTC(RenderPath):
     # @param self
     # @param scene シーンオブジェクト
     # @param parent 親ウィジェット
-    def __init__(self, profile, scene, parent=None):
+    def __init__(self, profile, scene, mode=True, parent=None):
         super(RenderRTC, self).__init__(scene, parent)
         
         self.profile = profile
-        
+        self.mode = mode
         #print self.parentWidget()
 
         self.rtc_defsize_x = 50
@@ -865,6 +1069,7 @@ class RenderRTC(RenderPath):
         #self.rtc_defsize_y = 60
         self.rtc_defpos_x = 25
         self.rtc_defpos_y = 20
+        self.portsize = self.rtc_defsize_x/4.0
 
         #self.maxSize_port = self.rtc_defsize_y*0.33
         #self.minSize_x = 30
@@ -875,6 +1080,8 @@ class RenderRTC(RenderPath):
 
         self.dataports = []
         self.serviceports = []
+        self.viewScale = 1
+        
         self.setRTC()
 
         #rp = RTCProfile('RTC.xml')
@@ -890,9 +1097,70 @@ class RenderRTC(RenderPath):
             #print i.keys()
 
         
+        
         #self.setCenterPoint(0,0)
         #self.addDataPort()
+        self.textVisible = True
 
+    ##
+    # @brief テキストを表示するか設定
+    # @param self
+    # @param visi Trueで表示、Falseで非表示
+    def drawTextVisible(self, visi):
+        self.textVisible = visi
+        tmp = self.serviceports[:]
+        tmp.extend(self.dataports)
+        for dp in tmp:
+            dp.drawTextVisible(visi)
+
+    ##
+    # @brief サイズ計算
+    # @param self
+    # @param x 上、下側のポート数
+    # @param y 右、左側のポート数
+    # @return 幅(X)、幅(Y)、位置(X)、位置(Y)
+    def calcSize(self,x,y):
+        if self.mode:
+            x += 4
+            y += 4
+            if x > y:
+                dx = self.rtc_defsize_x
+                dy = self.rtc_defsize_x*y/x
+            elif x < y:
+                dx = self.rtc_defsize_y*x/y
+                dy = self.rtc_defsize_y
+            else:
+                dx = self.rtc_defsize_x
+                dy = self.rtc_defsize_y
+        else:
+            pdx = self.portsize*(x+1)*2
+            
+            if pdx > self.rtc_defsize_x:
+                dx = pdx
+            else:
+                dx = self.rtc_defsize_x
+
+            pdy = self.portsize*(y+1)*2
+            if pdy > self.rtc_defsize_y:
+                dy = pdy
+            else:
+                dy = self.rtc_defsize_y
+
+            scalex = dx/self.rtc_defsize_x
+            scaley = dy/self.rtc_defsize_y
+            
+            if scalex > scaley:
+                self.viewScale = scalex
+            else:
+                self.viewScale = scaley
+
+            
+
+        px = (100.0 - dx)/2.0
+        py = (100.0 - dy)/2.0
+
+        
+        return dx,dy,px,py
     ##
     # @brief ペインターオブジェクト設定
     # @param self 
@@ -936,14 +1204,19 @@ class RenderRTC(RenderPath):
         if self.size_y < size_y:
             self.size_y = size_y
         """
-        self.setPosition(self.rtc_defpos_x,self.rtc_defpos_y)
-        self.setSize(self.rtc_defsize_x,self.rtc_defsize_y)
+        
+        size,count,count_h,count_v = self.calcPortSize()
+        dx,dy,px,py = self.calcSize(count_h,count_v)
+            
+        
+        self.setPosition(px,py)
+        self.setSize(dx,dy)
 
         self.path = QtGui.QPainterPath()
         self.path.moveTo(0, 0)
-        self.path.lineTo(self.rtc_defsize_x, 0)
-        self.path.lineTo(self.rtc_defsize_x, self.rtc_defsize_y)
-        self.path.lineTo(0, self.rtc_defsize_y)
+        self.path.lineTo(dx, 0)
+        self.path.lineTo(dx, dy)
+        self.path.lineTo(0, dy)
         self.path.closeSubpath()
 
         
@@ -965,15 +1238,17 @@ class RenderRTC(RenderPath):
         
             
         
-        size,count_d = self.calcPortSize()
+        size,count_d,count_h,count_v = self.calcPortSize()
 
-        tmp = self.serviceports[:]
-        tmp.extend(self.dataports)
+        tmp = self.dataports[:]
+        tmp.extend(self.serviceports)
         
         
 
-        
-
+        dx,dy,px,py = self.calcSize(count_h,count_v)
+        if not self.mode:
+            size = self.portsize
+            
         count = [0,0,0,0]
 
         offxsize = (self.rtc_defsize_x - size*float(count_d))/(float(count_d)+1.0)
@@ -981,14 +1256,14 @@ class RenderRTC(RenderPath):
         for dp in tmp:
 
             if dp.position == Port.LEFT:
-                dp.setPosition(self.rtc_defpos_x,self.rtc_defpos_y+size*2.0*(float(count[dp.position])+0.5))
+                dp.setPosition(px,py+size*2.0*(float(count[dp.position])+0.5))
             elif dp.position == Port.RIGHT:
-                dp.setPosition(self.rtc_defpos_x+self.rtc_defsize_x,self.rtc_defpos_y+size*2.0*(float(count[dp.position])+0.5))
+                dp.setPosition(px+dx,py+size*2.0*(float(count[dp.position])+0.5))
             elif dp.position == Port.TOP:
-                dp.setPosition(self.rtc_defpos_x+size*float(count[dp.position])+offxsize*float(count[dp.position]+1),self.rtc_defpos_y)
+                dp.setPosition(px+size*float(count[dp.position])+offxsize*float(count[dp.position]+1),py)
             elif dp.position == Port.BOTTOM:
-                dp.setPosition(self.rtc_defpos_x+size*float(count[dp.position])+offxsize*float(count[dp.position]+1),self.rtc_defpos_y+self.rtc_defsize_y)
-            count[dp.position] += 1
+                dp.setPosition(px+size*float(count[dp.position])+offxsize*float(count[dp.position]+1),py+dx)
+            count[dp.position] += len(dp.interfaces)
             dp.setBoxSize(size)
             
 
@@ -1030,7 +1305,17 @@ class RenderRTC(RenderPath):
         if count == 0:
             count = 1
 
-        return self.rtc_defsize_y/(1.0+float(count*2)),count
+        count_v = cdps_t
+        if count_v < cdps_b:
+            count_v = cdps_b
+
+        count_h = cdps_l
+        if count_h < cdps_r:
+            count_h = cdps_r
+
+        
+
+        return self.rtc_defsize_y/(1.0+float(count*2)),count,count_v,count_h
         #return self.maxSize_port/count
 
     ##
@@ -1040,13 +1325,15 @@ class RenderRTC(RenderPath):
     def addServicePort(self, profile):
         
         
-        size,count = self.calcPortSize()
+        size,count,count_h,count_v = self.calcPortSize()
         
         dp = ServicePort(profile,size,self.scene(),self)
 
         
             
         self.serviceports.append(dp)
+        
+        
         self.setRTC()
 
         self.addPort()
@@ -1063,7 +1350,8 @@ class RenderRTC(RenderPath):
                 ans.append(d)
         for d in self.serviceports:
             if d.position == position:
-                ans.append(d)
+                for i in d.interfaces:
+                    ans.append(i)
 
         return ans
         
@@ -1073,13 +1361,14 @@ class RenderRTC(RenderPath):
     # @param profile プロファイル
     def addDataPort(self, profile):
         
-        size,count = self.calcPortSize()
+        size,count,count_h,count_v = self.calcPortSize()
         
         dp = DataPort(profile,size,self.scene(),self)
 
         
         
         self.dataports.append(dp)
+        
         self.setRTC()
 
         self.addPort()
@@ -1099,6 +1388,16 @@ class RenderRTC(RenderPath):
     # @param widget ウィジェット
     def paint(self, painter, option, widget=None):
         self.updatePaint(painter)
+
+    ##
+    # @brief ダブルクリック時のイベント
+    # @param self
+    # @param event イベントオブジェクト
+    def mouseDoubleClickEvent(self, event):
+        self.rtcw = RTCViewWindow(self.profile)
+        self.rtcw.show()
+        
+
 
 
 ##
@@ -1340,7 +1639,7 @@ class ViewWindow(QtGui.QDialog):
         
         self.view = GraphicsView(self.scene)
         self.view.setViewportUpdateMode(QtGui.QGraphicsView.BoundingRectViewportUpdate)
-        self.view.setBackgroundBrush(QtGui.QColor(230, 200, 167))
+        self.view.setBackgroundBrush(QtGui.QColor(255, 255, 255))
 
         self.view.setMinimumHeight(200)
         
@@ -1383,17 +1682,69 @@ class GraphicsView(QtGui.QGraphicsView):
     # @param parent 親ウィジェット
     def __init__(self, scene, parent=None):
         super(GraphicsView, self).__init__(scene, parent)
+        self.m_rtc = None
 
+    def setRTC(self, rtc):
+        self.m_rtc = rtc
+        
     ##
     # @brief キー押下時のイベント
     # @param self
     # @param k キー
     def keyPressEvent(self, k):
+        dx = self.scene().width()
+        dy = self.scene().height()
         if k.key() == QtCore.Qt.Key_Up:
             self.scale(1.1,1.1)
         elif k.key() == QtCore.Qt.Key_Down:
             self.scale(0.9,0.9)
+       
+        elif k.key() == QtCore.Qt.Key_Space:
+            if self.m_rtc:
+                self.m_rtc.drawTextVisible(not self.m_rtc.textVisible)
+                self.update()
+                self.viewport().update()
+                #self.parent().repaint()
+                #self.repaint()
+                #self.widget().update()
+            
         
+
+##
+# @class RTCViewWindow
+# @brief リストで表示するRTC
+#
+class RTCViewWindow(QtGui.QGroupBox):
+    ##
+    # @brief コンストラクタ
+    # @param self
+    # @param profile プロファイル
+    # @param name 表示名
+    # @param parent 親ウィジェット
+    def __init__(self, profile, name="", parent=None):
+        super(RTCViewWindow, self).__init__(name, parent)
+        self.profile = profile
+
+        self.mainLayout = QtGui.QVBoxLayout()
+        self.setLayout(self.mainLayout)
+        
+        self.scene = QtGui.QGraphicsScene(0, 0, 600, 600)
+        
+        self.view = GraphicsView(self.scene)
+        self.view.scale(0.25, 0.25)
+        self.view.setViewportUpdateMode(QtGui.QGraphicsView.BoundingRectViewportUpdate)
+        self.view.setBackgroundBrush(QtGui.QColor(255, 255, 255))
+        self.mainLayout.addWidget(self.view)
+        self.renderWindow = RenderRTC(profile, self.scene, False)
+        self.view.setRTC(self.renderWindow)
+        
+        #self.setFixedSize(300,self.renderWindow.viewScale*300)
+        #self.view.scale(self.renderWindow.viewScale, self.renderWindow.viewScale)
+
+        
+        self.setMinimumSize(500,200+self.renderWindow.viewScale*80)
+        self.setMaximumSize(500,200+self.renderWindow.viewScale*80)
+        #self.view.translate(0.0, (self.renderWindow.viewScale-1)*0.05)
 
 ##
 # @class RTCItem
@@ -1414,15 +1765,15 @@ class RTCItem(QtGui.QGroupBox):
         self.setLayout(self.mainLayout)
         #self.groupBox.setLayout(self.mainLayout)
 
-        self.scene = QtGui.QGraphicsScene(0, 0, 150, 150)
+        self.scene = QtGui.QGraphicsScene(0, 0, 600, 600)
         #bar = self.scene.verticalScrollBar()
         #bar.valueChanged.connect(self.valueChanged)
         #self.scene.changed.connect(self.valueChanged)
 
         self.view = GraphicsView(self.scene)
-        
+        self.view.scale(0.25, 0.25)
         self.view.setViewportUpdateMode(QtGui.QGraphicsView.BoundingRectViewportUpdate)
-        self.view.setBackgroundBrush(QtGui.QColor(230, 200, 167))
+        self.view.setBackgroundBrush(QtGui.QColor(255, 255, 255))
         self.mainLayout.addWidget(self.view)
         self.renderWindow = RenderRTC(profile, self.scene)
         #self.renderWindow.updatePaint()
@@ -1451,7 +1802,9 @@ class RTCItem(QtGui.QGroupBox):
         self.setMinimumSize(200,280)
         self.setMaximumSize(200,280)
 
-
+    ##
+    # @brief 未使用
+    # @param self
     def valueChanged(self, v):
         print self.scene.items()
         for i in self.scene.items():

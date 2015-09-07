@@ -1,4 +1,9 @@
-﻿
+﻿/*!
+* @file  Config.cpp
+* @brief 実行条件のウィジェット
+*
+*/
+
 #include <QtWidgets>
 #include "Config.h"
 
@@ -9,8 +14,25 @@ using namespace RTC;
 using namespace std;
 
 
+/**
+*@brief 実行条件のレイアウト内のウィジェットを全て削除する関数
+* @param lt 実行条件のレイアウト
+*/
+void CrearLayout(QLayout *lt)
+{
+	QLayoutItem* item;
+	while ((item = lt->takeAt(1)) != NULL)
+	{
+		item->widget()->close();
+		delete item->widget();
+		delete item;
+	}
 
+}
 
+/**
+*@brief 実行条件のウィジェットのコンストラクタ
+*/
 Configs::Configs(QWidget *parent)
     : QWidget(parent)
 {
@@ -74,7 +96,10 @@ Configs::Configs(QWidget *parent)
 
 }
 
-
+/**
+*@brief RTCが追加されたときに反映する関数
+* @param name RTC名
+*/
 void Configs::addComp(std::string name)
 {
 	CompList *cl = new CompList();
@@ -108,18 +133,10 @@ void Configs::addComp(std::string name)
 
 }
 
-void CrearLayout(QLayout *lt)
-{
-	QLayoutItem* item;
-    while ( ( item = lt->takeAt( 1 ) ) != NULL )
-    {
-		item->widget()->close();
-        delete item->widget();
-        delete item;
-    }
-	
-}
 
+/**
+*@brief 初期化
+*/
 void Configs::resetComp()
 {
 	Cl.clear();

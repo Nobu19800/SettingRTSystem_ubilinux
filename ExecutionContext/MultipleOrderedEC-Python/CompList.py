@@ -3,8 +3,7 @@ from OpenRTM_aist import RTC
 CompList = [
     [
         [
-            ["Test10", RTC.INACTIVE_STATE],
-            ["Test20", RTC.ACTIVE_STATE]
+
         ],
         [
             [

@@ -1,4 +1,9 @@
-﻿
+﻿/*!
+* @file  Config.h
+* @brief 実行条件のウィジェット
+*
+*/
+
 #ifndef CONFIG_H
 #define CONFIG_H
 
@@ -36,18 +41,24 @@ QT_END_NAMESPACE
 
 
 
-/*
-*実行条件の初期化の関数
+
+/**
+*@brief 実行条件のレイアウト内のウィジェットを全て削除する関数
+* @param lt 実行条件のレイアウト
 */
 void CrearLayout(QLayout *lt);
 
-/*
-*実行条件のウィジェットに表示するRTCのクラス
-*/
 
+/**
+* @class CompList
+*@brief 実行条件のウィジェット
+*/
 class CompList
 {
 public:
+	/**
+	*@brief コンストラクタ
+	*/
 	CompList(){};
 	QLabel *name;
 	std::string Name;
@@ -60,23 +71,30 @@ public:
 	QWidget *Lw;
 };
 
-/*
-*実行条件のウィジェット
+
+
+/**
+* @class Configs
+*@brief 実行条件のウィジェット
 */
-
-
 class Configs : public QWidget
 {
 	Q_OBJECT
 public:
+	/**
+	*@brief コンストラクタ
+	* @param parent 親ウィジェット
+	*/
+    	Configs(QWidget *parent = 0);
 	
-    Configs(QWidget *parent = 0);
-	/*
-	*RTCが追加されたときに反映する関数
+	/**
+	*@brief RTCが追加されたときに反映する関数
+	* @param name RTC名
 	*/
 	void addComp(std::string name);
-	/*
-	*初期化の関数
+	
+	/**
+	*@brief 初期化
 	*/
 	void resetComp();
 	std::vector<CompList *> Cl;

@@ -21,6 +21,29 @@ find_package(Qt5Widgets)
 find_package(OpenRTM REQUIRED)
 
 
+
+if (DEFINED OPENRTM_INCLUDE_DIRS)
+  string(REGEX REPLACE "-I" ";"
+    OPENRTM_INCLUDE_DIRS "${OPENRTM_INCLUDE_DIRS}")
+  string(REGEX REPLACE " ;" ";"
+    OPENRTM_INCLUDE_DIRS "${OPENRTM_INCLUDE_DIRS}")
+endif (DEFINED OPENRTM_INCLUDE_DIRS)
+
+if (DEFINED OPENRTM_LIBRARY_DIRS)
+  string(REGEX REPLACE "-L" ";"
+    OPENRTM_LIBRARY_DIRS "${OPENRTM_LIBRARY_DIRS}")
+  string(REGEX REPLACE " ;" ";"
+    OPENRTM_LIBRARY_DIRS "${OPENRTM_LIBRARY_DIRS}")
+endif (DEFINED OPENRTM_LIBRARY_DIRS)
+
+if (DEFINED OPENRTM_LIBRARIES)
+  string(REGEX REPLACE "-l" ";"
+    OPENRTM_LIBRARIES "${OPENRTM_LIBRARIES}")
+  string(REGEX REPLACE " ;" ";"
+    OPENRTM_LIBRARIES "${OPENRTM_LIBRARIES}")
+endif (DEFINED OPENRTM_LIBRARIES)
+
+
 #if(WIN32)
 
 #  set(BOOST_ROOT $ENV{BOOST_ROOT})
@@ -67,7 +90,7 @@ set(luabind_srcs ${LUABIND_PATH}/src/class.cpp ${LUABIND_PATH}/src/class_info.cp
 
 IF (${Qt5Widgets_FOUND})
 
-	set(ec_srcs AddButton.cpp AddButton2.cpp AddButton3.cpp CompSearch.cpp Config.cpp ExComp.cpp FEComp.cpp FrameComp.cpp mainwindow.cpp MPComp.cpp MPLua.cpp MPTask.cpp MultipleOrderedEC.cpp SetComp.cpp)
+	set(ec_srcs AddButton.cpp AddButton2.cpp AddButton3.cpp FileStreamFunc.cpp Config.cpp ExComp.cpp FEComp.cpp FrameComp.cpp mainwindow.cpp MPComp.cpp MPLua.cpp MPTask.cpp MultipleOrderedEC.cpp SetComp.cpp)
 
 
 
@@ -87,7 +110,7 @@ IF (${Qt5Widgets_FOUND})
 	
 	QT5_USE_MODULES(MultipleOrderedEC Widgets)
 ELSE (${Qt5Widgets_FOUND})
-	set(ec_srcs CompSearch.cpp MPComp.cpp MPLua.cpp MPTask.cpp MultipleOrderedEC.cpp )
+	set(ec_srcs FileStreamFunc.cpp MPComp.cpp MPLua.cpp MPTask.cpp MultipleOrderedEC.cpp )
 	ADD_LIBRARY(MultipleOrderedEC SHARED  ${ec_srcs} ${luabind_srcs})
 	
 ENDIF (${Qt5Widgets_FOUND})

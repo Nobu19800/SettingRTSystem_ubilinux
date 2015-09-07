@@ -1,4 +1,10 @@
-﻿#ifndef RTC_MUTIPLEORDEREDEC_H
+﻿/*!
+* @file  MultipleOrderedEC.h
+* @brief 実行順序の設定ができる実行コンテキスト
+*
+*/
+
+#ifndef RTC_MUTIPLEORDEREDEC_H
 #define RTC_MUTIPLEORDEREDEC_H
 
 #include <rtm/RTC.h>
@@ -20,51 +26,70 @@ class GUITask;
 
 namespace RTC
 {
-  /*
-  *実行順序の設定ができる実行コンテキストクラス
-  */
+  
+	/**
+	* @class MultipleOrderedEC
+	*@brief 実行順序の設定ができる実行コンテキスト
+	*/
   class MultipleOrderedEC
     : public virtual PeriodicExecutionContext
   {
 
   public:
-
+	/**
+	*@brief コンストラクタ
+	*/
     MultipleOrderedEC();
 
+	/**
+	*@brief デストラクタ
+	*/
     virtual ~MultipleOrderedEC(void);
 
-	/*
-	*スレッド実行関数
+	
+	/**
+	*@brief スレッド実行関数
+	* @return
 	*/
     virtual int svc(void);
-	/*
-	*コンポーネントのロジック実行の関数
+	
+	/**
+	*@brief コンポーネントのロジック実行の関数
+	* @param c ブロック
 	*/
 	void workerComp(sub_Rule *c);
 
 	
-	/*
-	*ファイルから実行順序の読み込みの関数
+	
+	/**
+	*@brief ファイルから実行順序の読み込みの関数
 	*/
 	void LoadRule();
 
 	
-	/*
-	*コンポーネントの名前取得の関数
+	
+	/**
+	*@brief 番号からコンポーネントの名前取得の関数
+	* @param num 番号
+	* @return RTC名
 	*/
 	std::string getCompName(int num);
-	/*
-	*コンポーネントの数取得の関数
+	
+	/**
+	*@brief コンポーネントの数取得の関数
+	* @return RTC数
 	*/
 	int getCompNum();
 
-	/*
-	*GUIから実行順序の読み込みの関数
+	
+	/**
+	*@brief GUIから実行順序の読み込みの関数
+	* @param RS_d 実行順序のリスト
 	*/
 	void LoadRuleGUI(std::vector<main_Rule> &RS_d);
 
-	/*
-	*設定した実行順序のRTCを格納する関数
+	/**
+	*@brief 設定した実行順序のRTCを格納する関数
 	*/
 	void LoadRules();
 
@@ -79,8 +104,11 @@ namespace RTC
 	std::string SetGui;
 
 	//std::vector<Comp> s_comp;
-	/*
-	*rtc.confの設定を取得する関数
+	/**
+	*@brief rtc.confの設定を取得する関数
+	* @param prop プロパティ
+	* @param key キー
+	* @param value 値
 	*/
 	template <class T>
     void getProperty(coil::Properties& prop, const char* key, T& value)
