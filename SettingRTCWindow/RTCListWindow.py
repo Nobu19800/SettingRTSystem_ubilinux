@@ -1645,12 +1645,12 @@ class ViewWindow(QtGui.QDialog):
          
         self.setLayout(self.mainLayout)
         self.profile = profile
-        self.scene = QtGui.QGraphicsScene(0, 0, 170, 170)
+        self.scene = QtGui.QGraphicsScene(0, 0, 600, 600)
         
         self.view = GraphicsView(self.scene)
         self.view.setViewportUpdateMode(QtGui.QGraphicsView.BoundingRectViewportUpdate)
         self.view.setBackgroundBrush(QtGui.QColor(255, 255, 255))
-
+        self.view.scale(0.25, 0.25)
         self.view.setMinimumHeight(200)
         
         
