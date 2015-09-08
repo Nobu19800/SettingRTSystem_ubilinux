@@ -1069,6 +1069,8 @@ class RenderRTC(RenderPath):
         #self.rtc_defsize_y = 60
         self.rtc_defpos_x = 25
         self.rtc_defpos_y = 20
+        self.rtc_defsize_p_x = 50
+        self.rtc_defsize_p_y = 20
         self.portsize = self.rtc_defsize_x/4.0
 
         #self.maxSize_port = self.rtc_defsize_y*0.33
@@ -1133,18 +1135,18 @@ class RenderRTC(RenderPath):
                 dx = self.rtc_defsize_x
                 dy = self.rtc_defsize_y
         else:
-            pdx = self.portsize*(x+1)*2
+            pdx = self.portsize*((x+1)*2-1)
             
-            if pdx > self.rtc_defsize_x:
+            if pdx > self.rtc_defsize_p_x:
                 dx = pdx
             else:
-                dx = self.rtc_defsize_x
+                dx = self.rtc_defsize_p_x
 
-            pdy = self.portsize*(y+1)*2
-            if pdy > self.rtc_defsize_y:
+            pdy = self.portsize*((y+1)*2-1)
+            if pdy > self.rtc_defsize_p_y:
                 dy = pdy
             else:
-                dy = self.rtc_defsize_y
+                dy = self.rtc_defsize_p_y
 
             scalex = dx/self.rtc_defsize_x
             scaley = dy/self.rtc_defsize_y
