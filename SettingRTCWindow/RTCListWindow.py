@@ -582,13 +582,7 @@ class Port(RenderPath):
         path = self.getPath()
         self.setPath(path)
 
-    ##
-    # @brief ダブルクリック時のイベント
-    # @param self
-    # @param event イベントオブジェクト
-    def mouseDoubleClickEvent(self, event):
-        self.vw = ViewServicePort(self.profile)
-        self.vw.show()
+    
 
 ##
 # @class ServiceInterfaceProvided
@@ -615,7 +609,7 @@ class ServiceInterfaceProvided:
         self.scene.addItem( self.m_obj )
         self.m_line = QtGui.QGraphicsLineItem( self.posx,self.posy,self.posx,self.posy )
         pen = QtGui.QPen( QtGui.QColor( 0, 0, 0 ) )
-        pen.setWidth( 3 )
+        pen.setWidth( 12 )
         self.m_line.setPen( pen )
         self.scene.addItem( self.m_line )
 
@@ -634,9 +628,11 @@ class ServiceInterfaceProvided:
         self.posx = epx
         self.posy = epy
         size = self.size*self.scene.height()/100.0
-        
-        self.m_obj.setRect(self.posx-size/2,self.posy-size/2,size,size)
         self.m_line.setLine(spx, spy, epx, epy)
+        #if self.position == Port.LEFT:
+        #elif self.position == Port.TOP:
+        self.m_obj.setRect(self.posx-size/2,self.posy-size/2,size,size)
+        
 
 
 ##
@@ -664,10 +660,10 @@ class ServiceInterfaceRequired(RenderPath):
         color1 = QtGui.QColor("white")
         color2 = QtGui.QColor("white")
         self.m_obj.setFillGradient(color1,color2)
-        
+        self.m_obj.setPenWidth(2)
         self.m_line = QtGui.QGraphicsLineItem( self.posx,self.posy,self.posx,self.posy )
         pen = QtGui.QPen( QtGui.QColor( 0, 0, 0 ) )
-        pen.setWidth( 3 )
+        pen.setWidth( 12 )
         self.m_line.setPen( pen )
         self.scene.addItem( self.m_line )
 
@@ -810,7 +806,7 @@ class ServicePort(Port):
             epx -= self.size
             spy += self.size/2
             epy += self.size/2
-            epx -= self.size
+            epx -= self.size*2
             cofx = 1
 
         elif self.profile.position == "RIGHT":
@@ -827,7 +823,7 @@ class ServicePort(Port):
             epx += self.size
             spy += self.size/2
             epy += self.size/2
-            epx += self.size
+            epx += self.size*2
             cofx = 1
 
         elif self.profile.position == "TOP":
@@ -844,7 +840,7 @@ class ServicePort(Port):
             epx += self.size/2
             spy -= self.size
             epy -= self.size
-            epy -= self.size
+            epy -= self.size*2
             cofy = 1
 
         elif self.profile.position == "BOTTOM":
@@ -861,14 +857,14 @@ class ServicePort(Port):
             epx += self.size/2
             spy += self.size
             epy += self.size
-            epy += self.size
+            epy += self.size*2
             cofy = 1
 
         rectPath.closeSubpath()
 
         count = 0
         for i in self.interfacesWindow:
-            i.size = self.size*0.7
+            i.size = self.size
             cx = cofx*self.size*2*count
             cy = cofy*self.size*2*count
             spx += cx
@@ -895,7 +891,13 @@ class ServicePort(Port):
             self.drawText(text, painter, self.size, self.position, [0,0,0], self.size*3)
         self.updatePaint(painter)
 
-    
+    ##
+    # @brief ダブルクリック時のイベント
+    # @param self
+    # @param event イベントオブジェクト
+    def mouseDoubleClickEvent(self, event):
+        self.vw = ViewServicePort(self.profile)
+        self.vw.show()
     
         
 ##
@@ -1044,7 +1046,13 @@ class DataPort(Port):
             self.drawText(text, painter, self.size, self.position, [0,0,0], self.size*3)
         self.updatePaint(painter)
 
-    
+    ##
+    # @brief ダブルクリック時のイベント
+    # @param self
+    # @param event イベントオブジェクト
+    def mouseDoubleClickEvent(self, event):
+        self.vw = ViewDataPort(self.profile)
+        self.vw.show()
     
 
 ##
@@ -1716,17 +1724,18 @@ class GraphicsView(QtGui.QGraphicsView):
 # @class RTCViewWindow
 # @brief リストで表示するRTC
 #
-class RTCViewWindow(QtGui.QGroupBox):
+class RTCViewWindow(QtGui.QDialog):
     ##
     # @brief コンストラクタ
     # @param self
     # @param profile プロファイル
     # @param name 表示名
     # @param parent 親ウィジェット
-    def __init__(self, profile, name="", parent=None):
-        super(RTCViewWindow, self).__init__(name, parent)
+    def __init__(self, profile, parent=None):
+        super(RTCViewWindow, self).__init__(parent)
         self.profile = profile
-
+        name = profile.name
+        self.setWindowTitle(name)
         self.mainLayout = QtGui.QVBoxLayout()
         self.setLayout(self.mainLayout)
         
