@@ -460,8 +460,8 @@ class RTComponentProfile():
     # @param name 
     # @return 
     # 
-    def createComp(self, name):
-        return True
+    #def createComp(self, name):
+    #    return True
 
     ##
     # @brief 未実装
@@ -1739,6 +1739,20 @@ class ConfDataInterface_i (RTCConfData__POA.ConfDataInterface):
         return True
 
     ##
+    # @brief 起動する複合コンポーネントを保存
+    # @param self
+    # @param name RTC名
+    # @param dList 起動するRTCのリスト
+    # @return 書き込むデータ
+    def saveCompositeData(self, name, dList):
+            rtc_name = "ECandStateSharedComposite?&instance_name="+name.split(".")[0]
+   
+            for n in dList:
+                if n == rtc_name:
+                    return ""
+            return rtc_name
+                    
+    ##
     # @brief rtc.confの各種設定を保存
     # @param self
     # @param fd rtc.confのファイルストリーム
@@ -1769,25 +1783,39 @@ class ConfDataInterface_i (RTCConfData__POA.ConfDataInterface):
             
             
             if d.id == "manager.components.precreate":
-                print d.data
+                dlist = d.data.split(",")
                 for c in range(0,len(compositeList)):
-                    s += "ECandStateSharedComposite?&instance_name="+compositeList[c].name.split(".")[0]
+                    rtc_name = self.saveCompositeData(compositeList[c].name, dlist)
+                    if rtc_name != "":
+                        s += rtc_name
+                        if c != len(compositeList)-1:
+                            s += ","
                     #print c.name.split(".")
-                    if c != len(compositeList)-1:
-                        s += ","
+                    
 
-                if d.data != "":
-                     s += ","
-            elif d.id == "manager.modules.load_path":
-                s += dname
-
-                if d.data != "":
+                if len(compositeList) != 0 and d.data != "":
                      s += ","
                      
+            elif d.id == "manager.modules.load_path":
+                dlist = d.data.split(",")
+                if len(dlist) > 0:
+                    if dlist[0] != dname:
+                        s += dname
+                        if d.data != "":
+                            s += ","
+                else:
+                    s += dname
+                    
+                     
             elif d.id == "manager.modules.preload":
-                s += fname
-                if d.data != "":
-                     s += ","
+                dlist = d.data.split(",")
+                if len(dlist) > 0:
+                    if dlist[0] != fname:
+                        s += fname
+                        if d.data != "":
+                            s += ","
+                else:
+                    s += fname
             
             #if rtcdFlag and d.id == "exec_cxt.periodic.type":
             #    s += "PeriodicExecutionContext"
@@ -2228,10 +2256,21 @@ class ConfDataInterface_i (RTCConfData__POA.ConfDataInterface):
     # @return　(実行ファイルのパス、実行ファイルの存在するディレクトリのパス、実行ファイル名)
     def getFilePath_exe(self, name, filename):
         rp = RTComponentProfile()
-        filename = filename + "Comp"
-        if os.name == 'nt':
-            filename += ".exe"
-        filepath = rp.getFile(name, filename)
+        baseFileName = filename + "Comp"
+        filepath = ""
+        if os.name == 'posix':
+            filename = baseFileName
+            filepath = rp.getFile(name, filename)
+            if filepath == "":
+                filename = filename + ".sh"
+                filepath = rp.getFile(name, filename)
+        elif os.name == 'nt':
+            filename = baseFileName + ".exe"
+            filepath = rp.getFile(name, filename)
+            if filepath == "":
+                filename = filename + ".bat"
+                filepath = rp.getFile(name, filename)
+                
         if filepath != "":
             path = os.path.relpath(filepath)
             dname = os.path.dirname(path)
@@ -2319,7 +2358,7 @@ class ConfDataInterface_i (RTCConfData__POA.ConfDataInterface):
                         
                         return False
                     
-                if profile.language == u"C++":
+                if profile.language != u"Python":
                     
                     path,dname,bname = self.getFilePath_exe(name, rtc_name)
 
@@ -2328,6 +2367,8 @@ class ConfDataInterface_i (RTCConfData__POA.ConfDataInterface):
 
                         if os.name == 'posix':
                             com = com.split(" ")
+                        elif os.name == 'nt':
+                            com = "cmd /c " + com
                         
                         cwd = os.getcwd()
                         os.chdir(dname)
@@ -2348,7 +2389,7 @@ class ConfDataInterface_i (RTCConfData__POA.ConfDataInterface):
                     else:
                         return False
                     
-                elif profile.language == u"Python":
+                else:
                     path,dname,bname = self.getFilePath_py(name, rtc_name)
 
                     if path != "":
@@ -2433,16 +2474,20 @@ class ConfDataInterface_i (RTCConfData__POA.ConfDataInterface):
         f.write(d)
         
         for c in rtc_list:
-            
-            WriteString(c["name"],f)
-            WriteString(c["filename"],f)
-            d = struct.pack("i", c["num"])
-            
-            f.write(d)
             if mode == 0:
-                WriteString(c["path"],f)
+                WriteString(c["name"],f)
+                WriteString(c["filename"],f)
+                d = struct.pack("i", c["num"])
                 
-                WriteString(c["directory"],f)
+                f.write(d)
+                if mode == 0:
+                    WriteString(c["path"],f)
+                    
+                    WriteString(c["directory"],f)
+            else:
+                WriteString(c["name"],f)
+                d = struct.pack("i", c["num"])
+                f.write(d)
                 
                 
             
