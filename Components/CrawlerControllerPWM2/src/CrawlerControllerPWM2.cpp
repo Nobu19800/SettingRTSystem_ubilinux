@@ -692,7 +692,7 @@ RTC::ReturnCode_t CrawlerControllerPWM2::onExecute(RTC::UniqueId ec_id)
 	const double pm = 0.01;
 	
 	double dfv = input_crawlerVol0 - input_crawlerVol1;
-	if(dir == C_Forword && sqrt(dfv*dfv) < pm)
+	if(sqrt(dfv*dfv) < pm)
 	{
 		input_crawlerVol0 += drz*m_rotCorVal;
 		input_crawlerVol1 -= drz*m_rotCorVal;
