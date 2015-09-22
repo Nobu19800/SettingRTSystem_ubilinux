@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <rtc:RtcProfile rtc:version="0.2" rtc:id="RTC:Miyamoto Nobuhiko:Crawler:CrawlerController:1.0.0" xmlns:rtcExt="http://www.openrtp.org/namespaces/rtc_ext" xmlns:rtcDoc="http://www.openrtp.org/namespaces/rtc_doc" xmlns:rtc="http://www.openrtp.org/namespaces/rtc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <rtc:BasicInfo xsi:type="rtcExt:basic_info_ext" rtcExt:saveProject="CrawlerController" rtc:updateDate="2015-08-31T22:29:27.475+09:00" rtc:creationDate="2015-08-30T23:53:03+09:00" rtc:abstract="クローラー制御RTコンポーネント" rtc:version="1.0.0" rtc:vendor="Miyamoto Nobuhiko" rtc:maxInstances="1" rtc:executionType="PeriodicExecutionContext" rtc:executionRate="1000.0" rtc:description="Crawler Controller" rtc:category="Crawler" rtc:componentKind="DataFlowComponent" rtc:activityType="PERIODIC" rtc:componentType="STATIC" rtc:name="CrawlerController">
+    <rtc:BasicInfo xsi:type="rtcExt:basic_info_ext" rtcExt:saveProject="CrawlerController" rtc:updateDate="2015-09-22T11:25:33.604+09:00" rtc:creationDate="2015-08-30T23:53:03+09:00" rtc:abstract="クローラー制御RTコンポーネント" rtc:version="1.0.0" rtc:vendor="Miyamoto Nobuhiko" rtc:maxInstances="1" rtc:executionType="PeriodicExecutionContext" rtc:executionRate="1000.0" rtc:description="Crawler Controller" rtc:category="Crawler" rtc:componentKind="DataFlowComponent" rtc:activityType="PERIODIC" rtc:componentType="STATIC" rtc:name="CrawlerController">
         <rtcDoc:Doc rtcDoc:reference="" rtcDoc:license="LGPL" rtcDoc:creator="" rtcDoc:algorithm="" rtcDoc:inout="" rtcDoc:description="クローラー制御RTコンポーネント"/>
         <rtcExt:VersionUpLogs></rtcExt:VersionUpLogs>
     </rtc:BasicInfo>
@@ -141,8 +141,8 @@
             <rtcDoc:Doc rtcDoc:constraint="(0,1)" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="1の時は地磁気センサを使用する" rtcDoc:defaultValue="1" rtcDoc:dataname="MagneticSensor"/>
             <rtcExt:Properties rtcExt:value="radio" rtcExt:name="__widget__"/>
         </rtc:Configuration>
-        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="1.0" rtc:type="double" rtc:name="bias">
-            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="障害物が近づいた場合にどの程度旋回を行うか？値が大きくなるほど旋回しやすくなります。" rtcDoc:defaultValue="1.0" rtcDoc:dataname="bias"/>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="2.0" rtc:type="double" rtc:name="bias">
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="障害物が近づいた場合にどの程度旋回を行うか？値が大きくなるほど旋回しやすくなります。" rtcDoc:defaultValue="2.0" rtcDoc:dataname="bias"/>
             <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
         </rtc:Configuration>
         <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="0.5" rtc:type="double" rtc:name="frontDistance">

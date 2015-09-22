@@ -10,7 +10,12 @@
  */
 
 #include <math.h>
+#include <fstream>
 #include "CrawlerController.h"
+
+
+//std::ofstream ofs("test.txt");
+
 
 // Module specification
 // <rtc-template block="module_spec">
@@ -33,7 +38,7 @@ static const char* crawlercontroller_spec[] =
     "conf.default.BackRangeSensor", "1",
     "conf.default.AccelerationSensor", "1",
     "conf.default.MagneticSensor", "1",
-    "conf.default.bias", "1.0",
+    "conf.default.bias", "2.0",
     "conf.default.frontDistance", "0.5",
     "conf.default.backDistance", "0.1",
     "conf.default.filter", "0.05",
@@ -141,7 +146,7 @@ RTC::ReturnCode_t CrawlerController::onInitialize()
   bindParameter("BackRangeSensor", m_BackRangeSensor, "1");
   bindParameter("AccelerationSensor", m_AccelerationSensor, "1");
   bindParameter("MagneticSensor", m_MagneticSensor, "1");
-  bindParameter("bias", m_bias, "1.0");
+  bindParameter("bias", m_bias, "2.0");
   bindParameter("frontDistance", m_frontDistance, "0.5");
   bindParameter("backDistance", m_backDistance, "0.1");
   bindParameter("filter", m_filter, "0.05");
@@ -185,6 +190,9 @@ RTC::ReturnCode_t CrawlerController::onActivated(RTC::UniqueId ec_id)
 	m_calc->reset();
 	last_posx = 0;
 	last_posy = 0;
+
+	first_time = coil::TimeValue(coil::gettimeofday());
+
   return RTC::RTC_OK;
 }
 
@@ -202,6 +210,11 @@ RTC::ReturnCode_t CrawlerController::onDeactivated(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t CrawlerController::onExecute(RTC::UniqueId ec_id)
 {
+	//return RTC::RTC_ERROR;
+	/*coil::TimeValue t0(coil::gettimeofday());
+	double now_time = (double)(t0-first_time);
+	ofs << now_time - last_time << std::endl;
+	last_time = now_time;*/
 	if(m_in0In.isNew() && m_in1In.isNew())
 	{
 		double in0, in1;

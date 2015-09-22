@@ -458,6 +458,8 @@ class CrawlerController
 	Crawler *m_crawler;
 	CalcOrientation *m_calc;
 	double last_posx, last_posy;
+	coil::TimeValue first_time;
+	double last_time;
   // <rtc-template block="private_attribute">
   
   // </rtc-template>

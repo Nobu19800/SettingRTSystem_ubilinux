@@ -80,6 +80,8 @@ private:
 
 	double last_bias0;
 	double last_bias1;
+	double last_bias2;
+	double last_bias3;
 
 
 	double last_rz;

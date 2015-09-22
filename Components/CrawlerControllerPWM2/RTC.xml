@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <rtc:RtcProfile rtc:version="0.2" rtc:id="RTC:Miyamoto Nobuhiko:Crawler:CrawlerControllerPWM2:1.0.0" xmlns:rtcExt="http://www.openrtp.org/namespaces/rtc_ext" xmlns:rtcDoc="http://www.openrtp.org/namespaces/rtc_doc" xmlns:rtc="http://www.openrtp.org/namespaces/rtc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <rtc:BasicInfo xsi:type="rtcExt:basic_info_ext" rtcExt:saveProject="CrawlerControllerPWM2" rtc:updateDate="2015-08-31T00:20:09.602+09:00" rtc:creationDate="2015-03-27T23:01:58+09:00" rtc:abstract="クローラーの制御を行うRTCです。  &lt;a href=&quot;http://robotarmrtc.iaigiri.com/&quot; target=&quot;_blank&quot;&gt;マニュアル&lt;/a&gt; " rtc:version="1.0.0" rtc:vendor="Miyamoto Nobuhiko" rtc:maxInstances="1" rtc:executionType="PeriodicExecutionContext" rtc:executionRate="1000.0" rtc:description="Crawler Controller Component" rtc:category="Crawler" rtc:componentKind="DataFlowComponent" rtc:activityType="PERIODIC" rtc:componentType="STATIC" rtc:name="CrawlerControllerPWM2">
+    <rtc:BasicInfo xsi:type="rtcExt:basic_info_ext" rtcExt:saveProject="CrawlerControllerPWM2" rtc:updateDate="2015-09-22T11:29:13.638+09:00" rtc:creationDate="2015-03-27T23:01:58+09:00" rtc:abstract="クローラーの制御を行うRTCです。  &lt;a href=&quot;http://robotarmrtc.iaigiri.com/&quot; target=&quot;_blank&quot;&gt;マニュアル&lt;/a&gt; " rtc:version="1.0.0" rtc:vendor="Miyamoto Nobuhiko" rtc:maxInstances="1" rtc:executionType="PeriodicExecutionContext" rtc:executionRate="1000.0" rtc:description="Crawler Controller Component" rtc:category="Crawler" rtc:componentKind="DataFlowComponent" rtc:activityType="PERIODIC" rtc:componentType="STATIC" rtc:name="CrawlerControllerPWM2">
         <rtcDoc:Doc rtcDoc:reference="" rtcDoc:license="LGPL" rtcDoc:creator="" rtcDoc:algorithm="" rtcDoc:inout="" rtcDoc:description="クローラーの制御を行うRTCです。 http://robotarmrtc.iaigiri.com/"/>
         <rtcExt:VersionUpLogs></rtcExt:VersionUpLogs>
         <rtcExt:VersionUpLogs></rtcExt:VersionUpLogs>
@@ -27,19 +27,19 @@
     </rtc:Actions>
     <rtc:ConfigurationSet>
         <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="3" rtc:type="int" rtc:name="motor0pwm0">
-            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="右モーター制御用TA8428KのIN1に接続するピン番号" rtcDoc:defaultValue="" rtcDoc:dataname=""/>
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="右モーター制御用TA8428KのIN1に接続するピン番号" rtcDoc:defaultValue="3" rtcDoc:dataname="motor0pwm0"/>
             <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
         </rtc:Configuration>
         <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="5" rtc:type="int" rtc:name="motor0pwm1">
-            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="右モーター制御用TA8428KのIN2に接続するピン番号" rtcDoc:defaultValue="" rtcDoc:dataname=""/>
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="右モーター制御用TA8428KのIN2に接続するピン番号" rtcDoc:defaultValue="5" rtcDoc:dataname="motor0pwm1"/>
             <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
         </rtc:Configuration>
         <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="6" rtc:type="int" rtc:name="motor1pwm0">
-            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="左モーター制御用TA8428KのIN1に接続するピン番号" rtcDoc:defaultValue="" rtcDoc:dataname=""/>
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="左モーター制御用TA8428KのIN1に接続するピン番号" rtcDoc:defaultValue="6" rtcDoc:dataname="motor1pwm0"/>
             <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
         </rtc:Configuration>
         <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="9" rtc:type="int" rtc:name="motor1pwm1">
-            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="左モーター制御用TA8428KのIN2に接続するピン番号" rtcDoc:defaultValue="" rtcDoc:dataname=""/>
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="左モーター制御用TA8428KのIN2に接続するピン番号" rtcDoc:defaultValue="9" rtcDoc:dataname="motor1pwm1"/>
             <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
         </rtc:Configuration>
         <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="1" rtc:type="int" rtc:name="gyroSensor">
@@ -111,7 +111,7 @@
                     </rtc:Or>
                 </rtc:ConstraintUnitType>
             </rtc:Constraint>
-            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="1の時は距離センサ(右前)を使用する" rtcDoc:defaultValue="" rtcDoc:dataname=""/>
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="1の時は距離センサ(右前)を使用する" rtcDoc:defaultValue="1" rtcDoc:dataname="rangeSensor0"/>
             <rtcExt:Properties rtcExt:value="radio" rtcExt:name="__widget__"/>
         </rtc:Configuration>
         <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="1" rtc:type="int" rtc:name="rangeSensor1">
@@ -135,7 +135,7 @@
                     </rtc:Or>
                 </rtc:ConstraintUnitType>
             </rtc:Constraint>
-            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="1の時は距離センサ(左前)を使用する" rtcDoc:defaultValue="" rtcDoc:dataname=""/>
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="1の時は距離センサ(左前)を使用する" rtcDoc:defaultValue="1" rtcDoc:dataname="rangeSensor1"/>
             <rtcExt:Properties rtcExt:value="radio" rtcExt:name="__widget__"/>
         </rtc:Configuration>
         <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="1" rtc:type="int" rtc:name="rangeSensor2">
@@ -159,7 +159,7 @@
                     </rtc:Or>
                 </rtc:ConstraintUnitType>
             </rtc:Constraint>
-            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="1の時は距離センサ(右後)を使用する" rtcDoc:defaultValue="" rtcDoc:dataname=""/>
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="1の時は距離センサ(右後)を使用する" rtcDoc:defaultValue="1" rtcDoc:dataname="rangeSensor2"/>
             <rtcExt:Properties rtcExt:value="radio" rtcExt:name="__widget__"/>
         </rtc:Configuration>
         <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="1" rtc:type="int" rtc:name="rangeSensor3">
@@ -183,23 +183,23 @@
                     </rtc:Or>
                 </rtc:ConstraintUnitType>
             </rtc:Constraint>
-            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="1の時は距離センサ(左後)を使用する" rtcDoc:defaultValue="" rtcDoc:dataname=""/>
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="1の時は距離センサ(左後)を使用する" rtcDoc:defaultValue="1" rtcDoc:dataname="rangeSensor3"/>
             <rtcExt:Properties rtcExt:value="radio" rtcExt:name="__widget__"/>
         </rtc:Configuration>
         <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="2" rtc:type="int" rtc:name="rangeSensor0_Pin">
-            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="距離センサ(右前)の信号線と接続するアナログ入力ピンの番号" rtcDoc:defaultValue="" rtcDoc:dataname=""/>
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="距離センサ(右前)の信号線と接続するアナログ入力ピンの番号" rtcDoc:defaultValue="2" rtcDoc:dataname="rangeSensor0_Pin"/>
             <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
         </rtc:Configuration>
         <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="3" rtc:type="int" rtc:name="rangeSensor1_Pin">
-            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="距離センサ(左前)の信号線と接続するアナログ入力ピンの番号" rtcDoc:defaultValue="" rtcDoc:dataname=""/>
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="距離センサ(左前)の信号線と接続するアナログ入力ピンの番号" rtcDoc:defaultValue="3" rtcDoc:dataname="rangeSensor1_Pin"/>
             <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
         </rtc:Configuration>
         <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="0" rtc:type="int" rtc:name="rangeSensor2_Pin">
-            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="距離センサ(右後)の信号線と接続するアナログ入力ピンの番号" rtcDoc:defaultValue="" rtcDoc:dataname=""/>
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="距離センサ(右後)の信号線と接続するアナログ入力ピンの番号" rtcDoc:defaultValue="0" rtcDoc:dataname="rangeSensor2_Pin"/>
             <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
         </rtc:Configuration>
         <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="1" rtc:type="int" rtc:name="rangeSensor3_Pin">
-            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="距離センサ(左後)の信号線と接続するアナログ入力ピンの番号" rtcDoc:defaultValue="" rtcDoc:dataname=""/>
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="距離センサ(左後)の信号線と接続するアナログ入力ピンの番号" rtcDoc:defaultValue="1" rtcDoc:dataname="rangeSensor3_Pin"/>
             <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
         </rtc:Configuration>
         <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="1" rtc:type="int" rtc:name="LSM303DLHC">
@@ -223,7 +223,7 @@
                     </rtc:Or>
                 </rtc:ConstraintUnitType>
             </rtc:Constraint>
-            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="1の時はLSM303DLHCを使用する" rtcDoc:defaultValue="" rtcDoc:dataname=""/>
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="1の時はLSM303DLHCを使用する" rtcDoc:defaultValue="1" rtcDoc:dataname="LSM303DLHC"/>
             <rtcExt:Properties rtcExt:value="radio" rtcExt:name="__widget__"/>
         </rtc:Configuration>
         <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="1" rtc:type="int" rtc:name="I2C_channel">
@@ -247,29 +247,31 @@
                     </rtc:Or>
                 </rtc:ConstraintUnitType>
             </rtc:Constraint>
-            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="I2Cのポート番号" rtcDoc:defaultValue="" rtcDoc:dataname=""/>
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="I2Cのポート番号" rtcDoc:defaultValue="1" rtcDoc:dataname="I2C_channel"/>
             <rtcExt:Properties rtcExt:value="radio" rtcExt:name="__widget__"/>
         </rtc:Configuration>
-        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="1.0" rtc:type="double" rtc:name="bias">
-            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="障害物が近づいた場合にどの程度旋回を行うか？値が大きくなるほど旋回しやすくなります。" rtcDoc:defaultValue="" rtcDoc:dataname=""/>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="2.0" rtc:type="double" rtc:name="bias">
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="障害物が近づいた場合にどの程度旋回を行うか？値が大きくなるほど旋回しやすくなります。" rtcDoc:defaultValue="2.0" rtcDoc:dataname="bias"/>
             <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
         </rtc:Configuration>
         <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="0.5" rtc:type="double" rtc:name="frontDistance">
-            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="回避運動を開始する障害物までの最長距離" rtcDoc:defaultValue="" rtcDoc:dataname=""/>
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="回避運動を開始する障害物までの最長距離" rtcDoc:defaultValue="0.5" rtcDoc:dataname="frontDistance"/>
             <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
         </rtc:Configuration>
         <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="0.1" rtc:type="double" rtc:name="backDistance">
-            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="回避運動を開始する障害物までの最短距離。この値より近い距離に障害物があっても回避運動を行いません" rtcDoc:defaultValue="" rtcDoc:dataname=""/>
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="回避運動を開始する障害物までの最短距離。この値より近い距離に障害物があっても回避運動を行いません" rtcDoc:defaultValue="0.1" rtcDoc:dataname="backDistance"/>
             <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
         </rtc:Configuration>
         <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="0.05" rtc:type="double" rtc:name="filter">
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="" rtcDoc:defaultValue="0.05" rtcDoc:dataname="filter"/>
             <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
         </rtc:Configuration>
         <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="0.5" rtc:type="double" rtc:name="rotOffset">
-            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="地磁気センサの計測値から計算した姿勢角へのオフセット" rtcDoc:defaultValue="" rtcDoc:dataname=""/>
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="地磁気センサの計測値から計算した姿勢角へのオフセット" rtcDoc:defaultValue="0.5" rtcDoc:dataname="rotOffset"/>
             <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
         </rtc:Configuration>
         <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="15" rtc:type="double" rtc:name="rotCorVal">
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="" rtcDoc:defaultValue="15" rtcDoc:dataname="rotCorVal"/>
             <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
         </rtc:Configuration>
     </rtc:ConfigurationSet>

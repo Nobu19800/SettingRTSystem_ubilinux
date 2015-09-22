@@ -113,7 +113,8 @@ private:
 	double last_ax, last_ay, last_az;
 	double last_mx, last_my, last_mz;
 	double last_avx, last_avy, last_avz;
-	coil::TimeValue last_time, first_time;
+	coil::TimeValue first_time;
+	double last_time;
 	int lv_count;
 	double last_rx, last_ry, last_rz;
 };

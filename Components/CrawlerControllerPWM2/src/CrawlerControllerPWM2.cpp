@@ -537,7 +537,7 @@ RTC::ReturnCode_t CrawlerControllerPWM2::onExecute(RTC::UniqueId ec_id)
 
 		Crawler_Direction dir = C_Stop;
 		
-		if(sqrt_ts < p && sqrt_rs < p)
+		if(trans_speed < p && sqrt_rs < p)
 		{
 			dir = C_Stop;
 		}
@@ -636,14 +636,16 @@ RTC::ReturnCode_t CrawlerControllerPWM2::onExecute(RTC::UniqueId ec_id)
 
 		if(dir == C_Forword || dir == C_Forword_Left || dir == C_Forword_Right)
 		{
-			trans_speed *= (1-trans_bias*trans_bias*trans_bias);
-			if(trans_speed < 0)
-				trans_speed = 0;
+			trans_speed *= (1-trans_bias*trans_bias);
+			//if(trans_speed < 0)
+			//	trans_speed = 0;
 			
 			if(rot_type)
-				rot_speed -= trans_bias*trans_bias*trans_bias*m_bias;
+				rot_speed -= trans_bias*trans_bias*m_bias;
 			else
-				rot_speed += trans_bias*trans_bias*trans_bias*m_bias;
+				rot_speed += trans_bias*trans_bias*m_bias;
+			if(rot_speed < -1)rot_speed = -1;
+			if(rot_speed > 1)rot_speed = 1;
 
 			input_crawlerVol0 = trans_speed + rot_speed;
 			input_crawlerVol1 = trans_speed - rot_speed;
@@ -690,7 +692,7 @@ RTC::ReturnCode_t CrawlerControllerPWM2::onExecute(RTC::UniqueId ec_id)
 	const double pm = 0.01;
 	
 	double dfv = input_crawlerVol0 - input_crawlerVol1;
-	if(sqrt(dfv*dfv) < pm)
+	if(dir == C_Forword && sqrt(dfv*dfv) < pm)
 	{
 		input_crawlerVol0 += drz*m_rotCorVal;
 		input_crawlerVol1 -= drz*m_rotCorVal;
