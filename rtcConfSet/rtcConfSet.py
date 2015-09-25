@@ -2259,17 +2259,21 @@ class ConfDataInterface_i (RTCConfData__POA.ConfDataInterface):
         baseFileName = filename + "Comp"
         filepath = ""
         if os.name == 'posix':
-            filename = baseFileName
-            filepath = rp.getFile(name, filename)
+            fn = filename + ".sh"
+            filepath = rp.getFile(name, fn)
             if filepath == "":
-                filename = filename + ".sh"
-                filepath = rp.getFile(name, filename)
+                fn = baseFileName
+                filepath = rp.getFile(name, fn)
+                
         elif os.name == 'nt':
-            filename = baseFileName + ".exe"
-            filepath = rp.getFile(name, filename)
+            
+            fn = filename + ".bat"
+            filepath = rp.getFile(name, fn)
             if filepath == "":
-                filename = filename + ".bat"
-                filepath = rp.getFile(name, filename)
+                fn = baseFileName + ".exe"
+                filepath = rp.getFile(name, fn)
+                
+            
                 
         if filepath != "":
             path = os.path.relpath(filepath)
