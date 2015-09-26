@@ -101,7 +101,7 @@ class MainWindow(QtGui.QMainWindow):
 
 
         filename = "rtcConfSetReq"
-        filepath = ["./rtcConfSetReq"]
+        filepath = ["../rtcConfSetReq"]
         func = self.getFunc(filename, filepath)
         func(self.mgr)
         self.control_comp = self.mgr.createComponent(filename)

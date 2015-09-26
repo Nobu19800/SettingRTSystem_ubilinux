@@ -1,4 +1,5 @@
 cd /d %~dp0
 python startNamingService.py
 start runManager.bat
-DLL\SettingRTSystem
+cd workspace
+..\DLL\SettingRTSystem -f rtc.conf
