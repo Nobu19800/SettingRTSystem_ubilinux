@@ -51,7 +51,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::getBaseOffset(JA
 
 /*!
 * @brief ロボット座標系の位置フィードバック情報を取得する
-* @param pos 位置フィードバック情報[単位:mm､degree]
+* @param pos 位置フィードバック情報[単位:m､rad]
 * @return JARA_ARM::RETURN_ID
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::getFeedbackPosCartesian(JARA_ARM::CarPosWithElbow_out pos)
@@ -59,7 +59,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::getFeedbackPosCa
 	
 	JARA_ARM::CarPosWithElbow_var cpos_var = new JARA_ARM::CarPosWithElbow;
 	
-	Vector3d p = m_robotArm->calcKinematics();
+	Vector3d p = m_robotArm->calcKinematics(m_robotArm->theta);
 	cpos_var->carPos[0][0] = cos(m_robotArm->theta[3]);
 	cpos_var->carPos[0][1] = -sin(m_robotArm->theta[3]);
 	cpos_var->carPos[1][0] = sin(m_robotArm->theta[3]);
@@ -115,15 +115,33 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::getMinAccelTimeJ
 }
 
 /*!
-* @brief ロボット座標系でのソフトリミット値を取得する(未実装)
-* @param xLimit X軸のソフトリミット値[単位:mm]
-* @param yLimit Y軸のソフトリミット値[単位:mm]
-* @param zLimit Z軸のソフトリミット値[単位:mm]
+* @brief ロボット座標系でのソフトリミット値を取得する
+* @param xLimit X軸のソフトリミット値[単位:m]
+* @param yLimit Y軸のソフトリミット値[単位:m]
+* @param zLimit Z軸のソフトリミット値[単位:m]
 * @return JARA_ARM::RETURN_ID
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::getSoftLimitCartesian(JARA_ARM::LimitValue_out xLimit, JARA_ARM::LimitValue_out yLimit, JARA_ARM::LimitValue_out zLimit)
 {
-	RETURNID_NOT_IMPLEMENTED;
+	JARA_ARM::LimitValue_var xLimit_var = new JARA_ARM::LimitValue;
+	JARA_ARM::LimitValue_var yLimit_var = new JARA_ARM::LimitValue;
+	JARA_ARM::LimitValue_var zLimit_var = new JARA_ARM::LimitValue;
+
+	xLimit_var->upper = m_robotArm->softUpperLimitCartesian(0);
+	xLimit_var->lower = m_robotArm->softLowerLimitCartesian(0);
+
+
+	yLimit_var->upper = m_robotArm->softUpperLimitCartesian(1);
+	yLimit_var->lower = m_robotArm->softLowerLimitCartesian(1);
+
+	zLimit_var->upper = m_robotArm->softUpperLimitCartesian(2);
+	zLimit_var->lower = m_robotArm->softLowerLimitCartesian(2);
+
+	xLimit = xLimit_var._retn();
+	yLimit = yLimit_var._retn();
+	zLimit = zLimit_var._retn();
+
+	RETURNID_OK;
 }
 
 /*!
@@ -138,34 +156,44 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::moveGripper(JARA
 
 /*!
 * @brief ロボット座標系の絶対値で指定された目標位置に対し､直交空間における直線補間で動作する
-* @param carPoint 絶対目標位置・姿勢[単位:mm、degree]
+* @param carPoint 絶対目標位置・姿勢[単位:m、rad]
 * @return JARA_ARM::RETURN_ID
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::moveLinearCartesianAbs(const JARA_ARM::CarPosWithElbow& carPoint)
 {
 	if(m_robotArm->stopFalg)RETURNID_NG;
-	m_robotArm->addTargetPos(Vector3d(carPoint.carPos[0][3], carPoint.carPos[1][3], carPoint.carPos[2][3]), atan2(carPoint.carPos[1][0],carPoint.carPos[0][0]), -1);
+
+	Vector3d targetPos = Vector3d(carPoint.carPos[0][3], carPoint.carPos[1][3], carPoint.carPos[2][3]);
+	double the = atan2(carPoint.carPos[1][0],carPoint.carPos[0][0]);
+
+	if(!m_robotArm->judgeSoftLimitPos(targetPos))RETURNID_NG;
+
+	m_robotArm->addTargetPos(targetPos, the, -1);
 	RETURNID_OK;
 }
 
 /*!
 * @brief ロボット座標系の相対値で指定された目標位置に対し､直交空間における直線補間で動作する
-* @param carPoint 相対目標位置・姿勢[単位:mm、degree]
+* @param carPoint 相対目標位置・姿勢[単位:m、rad]
 * @return JARA_ARM::RETURN_ID
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::moveLinearCartesianRel(const JARA_ARM::CarPosWithElbow& carPoint)
 {
 	if(m_robotArm->stopFalg)RETURNID_NG;
 
-	Vector3d pos = m_robotArm->calcKinematics();
+	Vector3d pos = m_robotArm->calcKinematics(m_robotArm->theta);
+	Vector3d targetPos = Vector3d(carPoint.carPos[0][3]+pos(0), carPoint.carPos[1][3]+pos(1), carPoint.carPos[2][3]+pos(2));
+	double the = atan2(carPoint.carPos[1][0],carPoint.carPos[0][0])+m_robotArm->theta[3];
+
+	if(!m_robotArm->judgeSoftLimitPos(targetPos))RETURNID_NG;
 	
-	m_robotArm->addTargetPos(Vector3d(carPoint.carPos[0][3]+pos(0), carPoint.carPos[1][3]+pos(1), carPoint.carPos[2][3]+pos(2)), atan2(carPoint.carPos[1][0],carPoint.carPos[0][0])+m_robotArm->theta[3], -1);
+	m_robotArm->addTargetPos(targetPos, the, -1);
 	RETURNID_OK;
 }
 
 /*!
 * @brief ロボット座標系の絶対値で指定された目標位置に対し､関節空間における直線補間で動作する(未実装)
-* @param carPoint 絶対目標位置・姿勢[単位:mm、degree]
+* @param carPoint 絶対目標位置・姿勢[単位:m、rad]
 * @return JARA_ARM::RETURN_ID
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::movePTPCartesianAbs(const JARA_ARM::CarPosWithElbow& carPoint)
@@ -175,7 +203,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::movePTPCartesian
 
 /*!
 * @brief ロボット座標系の相対値で指定された目標位置に対し､関節空間における直線補間で動作する(未実装)
-* @param carPoint 相対目標位置・姿勢[単位:mm、degree]
+* @param carPoint 相対目標位置・姿勢[単位:m、rad]
 * @return JARA_ARM::RETURN_ID
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::movePTPCartesianRel(const JARA_ARM::CarPosWithElbow& carPoint)
@@ -185,7 +213,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::movePTPCartesian
 
 /*!
 * @brief 絶対関節座標で指定された目標位置に対し､関節空間における直線補間で動作する
-* @param jointPoints 絶対目標位置[単位 degree]
+* @param jointPoints 絶対目標位置[単位 rad]
 * @return JARA_ARM::RETURN_ID
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::movePTPJointAbs(const JARA_ARM::JointPos& jointPoints)
@@ -193,13 +221,19 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::movePTPJointAbs(
 	if(m_robotArm->stopFalg)RETURNID_NG;
 
 	double tp[4] = {jointPoints[0], jointPoints[1], jointPoints[2], jointPoints[3]};
+	
+	if(!m_robotArm->judgeSoftLimitJoint(tp))
+	{
+		RETURNID_NG;
+	}
+
 	m_robotArm->addTargetJointPos(tp, -1);
 	RETURNID_OK;
 }
 
 /*!
 * @brief 相対関節座標で指定された目標位置に対し､関節空間における直線補間で動作する
-* @param jointPoints 相対目標位置[単位 degree]
+* @param jointPoints 相対目標位置[単位 rad]
 * @return JARA_ARM::RETURN_ID
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::movePTPJointRel(const JARA_ARM::JointPos& jointPoints)
@@ -207,6 +241,12 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::movePTPJointRel(
 	if(m_robotArm->stopFalg)RETURNID_NG;
 
 	double tp[4] = {jointPoints[0]+m_robotArm->theta[0], jointPoints[1]+m_robotArm->theta[1], jointPoints[2]+m_robotArm->theta[2], jointPoints[3]+m_robotArm->theta[3]};
+
+	if(!m_robotArm->judgeSoftLimitJoint(tp))
+	{
+		RETURNID_NG;
+	}
+
 	m_robotArm->addTargetJointPos(tp, -1);
 	
 	RETURNID_OK;
@@ -285,6 +325,15 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setAccelTimeJoin
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setBaseOffset(const JARA_ARM::HgMatrix offset)
 {
+	double o[12];
+	for(int i=0;i < 3;i++)
+	{
+		for(int j=0;j < 4;j++)
+		{
+			o[i*j] = offset[i][j];
+		}
+	}
+	m_robotArm->setBaseOffset(o);
 	RETURNID_NOT_IMPLEMENTED;
 }
 
@@ -300,7 +349,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setControlPointO
 
 /*!
 * @brief 直交空間における動作時の最大動作速度を設定する
-* @param speed 最大並進速度[単位:mm/s]、最大回転速度[単位:degree/s]からなる最大速度情報
+* @param speed 最大並進速度[単位:m/s]、最大回転速度[単位:rad/s]からなる最大速度情報
 * @return JARA_ARM::RETURN_ID
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setMaxSpeedCartesian(const JARA_ARM::CartesianSpeed& speed)
@@ -313,7 +362,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setMaxSpeedCarte
 
 /*!
 * @brief 関節空間における動作時の最大動作速度を設定する
-* @param speed 各軸の最大動作速度[単位:degree/s]
+* @param speed 各軸の最大動作速度[単位:rad/s]
 * @return JARA_ARM::RETURN_ID
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setMaxSpeedJoint(const JARA_ARM::DoubleSeq& speed)
@@ -347,15 +396,19 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setMinAccelTimeJ
 }
 
 /*!
-* @brief ロボット座標系でのソフトリミット値を設定する(未実装)
-* @param xLimit X軸のソフトリミット値[単位:mm]
-* @param yLimit Y軸のソフトリミット値[単位:mm]
-* @param zLimit Z軸のソフトリミット値[単位:mm]
+* @brief ロボット座標系でのソフトリミット値を設定する
+* @param xLimit X軸のソフトリミット値[単位:m]
+* @param yLimit Y軸のソフトリミット値[単位:m]
+* @param zLimit Z軸のソフトリミット値[単位:m]
 * @return JARA_ARM::RETURN_ID
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setSoftLimitCartesian(const JARA_ARM::LimitValue& xLimit, const JARA_ARM::LimitValue& yLimit, const JARA_ARM::LimitValue& zLimit)
 {
-	RETURNID_NOT_IMPLEMENTED;
+	Vector3d upper = Vector3d(xLimit.upper, yLimit.upper, zLimit.upper);
+	Vector3d lower = Vector3d(xLimit.lower, yLimit.lower, zLimit.lower);
+	
+	m_robotArm->setSoftLimitCartesian(upper,lower);
+	RETURNID_OK;
 }
 
 /*!
@@ -418,7 +471,7 @@ JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::setHome(const JA
 
 /*!
 * @brief 関節座標系の絶対値で定義された原点復帰位置を取得する
-* @param jointPoint 絶対位置[単位:radian or m
+* @param jointPoint 絶対位置[単位:radian or m]
 * @return JARA_ARM::RETURN_ID
 */
 JARA_ARM::RETURN_ID *ManipulatorCommonInterface_MiddleSVC_impl::getHome(JARA_ARM::JointPos_out jointPoint)

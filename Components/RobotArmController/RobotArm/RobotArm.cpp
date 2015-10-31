@@ -317,7 +317,7 @@ RobotArm::RobotArm()
 */
 void RobotArm::goHomePosition()
 {
-	//homePosition = calcKinematics();
+	//homePosition = calcKinematics(theta);
 
 	//targetPoint = homePosition;
 
@@ -340,8 +340,8 @@ void RobotArm::setHomePosition(double *jp)
 		homeTheta[i] = jp[i];
 	}
 
-	//homePosition = calcKinematics();
-	//homePosition = calcKinematics();
+	//homePosition = calcKinematics(theta);
+	//homePosition = calcKinematics(theta);
 }
 
 /**
@@ -375,7 +375,7 @@ void RobotArm::update(double st)
 	{
 		if(targetPoint.type == Point)
 		{
-			Vector3d pos = calcKinematics();
+			Vector3d pos = calcKinematics(theta);
 
 			double dPx = Kp*(targetPoint.target_pos(0)-pos(0));
 			double dPy = Kp*(targetPoint.target_pos(1)-pos(1));
@@ -394,7 +394,7 @@ void RobotArm::update(double st)
 			{
 				theta[i] = targetPoint.target_joint_pos[i];
 			}
-			judgeSoftLimitJoint();
+			if (!judgeSoftLimitJoint(theta))stop();
 		}
 
 		
@@ -436,7 +436,7 @@ void RobotArm::update(double st)
 
 			double ds = A*targetPoint.end_time/(2*M_PI)*(1 - cos(2*M_PI/targetPoint.end_time*targetPoint.time));
 
-			Vector3d pos = calcKinematics();
+			Vector3d pos = calcKinematics(theta);
 
 			double dPx = ds*dx/ST + Kp*(Px-pos(0));
 			double dPy = ds*dy/ST + Kp*(Py-pos(1));
@@ -546,7 +546,7 @@ void RobotArm::setTargetPos()
 
 	if(targetPoints[0].type == Point)
 	{
-		Vector3d pos = calcKinematics();
+		Vector3d pos = calcKinematics(theta);
 		/*startPoint(0) = pos(0);
 		startPoint(1) = pos(1);
 		startPoint(2) = pos(2);*/
@@ -586,22 +586,23 @@ void RobotArm::setAngle(double t1, double t2, double t3, double t4)
 	theta[2] = t3;
 	theta[3] = t4;
 
-	judgeSoftLimitJoint();
+	if (!judgeSoftLimitJoint(theta))stop();
 }
 
 /**
 *@brief 手先位置取得
+*@param the 関節角度
 * @return 手先位置
 */
-Vector3d RobotArm::calcKinematics()
+Vector3d RobotArm::calcKinematics(double *the)
 {
 	Vector3d A;
-	double S1 = sin(theta[0]);
-	double S2 = sin(theta[1]);
-	double C1 = cos(theta[0]);
-	double C2 = cos(theta[1]);
-	double S23 = sin(theta[1]+theta[2]);
-	double C23 = cos(theta[1]+theta[2]);
+	double S1 = sin(the[0]);
+	double S2 = sin(the[1]);
+	double C1 = cos(the[0]);
+	double C2 = cos(the[1]);
+	double S23 = sin(the[1]+the[2]);
+	double C23 = cos(the[1]+the[2]);
 
 	A(0) = -S1*C2*l[2] - S1*S23*l[3];
 	A(1) = C1*C2*l[2] + C1*S23*l[3];
@@ -613,17 +614,18 @@ Vector3d RobotArm::calcKinematics()
 
 /**
 *@brief ヤコビ行列取得
+*@param the 関節角度
 * @return ヤコビ行列
 */
-Matrix3d RobotArm::calcJacobian()
+Matrix3d RobotArm::calcJacobian(double *the)
 {
 
-	double S1 = sin(theta[0]);
-	double S2 = sin(theta[1]);
-	double C1 = cos(theta[0]);
-	double C2 = cos(theta[1]);
-	double S23 = sin(theta[1]+theta[2]);
-	double C23 = cos(theta[1]+theta[2]);
+	double S1 = sin(the[0]);
+	double S2 = sin(the[1]);
+	double C1 = cos(the[0]);
+	double C2 = cos(the[1]);
+	double S23 = sin(the[1]+the[2]);
+	double C23 = cos(the[1]+the[2]);
 
 
 	Matrix3d A;
@@ -648,7 +650,7 @@ Matrix3d RobotArm::calcJacobian()
 */
 Vector3d RobotArm::calcJointVel(Vector3d v)
 {
-	Matrix3d J = calcJacobian();
+	Matrix3d J = calcJacobian(theta);
 	Matrix3d Jinv = J.inverse();
 
 	Vector3d vf(v(0), v(1), v(2));
@@ -663,15 +665,17 @@ Vector3d RobotArm::calcJointVel(Vector3d v)
 }
 
 /**
-*@brief 関節、手先位置がソフトリミット内かを判定し、ソフトリミット外の場合は停止する
+*@brief 関節、手先位置がソフトリミット内かを判定する
+*@param the 関節角度
+*@return 範囲内の場合true
 */
-void RobotArm::judgeSoftLimitJoint()
+bool RobotArm::judgeSoftLimitJoint(double *the)
 {
 	for(int i=0;i < 4;i++)
 	{
-		double mpos = theta[i];
+		double mpos = the[i];
 		if(i == 2)
-			mpos = theta[2] + theta[1];
+			mpos = the[2] + the[1];
 
 		
 		
@@ -679,23 +683,55 @@ void RobotArm::judgeSoftLimitJoint()
 		{
 			
 			if(i == 2)
-				theta[2] = softUpperLimitJoint[i] - theta[1];
+				the[2] = softUpperLimitJoint[i] - the[1];
 			else
-				theta[i] = softUpperLimitJoint[i];
+				the[i] = softUpperLimitJoint[i];
 			
-			stop();
+			return false;
 			
 		}
 		else if(mpos < softLowerLimitJoint[i])
 		{
 			if(i == 2)
-				theta[2] = softLowerLimitJoint[i] - theta[1];
+				the[2] = softLowerLimitJoint[i] - the[1];
 			else
-				theta[i] = softLowerLimitJoint[i];
-			stop();
+				the[i] = softLowerLimitJoint[i];
+			return false;
 			
 		}
 	}
+
+	Vector3d pos = calcKinematics(the);
+
+	if(!judgeSoftLimitPos(pos))return false;
+
+	
+	return true;
+}
+
+
+
+/**
+*@brief 手先位置がソフトリミット内かを判定する
+*@param pos 手先位置
+*@return 範囲内の場合true
+*/
+bool RobotArm::judgeSoftLimitPos(Vector3d pos)
+{
+	
+
+	for(int i=0;i < 3;i++)
+	{
+		if(pos(i) > softUpperLimitCartesian(i))
+		{
+			return false;
+		}
+		else if(pos(i) < softLowerLimitCartesian(i))
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 /**
@@ -717,7 +753,7 @@ void RobotArm::updatePos(double v1, double v2, double v3, double v4)
 	theta[2] = theta[2] + v3*dt;
 	theta[3] = theta[3] + v4*dt;
 
-	judgeSoftLimitJoint();
+	if (!judgeSoftLimitJoint(theta))stop();
 
 	
 
@@ -841,7 +877,7 @@ void RobotArm::setStartPos(double j1, double j2, double j3, double j4)
 	double hp[4] = {j1, j2,j3, j4};
 	setAngle(j1, j2,j3, j4);
 	setHomePosition(hp);
-	homePosition = calcKinematics();
+	homePosition = calcKinematics(theta);
 	targetPoint.setJointPos(1, hp);
 	targetPoint.setStartJointPos(hp, MaxSpeedJoint,MinTime);
 	targetPoint.time = 1000;

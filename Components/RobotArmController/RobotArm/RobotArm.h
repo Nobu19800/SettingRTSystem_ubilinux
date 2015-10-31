@@ -88,9 +88,10 @@ public:
 	RobotArm();
 	/**
 	*@brief 手先位置取得
+	*@param the 関節角度
 	* @return 手先位置
 	*/
-	Vector3d calcKinematics();
+	Vector3d calcKinematics(double *the);
 	/**
 	*@brief 関節角度を入力
 	* @param t1 関節角度(関節1)
@@ -101,9 +102,10 @@ public:
 	void setAngle(double t1, double t2, double t3, double t4);
 	/**
 	*@brief ヤコビ行列取得
+	*@param the 関節角度
 	* @return ヤコビ行列
 	*/
-	Matrix3d calcJacobian();
+	Matrix3d calcJacobian(double *the);
 	/**
 	*@brief 手先速度から関節角速度を取得
 	* @param v 手先速度
@@ -244,9 +246,17 @@ public:
 	*/
 	void setSerbo(bool state);
 	/**
-	*@brief 関節、手先位置がソフトリミット内かを判定し、ソフトリミット外の場合は停止する
+	*@brief 関節、手先位置がソフトリミット内かを判定する
+	*@param the 関節角度
+	*@return 範囲内の場合true
 	*/
-	void judgeSoftLimitJoint();
+	bool judgeSoftLimitJoint(double *the);
+	/**
+	*@brief 手先位置がソフトリミット内かを判定する
+	*@param pos 手先位置
+	*@return 範囲内の場合true
+	*/
+	bool judgeSoftLimitPos(Vector3d pos);
 	
 
 

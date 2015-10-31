@@ -66,7 +66,7 @@ class ManipulatorCommonInterface_CommonSVC_impl
    JARA_ARM::RETURN_ID *getManipInfo(JARA_ARM::ManipInfo_out mInfo);
    /*!
    * @brief 関節座標系のソフトリミット値を取得
-   * @param softLimit 各軸のソフトリミット値[単位:degree]
+   * @param softLimit 各軸のソフトリミット値[単位:rad]
    * @return JARA_ARM::RETURN_ID
    */
    JARA_ARM::RETURN_ID *getSoftLimitJoint(JARA_ARM::LimitSeq_out softLimit);
@@ -88,7 +88,7 @@ class ManipulatorCommonInterface_CommonSVC_impl
    JARA_ARM::RETURN_ID *servoON();
    /*!
    * @brief 関節座標系のソフトリミット値設定
-   * @param softLimit 各軸のソフトリミット値[単位:degree]
+   * @param softLimit 各軸のソフトリミット値[単位:rad]
    * @return JARA_ARM::RETURN_ID
    */
    JARA_ARM::RETURN_ID *setSoftLimitJoint(const JARA_ARM::LimitSeq &softLimit);
