@@ -21,6 +21,10 @@ import glob
 sys.path.append(".")
 sys.path.append("../")
 
+
+
+sys.path.append(os.path.abspath("../RTCD_IDL"))
+
 import datetime
 import shutil
 
@@ -713,8 +717,8 @@ class ConfDataInterface_i (RTCConfData__POA.ConfDataInterface):
     # @param version バージョン
     # @param components コンポーネントのリスト
     # 
-    def freeze_dry(self, dest='-', xml=True, abstract='', vendor='', sysname='',
-        version='', components=[]):
+    def freeze_dry(self, dest='-', xml=True, abstract='RT System created by CCCT', vendor='Me', sysname='RTSystem',
+        version='0', components=[]):
 
 
         comp_list = []
@@ -1001,7 +1005,7 @@ class ConfDataInterface_i (RTCConfData__POA.ConfDataInterface):
         
         if cpp_path != None and py_path != None:
             
-            self.freeze_dry(sysFileName,True,"","Me","RTSystem",0,components)
+            self.freeze_dry(sysFileName,True,"RT System created by CCCT","Me","RTSystem",0,components)
 
             self.saveActiveFile(dirname[0],clist)
             self.saveDeactiveFile(dirname[0],clist)
@@ -1270,7 +1274,7 @@ class ConfDataInterface_i (RTCConfData__POA.ConfDataInterface):
 
             f.write(cmd)
 
-            f.write("sleep 5\n")
+            f.write("TIMEOUT /T 5\n")
 
             if os.name == 'posix':
                 f.write("sh composite.sh\n")

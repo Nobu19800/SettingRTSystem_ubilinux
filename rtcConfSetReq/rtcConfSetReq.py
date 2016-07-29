@@ -14,6 +14,9 @@ sys.path.append(".")
 import RTC
 import OpenRTM_aist
 
+import os
+sys.path.append(os.path.abspath("../RTCD_IDL"))
+
 import rtcconf_idl
 
 # Import Service implementation class

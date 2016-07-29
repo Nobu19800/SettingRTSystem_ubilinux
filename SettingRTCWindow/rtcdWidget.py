@@ -89,7 +89,7 @@ class rtcdWidget(MTabWidget):
     def __init__(self, parent=None):
         MTabWidget.__init__(self, None, parent)
         self.parent = parent
-        self.addTextBox("textBox", u"IPアドレス", ["localhost"] , "localhost")
+        self.addTextBox("textBox", u"アドレス番号", ["localhost"] , "localhost")
         self.addTextBox("filepath", u"ファイル名を直接入力してください", [""] , "")
 
         self.addFilePathButton = QtGui.QPushButton(u"ファイル名設定")
@@ -358,8 +358,8 @@ class rtcdWidget(MTabWidget):
     # @brief ファイル読み込みボタンのスロット
     # @param self
     def addLoadSlot(self):
-        text, ok = QtGui.QInputDialog.getText(self, u"IPアドレス入力",
-                u"IPアドレス", QtGui.QLineEdit.Normal,
+        text, ok = QtGui.QInputDialog.getText(self, u"アドレス入力",
+                u"アドレス", QtGui.QLineEdit.Normal,
                 self.WidList["textBox"]["Widget"].text())
         if ok and text != '':
             self.WidList["textBox"]["Widget"].setText(text)

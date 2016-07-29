@@ -25,6 +25,8 @@ import imp
 
 import LoadRTCs
 
+sys.path.append(os.path.abspath("../RTCD_IDL"))
+
 import rtcControl_idl
 
 # Import Service implementation class

@@ -54,6 +54,8 @@ import imp
 import SettingRTCWindow.RTCListWindow
 
 
+from rtcConfSet import rtcConfSet
+from rtcConfSetReq import rtcConfSetReq
 
 ##
 # @brief サービスポートを接続する関数
@@ -100,13 +102,14 @@ class MainWindow(QtGui.QMainWindow):
         self.mgr.runManager(True)
 
 
+        rtcConfSetReq.rtcConfSetReqInit(self.mgr)
         filename = "rtcConfSetReq"
-        filepath = ["../rtcConfSetReq"]
-        func = self.getFunc(filename, filepath)
-        func(self.mgr)
+        #filepath = ["../rtcConfSetReq"]
+        #func = self.getFunc(filename, filepath)
+        #func(self.mgr)
         self.control_comp = self.mgr.createComponent(filename)
 
-        
+        rtcConfSet.MyModuleInit(self.mgr)
 
         
 
@@ -573,8 +576,8 @@ class MainWindow(QtGui.QMainWindow):
     # @brief 初期化のスロット
     # @param self
     def newFile(self):
-        text, ok = QtGui.QInputDialog.getText(self, u"IPアドレス入力",
-                u"IPアドレス", QtGui.QLineEdit.Normal,
+        text, ok = QtGui.QInputDialog.getText(self, u"アドレス入力",
+                u"アドレス", QtGui.QLineEdit.Normal,
                 self.rtcd_widget.WidList["textBox"]["Widget"].text())
         if ok and text != '':
             self.rtcd_widget.WidList["textBox"]["Widget"].setText(text)
